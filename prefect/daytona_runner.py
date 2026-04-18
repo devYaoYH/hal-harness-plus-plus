@@ -37,14 +37,28 @@ from tidb_storage import (
 _ZIP_EXCLUDES = {
     ".git",
     ".venv",
+    "prefect",
     "results",
     "__pycache__",
     ".mypy_cache",
+    # Large downloaded data — never needed inside sandboxes
+    "irt_data/traces",
+    "irt_data/test_traces",
+    "irt_data/extracted",
+    # Agents not used in this run
+    "agents/auto-code-rover",
+    "agents/Moatless",
+    "agents/SWE-agent-v1.0",
+    "agents/Enigma",
+    "agents/SWE-agent",
+    "agents/USACO",
+    # Benchmark data not needed for swebench
     "hal/benchmarks/corebench",
     "hal/benchmarks/USACO",
     "hal/benchmarks/appworld",
     "hal/benchmarks/scienceagentbench",
     "hal/benchmarks/taubench/taubench_setup.sh",
+    "hal/benchmarks/colbench",
 }
 
 
@@ -60,6 +74,7 @@ def _daytona_client() -> Daytona:
 
 def _zip_repo() -> bytes:
     repo_root = Path(__file__).resolve().parent.parent
+    reporter = Path(__file__).parent / "sandbox_reporter.py"
     buf = io.BytesIO()
     with zipfile.ZipFile(
         buf, mode="w", compression=zipfile.ZIP_DEFLATED, strict_timestamps=False
@@ -70,6 +85,10 @@ def _zip_repo() -> bytes:
                 continue
             if path.is_file():
                 zf.write(path, rel)
+        # Inject sandbox_reporter.py from prefect/ (excluded above) at repo root level
+        zf.write(reporter, "prefect/sandbox_reporter.py")
+    size_mb = len(buf.getvalue()) / 1024 / 1024
+    print(f"Repo zip size: {size_mb:.1f} MB")
     return buf.getvalue()
 
 
