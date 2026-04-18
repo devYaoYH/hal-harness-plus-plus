@@ -36,3 +36,7 @@ uv.lock
 .claude/*.local.json
 .claude/*.local
 .claude-reliability/
+
+# IRT datset
+irt_data/traces/
+irt_data/test_traces/
