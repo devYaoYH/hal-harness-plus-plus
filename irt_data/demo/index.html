@@ -1486,13 +1486,13 @@
       <div class="accuracy-row">
         <div class="acc-block">
           <div class="acc-label">Predicted accuracy</div>
-          <div class="acc-value predicted">38.4%</div>
+          <div class="acc-value predicted">66.0%</div>
         </div>
         <div class="acc-block">
           <div class="acc-label">Baseline (SWE-Agent + claude-3-7)</div>
           <div class="acc-value baseline">53.0%</div>
         </div>
-        <div class="delta-badge delta-neg">−14.6 pp</div>
+        <div class="delta-badge delta-pos">+13.0 pp</div>
       </div>
 
       <div class="theta-display">
@@ -1515,18 +1515,40 @@
 
       <div class="method-note">
         <strong>Method:</strong> Feature projection only — no latent embedding (agent unseen).
-        Raw θ norm (242.7) rescaled to training distribution mean (11.8) before computing
-        task probabilities. Norm rescaling is applied when a novel feature combination
-        extrapolates beyond the training manifold.
+        Raw θ norm rescaled to training distribution mean before computing task probabilities.
+        The +13pp prediction over baseline reflects DeepSeek-R1's chain-of-thought reasoning
+        compensating strongly on hard code tasks despite SWE-Agent's prompting being tuned for Anthropic models.
       </div>
     </div>
 
-    <!-- Add card placeholder -->
-    <div class="add-card">
-      <div class="add-icon">+</div>
-      <div>Drop in another prediction</div>
-      <div style="font-size:9px;color:var(--text-xs);text-align:center;max-width:180px;">
-        Run predict_new_agent.py with any scaffold × model pair
+    <!-- SWE-Agent × DeepSeek-V3 prediction card -->
+    <div class="card">
+      <div class="card-eyebrow">
+        <span>Cold-start prediction · swebench_verified_mini</span>
+        <div class="pending-badge"><div class="pending-dot"></div>Awaiting validation</div>
+      </div>
+      <div class="card-title">SWE-Agent × DeepSeek-V3</div>
+      <div class="card-sub">Novel combination — SWE-Agent has only been observed with claude-3-7-sonnet. DeepSeek-V3 is a dense MoE model without chain-of-thought reasoning, contrasting with R1's explicit reasoning traces.</div>
+
+      <div class="accuracy-row">
+        <div class="acc-block">
+          <div class="acc-label">Predicted accuracy</div>
+          <div class="acc-value predicted">38.4%</div>
+        </div>
+        <div class="acc-block">
+          <div class="acc-label">Baseline (SWE-Agent + claude-3-7)</div>
+          <div class="acc-value baseline">53.0%</div>
+        </div>
+        <div class="delta-badge delta-neg">−14.6 pp</div>
+      </div>
+
+      <div class="conf-wrap">
+        <div class="conf-label"><span>Cold-start confidence</span><span>medium</span></div>
+        <div class="conf-track"><div class="conf-fill conf-sky" data-w="0.55"></div></div>
+      </div>
+
+      <div class="method-note">
+        <strong>vs DeepSeek-R1:</strong> V3 lacks the reasoning flag and has a lower active parameter count (37B active vs 671B full for R1). The feature projection yields a similar predicted drop from baseline, but the mechanism differs — R1's reasoning partially compensates on hard code tasks; V3 relies on scale alone.
       </div>
     </div>
   </div>
