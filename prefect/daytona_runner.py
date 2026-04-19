@@ -172,34 +172,6 @@ def _build_sandbox_command(spec: DaytonaEvalSpec, run_id: str) -> str:
 _REPORTER_OUTPUT = "/home/daytona/reporter_output.json"
 
 
-def _poll_for_reporter(sandbox, task_key: str, timeout_seconds: int = 3600) -> str:
-    """Poll eval.log every 30s; return full log as soon as reporter_output.json appears."""
-    import time
-    deadline = time.time() + timeout_seconds
-    lines_seen = 0
-    while time.time() < deadline:
-        time.sleep(30)
-        # Stream new log lines
-        log = sandbox.process.exec(f"cat {_SANDBOX_LOG} 2>/dev/null || true")
-        full_log = log.result or ""
-        lines = full_log.splitlines()
-        new_lines = lines[lines_seen:]
-        if new_lines:
-            for line in new_lines:
-                print(f"[sandbox:{task_key[:12]}] {line}")
-            lines_seen = len(lines)
-
-        # Exit as soon as reporter has written its output
-        done = sandbox.process.exec(
-            f"[ -f {_REPORTER_OUTPUT} ] && echo yes || echo no"
-        )
-        if (done.result or "").strip() == "yes":
-            print(f"[sandbox:{task_key[:12]}] Reporter done — collecting results")
-            return full_log
-
-    raise TimeoutError(f"Sandbox task {task_key} exceeded {timeout_seconds}s timeout")
-
-
 def _write_reporter_to_tidb(data: dict, job_id: str, task_key: str) -> None:
     """Write sandbox reporter output to TiDB from the local machine."""
     result = data.get("result_json") or {}
@@ -259,23 +231,16 @@ def run_eval_on_daytona(spec: DaytonaEvalSpec) -> dict:
             timeout=120,
         )
 
-        # Phase 1: install deps synchronously (safe to block — no eval running yet)
-        print(f"Installing deps | task_key={task_key}")
-        install_script = "/home/daytona/install.sh"
-        sandbox.fs.upload_file(_build_install_command(spec).encode(), install_script)
-        r = sandbox.process.exec(f"bash {install_script} 2>&1 | tee {_SANDBOX_LOG}", timeout=1800)
-        print(f"Install done (exit={r.exit_code})\n{(r.result or '')[-2000:]}")
-
-        # Phase 2: launch eval + reporter in background, poll for reporter_output.json
-        print(f"Launching eval | task_key={task_key}")
-        eval_cmd = _build_eval_command(spec, run_id)
-        eval_script = "/home/daytona/eval.sh"
-        sandbox.fs.upload_file(eval_cmd.encode(), eval_script)
-        sandbox.process.exec(
-            f"nohup bash {eval_script} >> {_SANDBOX_LOG} 2>&1 &",
-            timeout=10,
+        # Run install + eval + reporter synchronously in one script
+        print(f"Running eval | task_key={task_key}")
+        script = "/home/daytona/eval.sh"
+        sandbox.fs.upload_file(_build_sandbox_command(spec, run_id).encode(), script)
+        r = sandbox.process.exec(
+            f"bash {script} 2>&1 | tee {_SANDBOX_LOG}",
+            timeout=7200,
         )
-        _poll_for_reporter(sandbox, task_key, timeout_seconds=3600)
+        stdout = r.result or ""
+        print(f"[stdout tail]\n{stdout[-3000:]}")
 
         # Read reporter output and write to TiDB from local machine (sandbox can't reach port 4000)
         reporter_raw = sandbox.fs.download_file(_REPORTER_OUTPUT)
@@ -284,12 +249,9 @@ def run_eval_on_daytona(spec: DaytonaEvalSpec) -> dict:
         _write_reporter_to_tidb(reporter_data, spec.job_id, task_key)
 
         result = reporter_data.get("result_json", {})
-        log = sandbox.process.exec(f"tail -100 {_SANDBOX_LOG} 2>/dev/null || true")
-        stdout = log.result or ""
-        print(f"[stdout tail]\n{stdout}")
         local_path = save_task_results_local(spec.job_id, task_key, result)
         print(f"Results in TiDB + local cache | local={local_path}")
-        result["_stdout"] = stdout
+        result["_stdout"] = stdout[-5000:]
         return result
 
     finally:

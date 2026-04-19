@@ -1951,6 +1951,7 @@ function setHmView(v) {
 buildHm2();
 
 // Animate hm2 on scroll
+const hm2El = document.getElementById('hm2-grid');
 const hm2Obs = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
@@ -1958,7 +1959,7 @@ const hm2Obs = new IntersectionObserver(entries => {
     hm2Obs.unobserve(entry.target);
   });
 }, { threshold: 0.1 });
-if (hm2) { hm2.style.opacity = '0'; hm2.style.transition = 'opacity 0.5s'; hm2Obs.observe(hm2); }
+if (hm2El) { hm2El.style.opacity = '0'; hm2El.style.transition = 'opacity 0.5s'; hm2Obs.observe(hm2El); }
 
 // ── Render subset table ───────────────────────────────────────────────────
 const subsetBody = document.getElementById('subset-body');
