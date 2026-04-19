@@ -143,26 +143,19 @@ _SANDBOX_LOG = "/home/daytona/eval.log"
 _SANDBOX_DONE = "/home/daytona/eval.done"
 
 
-def _build_install_command(spec: DaytonaEvalSpec) -> str:
-    """Install all system + Python deps. Run synchronously before eval."""
+def _build_sandbox_command(spec: DaytonaEvalSpec, run_id: str) -> str:
+    """Full install + eval + reporter script, run synchronously."""
     return (
         f"echo '[eval] started' && "
         f"apt-get update -qq 2>&1 | tail -1 && apt-get install -y -q git docker.io 2>&1 | tail -1 && "
         f"(dockerd --host=unix:///var/run/docker.sock &) && sleep 3 && "
         f"echo '[eval] apt done' && "
         f"cd /home/daytona/hal-harness && "
-        f"pip install -e . && "
+        f"pip install --no-deps -e . && "
         f"pip install swebench python-dotenv docker tenacity cryptography && echo '[eval] hal installed' && "
         f"REQ={spec.agent_dir}/requirements_{spec.benchmark}.txt && "
         f"[ -f \"$REQ\" ] || REQ={spec.agent_dir}/requirements.txt && "
-        f"pip install -r \"$REQ\" && echo '[eval] agent deps installed'"
-    )
-
-
-def _build_eval_command(spec: DaytonaEvalSpec, run_id: str) -> str:
-    """Run eval + reporter in background; caller polls for reporter_output.json."""
-    return (
-        f"cd /home/daytona/hal-harness && "
+        f"pip install -r \"$REQ\" && echo '[eval] agent deps installed' && "
         f"echo '[eval] launching hal.cli' && python -m hal.cli "
         f"  --agent_name '{spec.agent}' "
         f"  --agent_function '{spec.agent_function}' "

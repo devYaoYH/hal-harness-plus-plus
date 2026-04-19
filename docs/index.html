@@ -201,8 +201,26 @@
     border: 1px solid var(--border);
     border-radius: 4px;
     background: #faf8f3;
-    padding: 2rem 2.4rem;
-    overflow-x: auto;
+    overflow: hidden;
+  }
+  .diagram-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1.6rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .diagram-summary::-webkit-details-marker { display: none; }
+  .diagram-summary:hover { background: var(--bg1); }
+  details[open] .diagram-summary { border-bottom-color: var(--border); }
+  .diagram-summary-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
   }
   .diagram-title {
     font-size: 9px;
@@ -210,7 +228,27 @@
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--text-dim);
-    margin-bottom: 2rem;
+    margin: 0;
+  }
+  .diagram-summary-badge {
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--text-xs);
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1px 7px;
+  }
+  .diagram-chevron {
+    font-size: 10px;
+    color: var(--text-dim);
+    transition: transform 0.2s;
+  }
+  details[open] .diagram-chevron { transform: rotate(180deg); }
+  .diagram-body {
+    padding: 2rem 2.4rem;
+    overflow-x: auto;
   }
   .diagram {
     display: grid;
@@ -1248,7 +1286,15 @@
 
   <!-- IRT diagram -->
   <div class="diagram-wrap fade-up">
-    <div class="diagram-title">Multidimensional IRT — computational graph</div>
+    <details>
+      <summary class="diagram-summary">
+        <div class="diagram-summary-left">
+          <span class="diagram-title">Multidimensional IRT — computational graph</span>
+          <span class="diagram-summary-badge">technical</span>
+        </div>
+        <span class="diagram-chevron">▼</span>
+      </summary>
+    <div class="diagram-body">
 
     <div class="diagram">
       <!-- col 1: inputs -->
@@ -1332,7 +1378,10 @@
         <div class="k-legend-item"><div class="k-legend-dot" style="background:var(--coral);opacity:0.8;"></div>Calibration error (lower = better)</div>
       </div>
     </div>
-  </div>
+
+    </div><!-- /.diagram-body -->
+    </details>
+  </div><!-- /.diagram-wrap -->
 </section>
 
 <!-- ── Section 02: IRT Model ─────────────────────────────────────────────── -->
@@ -1389,8 +1438,14 @@
 
   <!-- Harness × Benchmark heatmap -->
   <div class="hm2-wrap fade-up">
-    <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.8rem;">
-      swebench_verified_mini · model × harness accuracy (from public HAL leaderboard)
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.6rem;">
+      <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);">
+        swebench_verified_mini · model × harness accuracy (from public HAL leaderboard)
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="hm-btn-actual" onclick="setHmView('actual')">Actual</button>
+        <button class="view-btn" id="hm-btn-predicted" onclick="setHmView('predicted')">IRT Predicted</button>
+      </div>
     </div>
     <div class="hm2-grid" id="hm2-grid"></div>
     <div class="hm2-legend">
@@ -1399,7 +1454,7 @@
         <div style="width:80px;height:8px;border-radius:2px;background:linear-gradient(90deg,#f0f4f0,#2d7a35);"></div>
         <span style="font-size:9px;color:var(--text-dim);font-weight:500;">0% → high acc</span>
       </div>
-      <div style="font-size:9px;color:var(--text-xs);font-weight:500;">— = not evaluated · color normalised per harness column</div>
+      <div id="hm-legend-note" style="font-size:9px;color:var(--text-xs);font-weight:500;">— = not evaluated · color normalised per harness column</div>
     </div>
   </div>
 </section>
@@ -1768,79 +1823,132 @@ SWEEP.forEach(r => {
 const HM_HARNESSES = ['HAL Generalist Agent', 'My Agent', 'SWE-Agent'];
 
 const HM_MODELS = [
-  { name:'DeepSeek-R1',              'HAL Generalist Agent':0.060, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'DeepSeek-V3',              'HAL Generalist Agent':0.100, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'claude-3-7-sonnet',        'HAL Generalist Agent':0.320, 'My Agent':0.500, 'SWE-Agent':0.530 },
-  { name:'claude-haiku-4-5',         'HAL Generalist Agent':0.343, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'claude-opus-4-1',          'HAL Generalist Agent':0.540, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'claude-opus-4',            'HAL Generalist Agent':0.320, 'My Agent':0.600, 'SWE-Agent':null  },
-  { name:'claude-sonnet-4-5',        'HAL Generalist Agent':0.370, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'gemini-2.0-flash',         'HAL Generalist Agent':0.020, 'My Agent':0.224, 'SWE-Agent':null  },
-  { name:'gpt-4.1',                  'HAL Generalist Agent':0.020, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'gpt-4o',                   'HAL Generalist Agent':null,  'My Agent':0.292, 'SWE-Agent':null  },
-  { name:'gpt-4o-2024-11-20',        'HAL Generalist Agent':0.020, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'gpt-5',                    'HAL Generalist Agent':0.140, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'o1',                       'HAL Generalist Agent':null,  'My Agent':0.400, 'SWE-Agent':null  },
-  { name:'o3',                       'HAL Generalist Agent':null,  'My Agent':0.647, 'SWE-Agent':null  },
-  { name:'o3-mini',                  'HAL Generalist Agent':null,  'My Agent':0.408, 'SWE-Agent':null  },
-  { name:'o3-mini-2025-01-31',       'HAL Generalist Agent':0.000, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'o4-mini',                  'HAL Generalist Agent':0.040, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'DeepSeek-R1',        'HAL Generalist Agent':0.060, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'DeepSeek-V3',        'HAL Generalist Agent':0.100, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'claude-3-7-sonnet',  'HAL Generalist Agent':0.320, 'My Agent':0.500, 'SWE-Agent':0.530 },
+  { name:'claude-haiku-4-5',   'HAL Generalist Agent':0.343, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'claude-opus-4-1',    'HAL Generalist Agent':0.540, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'claude-opus-4',      'HAL Generalist Agent':0.320, 'My Agent':0.600, 'SWE-Agent':null  },
+  { name:'claude-sonnet-4-5',  'HAL Generalist Agent':0.370, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'gemini-2.0-flash',   'HAL Generalist Agent':0.020, 'My Agent':0.224, 'SWE-Agent':null  },
+  { name:'gpt-4.1',            'HAL Generalist Agent':0.020, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'gpt-4o',             'HAL Generalist Agent':null,  'My Agent':0.292, 'SWE-Agent':null  },
+  { name:'gpt-4o-2024-11-20',  'HAL Generalist Agent':0.020, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'gpt-5',              'HAL Generalist Agent':0.140, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'o1',                 'HAL Generalist Agent':null,  'My Agent':0.400, 'SWE-Agent':null  },
+  { name:'o3',                 'HAL Generalist Agent':null,  'My Agent':0.647, 'SWE-Agent':null  },
+  { name:'o3-mini',            'HAL Generalist Agent':null,  'My Agent':0.408, 'SWE-Agent':null  },
+  { name:'o3-mini-2025-01-31', 'HAL Generalist Agent':0.000, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'o4-mini',            'HAL Generalist Agent':0.040, 'My Agent':null,  'SWE-Agent':null  },
 ];
 
-// Per-column (harness) min/max, ignoring nulls
+// IRT cold-start predictions for null cells
+const HM_PREDICTED = {
+  'HAL Generalist Agent': { 'gpt-4o':0.464, 'o1':0.367, 'o3':0.367, 'o3-mini':0.380 },
+  'My Agent': {
+    'DeepSeek-R1':0.390, 'DeepSeek-V3':0.387, 'claude-haiku-4-5':0.329,
+    'claude-opus-4-1':0.558, 'claude-sonnet-4-5':0.378, 'gpt-4.1':0.378,
+    'gpt-4o-2024-11-20':0.342, 'gpt-5':0.388, 'o3-mini-2025-01-31':0.373, 'o4-mini':0.345,
+  },
+  'SWE-Agent': {
+    'DeepSeek-R1':0.660, 'DeepSeek-V3':0.384, 'claude-haiku-4-5':0.363,
+    'claude-opus-4-1':0.364, 'claude-opus-4':0.356, 'claude-sonnet-4-5':0.329,
+    'gemini-2.0-flash':0.344, 'gpt-4.1':0.351, 'gpt-4o':0.385,
+    'gpt-4o-2024-11-20':0.365, 'gpt-5':0.539, 'o1':0.360, 'o3':0.447,
+    'o3-mini':0.361, 'o3-mini-2025-01-31':0.356, 'o4-mini':0.528,
+  },
+};
+
+// Compute per-harness range across actual + predicted combined (for consistent scale)
 const hm2ColRange = {};
 HM_HARNESSES.forEach(h => {
-  const vals = HM_MODELS.map(m => m[h]).filter(v => v !== null);
-  hm2ColRange[h] = { min: Math.min(...vals), max: Math.max(...vals) };
+  const actuals   = HM_MODELS.map(m => m[h]).filter(v => v !== null);
+  const predicted = Object.values(HM_PREDICTED[h] || {});
+  const all = [...actuals, ...predicted];
+  hm2ColRange[h] = { min: Math.min(...all), max: Math.max(...all) };
 });
 
-function hm2Color(val, harness) {
+function hm2Color(val, harness, isPredicted) {
   const { min, max } = hm2ColRange[harness];
   const t = max === min ? 0.5 : (val - min) / (max - min);
+  if (isPredicted) {
+    // Muted blue-slate for predicted cells
+    const l = Math.round(94 - t * 48);
+    const s = Math.round(20 + t * 45);
+    const textL = t > 0.45 ? 18 : 38;
+    return { bg: `hsl(215,${s}%,${l}%)`, color: `hsl(215,50%,${textL}%)` };
+  }
   const l = Math.round(95 - t * 57);
   const s = Math.round(18 + t * 52);
   const textL = t > 0.42 ? 18 : 38;
   return { bg: `hsl(142,${s}%,${l}%)`, color: `hsl(142,50%,${textL}%)` };
 }
 
-const hm2 = document.getElementById('hm2-grid');
-hm2.style.gridTemplateColumns = `160px repeat(${HM_HARNESSES.length}, 1fr)`;
+let hmView = 'actual';
 
-// Header row
-const corner = document.createElement('div');
-corner.className = 'hm2-corner';
-corner.textContent = 'Model';
-hm2.appendChild(corner);
-HM_HARNESSES.forEach(h => {
-  const hdr = document.createElement('div');
-  hdr.className = 'hm2-col-hdr';
-  hdr.textContent = h;
-  hm2.appendChild(hdr);
-});
+function buildHm2() {
+  const hm2 = document.getElementById('hm2-grid');
+  hm2.innerHTML = '';
+  hm2.style.gridTemplateColumns = `160px repeat(${HM_HARNESSES.length}, 1fr)`;
 
-// Data rows
-HM_MODELS.forEach((row, ri) => {
-  const isLast = ri === HM_MODELS.length - 1;
-  const lbl = document.createElement('div');
-  lbl.className = 'hm2-row-hdr' + (isLast ? ' last-row' : '');
-  lbl.textContent = row.name;
-  hm2.appendChild(lbl);
-
-  HM_HARNESSES.forEach((h, hi) => {
-    const val = row[h];
-    const cell = document.createElement('div');
-    cell.className = 'hm2-cell' + (isLast ? ' last-row' : '') + (hi === HM_HARNESSES.length - 1 ? ' last-col' : '');
-    if (val === null) {
-      cell.style.background = 'var(--bg1)';
-      cell.innerHTML = '<span class="hm2-null">—</span>';
-    } else {
-      const { bg, color } = hm2Color(val, h);
-      cell.style.cssText = `background:${bg};color:${color};`;
-      cell.textContent = (val * 100).toFixed(1) + '%';
-    }
-    hm2.appendChild(cell);
+  // Header
+  const corner = document.createElement('div');
+  corner.className = 'hm2-corner';
+  corner.textContent = 'Model';
+  hm2.appendChild(corner);
+  HM_HARNESSES.forEach(h => {
+    const hdr = document.createElement('div');
+    hdr.className = 'hm2-col-hdr';
+    hdr.textContent = h;
+    hm2.appendChild(hdr);
   });
-});
+
+  HM_MODELS.forEach((row, ri) => {
+    const isLast = ri === HM_MODELS.length - 1;
+    const lbl = document.createElement('div');
+    lbl.className = 'hm2-row-hdr' + (isLast ? ' last-row' : '');
+    lbl.textContent = row.name;
+    hm2.appendChild(lbl);
+
+    HM_HARNESSES.forEach((h, hi) => {
+      const actual = row[h];
+      const pred   = (HM_PREDICTED[h] || {})[row.name] ?? null;
+      const showPred = hmView === 'predicted';
+      const val = actual !== null ? actual : (showPred ? pred : null);
+      const isPredicted = actual === null && showPred && pred !== null;
+
+      const cell = document.createElement('div');
+      cell.className = 'hm2-cell' + (isLast ? ' last-row' : '') + (hi === HM_HARNESSES.length - 1 ? ' last-col' : '');
+
+      if (val === null) {
+        cell.style.background = 'var(--bg1)';
+        cell.innerHTML = '<span class="hm2-null">—</span>';
+      } else {
+        const { bg, color } = hm2Color(val, h, isPredicted);
+        cell.style.cssText = `background:${bg};color:${color};`;
+        cell.textContent = (val * 100).toFixed(1) + '%';
+        if (isPredicted) {
+          cell.style.fontStyle = 'italic';
+          cell.title = 'IRT cold-start prediction';
+        }
+      }
+      hm2.appendChild(cell);
+    });
+  });
+}
+
+function setHmView(v) {
+  hmView = v;
+  document.getElementById('hm-btn-actual').classList.toggle('active',    v === 'actual');
+  document.getElementById('hm-btn-predicted').classList.toggle('active', v === 'predicted');
+  const note = document.getElementById('hm-legend-note');
+  note.textContent = v === 'predicted'
+    ? 'green = actual data · blue italic = IRT cold-start prediction · — = no prediction available'
+    : '— = not evaluated · color normalised per harness column';
+  buildHm2();
+}
+
+buildHm2();
 
 // Animate hm2 on scroll
 const hm2Obs = new IntersectionObserver(entries => {
