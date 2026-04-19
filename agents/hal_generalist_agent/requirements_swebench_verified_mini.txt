@@ -9,3 +9,4 @@ pdfminer.six>=20240706
 puremagic>=1.28
 pydub
 SpeechRecognition
+youtube_transcript_api>=0.6.2

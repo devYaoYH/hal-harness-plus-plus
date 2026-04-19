@@ -31,9 +31,13 @@ if missing:
 
 
 def main():
-    import weave
+    try:
+        import weave
+    except ImportError:
+        weave = None
 
-    weave.init(RUN_ID)
+    if weave is not None:
+        weave.init(RUN_ID)
 
     with open("/home/agent/input.json", "r") as f:
         input_data = json.load(f)
@@ -55,7 +59,12 @@ def main():
     spec.loader.exec_module(module)
     agent = getattr(module, function_name)
 
-    with weave.attributes({"weave_task_id": TASK_ID}):
+    if weave is not None:
+        ctx = weave.attributes({"weave_task_id": TASK_ID})
+    else:
+        from contextlib import nullcontext
+        ctx = nullcontext()
+    with ctx:
         result = agent(input_data, **agent_args)
 
     with open("/home/agent/output.json", "w") as f:

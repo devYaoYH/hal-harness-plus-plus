@@ -610,7 +610,12 @@ try:
     agent_fn = getattr(module, "{function_name}")
     
     # Run the agent function
-    with weave.attributes({{"weave_task_id": "{task_id}"}}):
+    if weave is not None:
+        ctx = weave.attributes({{"weave_task_id": "{task_id}"}})
+    else:
+        from contextlib import nullcontext
+        ctx = nullcontext()
+    with ctx:
         result = agent_fn(input_data, **agent_args)
     
     # Save output

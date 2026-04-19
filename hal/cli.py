@@ -410,10 +410,9 @@ def validate_model_pricing(model_name: str) -> None:
     model_name = model_name.replace("together_ai/", "")
 
     if model_name not in MODEL_PRICES_DICT:
-        logger.error(
-            f"Model '{model_name}' not found in pricing dictionary. Please add pricing information to MODEL_PRICES_DICT in weave_utils.py. Exiting..."
+        logger.warning(
+            f"Model '{model_name}' not found in pricing dictionary. Cost tracking will be unavailable."
         )
-        sys.exit(1)
 
 
 if __name__ == "__main__":

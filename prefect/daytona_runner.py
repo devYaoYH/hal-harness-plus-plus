@@ -31,8 +31,9 @@ from config_daytona import (
     DaytonaEvalSpec,
 )
 from tidb_storage import (
-    fetch_task_result,
     insert_task_metadata,
+    insert_agent_trace,
+    update_task_result,
     save_task_results_local,
 )
 
@@ -142,20 +143,26 @@ _SANDBOX_LOG = "/home/daytona/eval.log"
 _SANDBOX_DONE = "/home/daytona/eval.done"
 
 
-def _build_sandbox_command(spec: DaytonaEvalSpec, run_id: str) -> str:
-    """Install system deps + Python deps, run eval, report to TiDB, write done sentinel."""
+def _build_install_command(spec: DaytonaEvalSpec) -> str:
+    """Install all system + Python deps. Run synchronously before eval."""
     return (
         f"echo '[eval] started' && "
         f"apt-get update -qq 2>&1 | tail -1 && apt-get install -y -q git docker.io 2>&1 | tail -1 && "
         f"(dockerd --host=unix:///var/run/docker.sock &) && sleep 3 && "
         f"echo '[eval] apt done' && "
-        f"pip install pymysql && echo '[eval] pymysql done' && "
         f"cd /home/daytona/hal-harness && "
         f"pip install --no-deps -e . && "
         f"pip install swebench python-dotenv docker tenacity cryptography && echo '[eval] hal installed' && "
         f"REQ={spec.agent_dir}/requirements_{spec.benchmark}.txt && "
         f"[ -f \"$REQ\" ] || REQ={spec.agent_dir}/requirements.txt && "
-        f"pip install -r \"$REQ\" && echo '[eval] agent deps installed' && "
+        f"pip install -r \"$REQ\" && echo '[eval] agent deps installed'"
+    )
+
+
+def _build_eval_command(spec: DaytonaEvalSpec, run_id: str) -> str:
+    """Run eval + reporter in background; caller polls for reporter_output.json."""
+    return (
+        f"cd /home/daytona/hal-harness && "
         f"echo '[eval] launching hal.cli' && python -m hal.cli "
         f"  --agent_name '{spec.agent}' "
         f"  --agent_function '{spec.agent_function}' "
@@ -165,24 +172,20 @@ def _build_sandbox_command(spec: DaytonaEvalSpec, run_id: str) -> str:
         f"  --run_id '{run_id}' "
         f"  -A 'model_name={spec.model}' ; "
         f"export HAL_EXIT_CODE=$? ; "
-        f"python /home/daytona/hal-harness/prefect/sandbox_reporter.py ; "
-        f"echo $HAL_EXIT_CODE > {_SANDBOX_DONE}"
+        f"python /home/daytona/hal-harness/prefect/sandbox_reporter.py"
     )
 
 
-def _poll_sandbox_log(sandbox, task_key: str, timeout_seconds: int = 1800) -> str:
-    """Poll eval.log every 30s, printing new lines. Returns full log when done sentinel appears."""
+_REPORTER_OUTPUT = "/home/daytona/reporter_output.json"
+
+
+def _poll_for_reporter(sandbox, task_key: str, timeout_seconds: int = 3600) -> str:
+    """Poll eval.log every 30s; return full log as soon as reporter_output.json appears."""
     import time
     deadline = time.time() + timeout_seconds
     lines_seen = 0
     while time.time() < deadline:
-        time.sleep(15)
-        # Check if done sentinel exists and has content
-        done = sandbox.process.exec(
-            f"[ -s {_SANDBOX_DONE} ] && cat {_SANDBOX_DONE} || echo __RUNNING__"
-        )
-        done_val = (done.result or "").strip()
-
+        time.sleep(30)
         # Stream new log lines
         log = sandbox.process.exec(f"cat {_SANDBOX_LOG} 2>/dev/null || true")
         full_log = log.result or ""
@@ -193,11 +196,43 @@ def _poll_sandbox_log(sandbox, task_key: str, timeout_seconds: int = 1800) -> st
                 print(f"[sandbox:{task_key[:12]}] {line}")
             lines_seen = len(lines)
 
-        if done_val != "__RUNNING__":
-            print(f"[sandbox:{task_key[:12]}] Done (exit={done_val})")
+        # Exit as soon as reporter has written its output
+        done = sandbox.process.exec(
+            f"[ -f {_REPORTER_OUTPUT} ] && echo yes || echo no"
+        )
+        if (done.result or "").strip() == "yes":
+            print(f"[sandbox:{task_key[:12]}] Reporter done — collecting results")
             return full_log
 
     raise TimeoutError(f"Sandbox task {task_key} exceeded {timeout_seconds}s timeout")
+
+
+def _write_reporter_to_tidb(data: dict, job_id: str, task_key: str) -> None:
+    """Write sandbox reporter output to TiDB from the local machine."""
+    result = data.get("result_json") or {}
+    update_task_result(
+        job_id,
+        task_key,
+        status=data.get("status", "failed"),
+        result=result,
+        total_cost=data.get("total_cost"),
+        stdout="",
+        stderr="",
+    )
+    insert_agent_trace(
+        job_id=job_id,
+        task_key=task_key,
+        scaffold=data["scaffold"],
+        model=data["model"],
+        benchmark=data["benchmark"],
+        task_id=data["task_id"],
+        run_id=data["run_id"],
+        correct=data.get("correct"),
+        trace_log=data.get("trace_log", ""),
+        raw_submission=data.get("raw_submission"),
+        wall_clock_seconds=data.get("wall_clock_seconds"),
+        total_cost=data.get("total_cost"),
+    )
 
 
 def run_eval_on_daytona(spec: DaytonaEvalSpec) -> dict:
@@ -231,25 +266,36 @@ def run_eval_on_daytona(spec: DaytonaEvalSpec) -> dict:
             timeout=120,
         )
 
-        print(f"Running eval + reporter | task_key={task_key}")
-        cmd = _build_sandbox_command(spec, run_id)
-        script = "/home/daytona/eval.sh"
-        sandbox.fs.upload_file(cmd.encode(), script)
-        # Run synchronously — nohup backgrounding kills the process when the exec session ends
-        r = sandbox.process.exec(
-            f"bash {script} 2>&1 | tee {_SANDBOX_LOG}",
-            timeout=7200,
-        )
-        stdout = r.result or ""
-        exit_code = r.exit_code or 0
+        # Phase 1: install deps synchronously (safe to block — no eval running yet)
+        print(f"Installing deps | task_key={task_key}")
+        install_cmd = _build_install_command(spec)
+        r = sandbox.process.exec(f"bash -c {repr(install_cmd)} 2>&1 | tee {_SANDBOX_LOG}", timeout=1800)
+        print(f"Install done (exit={r.exit_code})")
 
-        # Results are already in TiDB — fetch them back for the Prefect artifact
-        result = fetch_task_result(spec.job_id, task_key) or {}
+        # Phase 2: launch eval + reporter in background, poll for reporter_output.json
+        print(f"Launching eval | task_key={task_key}")
+        eval_cmd = _build_eval_command(spec, run_id)
+        eval_script = "/home/daytona/eval.sh"
+        sandbox.fs.upload_file(eval_cmd.encode(), eval_script)
+        sandbox.process.exec(
+            f"nohup bash {eval_script} >> {_SANDBOX_LOG} 2>&1 &",
+            timeout=10,
+        )
+        _poll_for_reporter(sandbox, task_key, timeout_seconds=3600)
+
+        # Read reporter output and write to TiDB from local machine (sandbox can't reach port 4000)
+        reporter_raw = sandbox.fs.download_file(_REPORTER_OUTPUT)
+        reporter_data = json.loads(reporter_raw) if reporter_raw else {}
+        print(f"[reporter] status={reporter_data.get('status')} correct={reporter_data.get('correct')}")
+        _write_reporter_to_tidb(reporter_data, spec.job_id, task_key)
+
+        result = reporter_data.get("result_json", {})
+        log = sandbox.process.exec(f"tail -100 {_SANDBOX_LOG} 2>/dev/null || true")
+        stdout = log.result or ""
+        print(f"[stdout tail]\n{stdout}")
         local_path = save_task_results_local(spec.job_id, task_key, result)
         print(f"Results in TiDB + local cache | local={local_path}")
-
-        print(f"[stdout tail]\n{stdout[-3000:]}")
-        result["_stdout"] = stdout[-5000:]
+        result["_stdout"] = stdout
         return result
 
     finally:

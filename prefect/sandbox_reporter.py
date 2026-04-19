@@ -1,8 +1,11 @@
 """
 Runs INSIDE a Daytona sandbox after hal.cli completes.
-Collects results and agent traces, writes them directly to TiDB.
+Collects results and agent traces, writes them to /home/daytona/reporter_output.json.
 
-Invoked by the sandbox entrypoint — requires TIDB_* and HAL_* env vars.
+The runner (daytona_runner.py) reads this file via sandbox.fs and writes to TiDB
+from the local machine, avoiding the need for the sandbox to reach port 4000.
+
+Invoked by the sandbox entrypoint — requires HAL_* env vars.
 
 Usage (inside sandbox):
     python sandbox_reporter.py
@@ -11,26 +14,9 @@ Usage (inside sandbox):
 import glob
 import json
 import os
-import sys
 from datetime import datetime, timezone
 
-import pymysql
-
-
-def _connect():
-    ssl_config = {"ssl_verify_cert": True, "ssl_verify_identity": True}
-    ca = os.environ.get("TIDB_SSL_CA", "")
-    if ca:
-        ssl_config["ca"] = ca
-    return pymysql.connect(
-        host=os.environ["TIDB_HOST"],
-        port=int(os.environ.get("TIDB_PORT", "4000")),
-        user=os.environ["TIDB_USER"],
-        password=os.environ["TIDB_PASSWORD"],
-        database=os.environ["TIDB_DATABASE"],
-        ssl=ssl_config,
-        autocommit=True,
-    )
+_OUTPUT_PATH = "/home/daytona/reporter_output.json"
 
 
 def _find_file(pattern):
@@ -98,38 +84,29 @@ def main():
 
     total_cost = result.get("total_cost", results_data.get("total_cost"))
 
-    # Write to TiDB
-    conn = _connect()
-    try:
-        with conn.cursor() as cur:
-            # Update eval_runs
-            cur.execute(
-                """UPDATE eval_runs
-                   SET status=%s, completed_at=%s, result_json=%s,
-                       total_cost=%s, stdout=%s, stderr=%s
-                   WHERE job_id=%s AND task_key=%s""",
-                (status, now, json.dumps(result) if result else None,
-                 total_cost, "", "", job_id, task_key),
-            )
-            print(f"[reporter] eval_runs updated: status={status}")
+    output = {
+        "job_id": job_id,
+        "task_key": task_key,
+        "agent_id": agent_id,
+        "scaffold": scaffold,
+        "model": model,
+        "benchmark": benchmark,
+        "task_id": task_id,
+        "run_id": run_id,
+        "status": status,
+        "completed_at": now,
+        "correct": correct,
+        "total_cost": total_cost,
+        "wall_clock_seconds": wall_clock,
+        "trace_log": trace_log,
+        "raw_submission": raw_submission,
+        "result_json": result,
+    }
 
-            # Insert agent trace
-            cur.execute(
-                """INSERT INTO agent_traces
-                   (job_id, task_key, agent_id, scaffold, model, benchmark,
-                    task_id, run_id, correct, trace_log, raw_submission,
-                    wall_clock_seconds, total_cost)
-                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                (job_id, task_key, agent_id, scaffold, model, benchmark,
-                 task_id, run_id, correct, trace_log,
-                 json.dumps(raw_submission) if raw_submission else None,
-                 wall_clock, total_cost),
-            )
-            print(f"[reporter] agent_trace inserted: correct={correct} wall_clock={wall_clock}")
-    finally:
-        conn.close()
+    with open(_OUTPUT_PATH, "w") as f:
+        json.dump(output, f)
 
-    print(f"[reporter] Done. agent_id={agent_id}")
+    print(f"[reporter] Written to {_OUTPUT_PATH} | status={status} correct={correct}")
 
 
 if __name__ == "__main__":
