@@ -1,8 +1,13 @@
-import weave
+try:
+    import weave
+    from weave.trace_server.trace_server_interface import CallsFilter, CallsQueryReq
+except ImportError:
+    weave = None
+    CallsFilter = None
+    CallsQueryReq = None
 from typing import Dict, Any, Tuple, List, Optional
 from .logging_utils import create_progress
 from datetime import datetime
-from weave.trace_server.trace_server_interface import CallsFilter, CallsQueryReq
 import logging
 import time
 
@@ -705,7 +710,6 @@ def find_usage_dict_recursive(data):
     return found
 
 
-@weave.op()
 def get_total_cost(client):
     total_cost = 0
     token_usage = {}

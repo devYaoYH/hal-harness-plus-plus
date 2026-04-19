@@ -183,7 +183,11 @@ def _encode_agent_features(
         cat_data.append(codes + 1)  # shift so 0 = unknown/NaN
     cat_tensor = torch.from_numpy(np.column_stack(cat_data).astype(np.int64)) if cat_data else torch.zeros(len(features), 0, dtype=torch.long)
 
-    # Continuous + boolean: fill NaN with 0, normalize
+    # Continuous + boolean: fill NaN with 0, then apply per-column transforms
+    # so that all features land in a comparable ~[-3, 3] range for the linear layer.
+    _LOG1P_COLS = {"model_param_count_full_b", "model_param_count_active_b", "scaffold_max_steps"}
+    _ZSCORE_COLS = {"model_release_ym"}
+
     cont_data = []
     for col in cont_cols:
         vals = features[col].copy()
@@ -191,6 +195,13 @@ def _encode_agent_features(
             vals = vals.map({True: 1.0, False: 0.0, np.nan: 0.0}).astype(float)
         else:
             vals = vals.fillna(0.0).astype(float)
+        bare = col.split(".")[-1]  # strip any prefix — col names have no dots, so this is a no-op
+        if col in _LOG1P_COLS:
+            vals = np.log1p(vals)
+        elif col in _ZSCORE_COLS:
+            std = vals.std()
+            if std > 0:
+                vals = (vals - vals.mean()) / std
         cont_data.append(vals.values)
     cont_tensor = torch.from_numpy(np.column_stack(cont_data).astype(np.float32)) if cont_data else torch.zeros(len(features), 0)
 

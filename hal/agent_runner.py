@@ -1,6 +1,9 @@
 import os
 import json
-import weave
+try:
+    import weave
+except ImportError:
+    weave = None
 import time
 import logging
 from typing import Dict, Any, Optional
@@ -226,7 +229,7 @@ class AgentRunner:
 
         # Initialize logging for main run
         logger.info("Initializing logging with W&B Weave...")
-        weave_client = weave.init(self.run_id)
+        weave_client = weave.init(self.run_id) if weave is not None else None
 
         # Get dataset and filter for remaining tasks if continuing
         dataset = self.benchmark.get_dataset()
@@ -309,17 +312,14 @@ class AgentRunner:
                 )
 
         # delete previous calls from previous run if continuing for remaining tasks
-        if self.continue_run and not self.ignore_errors and dataset:
+        if self.continue_run and not self.ignore_errors and dataset and weave_client is not None:
             logger.info("Cleaning up calls from previous run...")
-            # Fetch all calls once instead of once per task (O(1) vs O(N) API calls)
             all_calls = weave_client.get_calls()
-            # Group calls by task_id for tasks that need cleanup
             calls_to_delete = {}
             for call in all_calls:
                 task_id = call.attributes.get("weave_task_id")
                 if task_id in dataset:
                     calls_to_delete.setdefault(task_id, []).append(call.id)
-            # Delete calls for each task
             for task_id, call_ids in calls_to_delete.items():
                 if call_ids:
                     delete_calls(call_ids, weave_client)
@@ -470,7 +470,7 @@ class AgentRunner:
         # Handle evaluation differently for prompt sensitivity mode
         if self.prompt_sensitivity:
             # stop weave logging before harness is run to avoid lm as judge to produce additional cost
-            weave.finish()
+            if weave is not None: weave.finish()
 
             # Evaluate each variation separately
             eval_results = {}
@@ -529,7 +529,7 @@ class AgentRunner:
                 # sys.exit(1)
 
             # stop weave logging before harness is run to avoid lm as judge to produce additional cost
-            weave.finish()
+            if weave is not None: weave.finish()
 
             eval_results = self.benchmark.evaluate_output(agent_output, self.run_id)
 

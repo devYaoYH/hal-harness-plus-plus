@@ -9,11 +9,13 @@ import datetime
 import io
 import json
 import re
+import socket
 import uuid
 import zipfile
 from pathlib import Path
 
 from daytona_sdk import Daytona, DaytonaConfig, CreateSandboxFromImageParams
+from daytona_sdk._sync.sandbox import Resources
 
 from config_daytona import (
     DAYTONA_API_KEY,
@@ -50,7 +52,6 @@ _ZIP_EXCLUDES = {
     "agents/Moatless",
     "agents/SWE-agent-v1.0",
     "agents/Enigma",
-    "agents/SWE-agent",
     "agents/USACO",
     # Benchmark data not needed for swebench
     "hal/benchmarks/corebench",
@@ -60,6 +61,10 @@ _ZIP_EXCLUDES = {
     "hal/benchmarks/taubench/taubench_setup.sh",
     "hal/benchmarks/colbench",
 }
+
+
+def _resolve_ip(hostname: str) -> str:
+    return socket.gethostbyname(hostname) + "/32"
 
 
 def _daytona_client() -> Daytona:
@@ -117,9 +122,11 @@ def _sandbox_env_vars(spec: DaytonaEvalSpec, task_key: str, run_id: str) -> dict
         "TIDB_PASSWORD": TIDB_PASSWORD,
         "TIDB_DATABASE": TIDB_DATABASE,
     })
-    if TIDB_SSL_CA:
-        env["TIDB_SSL_CA"] = TIDB_SSL_CA
+    # Don't forward TIDB_SSL_CA — it's a local file path that won't exist in sandbox.
+    # sandbox_reporter.py will use system CA bundle when TIDB_SSL_CA is unset.
     env.update({
+        "HF_DATASETS_CACHE": "/home/daytona/hal-harness/hf_cache",
+        "HF_DATASETS_OFFLINE": "1",
         "HAL_JOB_ID": spec.job_id,
         "HAL_TASK_KEY": task_key,
         "HAL_SCAFFOLD": spec.agent,
@@ -131,17 +138,25 @@ def _sandbox_env_vars(spec: DaytonaEvalSpec, task_key: str, run_id: str) -> dict
     return env
 
 
+_SANDBOX_LOG = "/home/daytona/eval.log"
+_SANDBOX_DONE = "/home/daytona/eval.done"
+
+
 def _build_sandbox_command(spec: DaytonaEvalSpec, run_id: str) -> str:
-    """Command that runs inside the sandbox: install, eval, then report to TiDB."""
+    """Install system deps + Python deps, run eval, report to TiDB, write done sentinel."""
     return (
-        "cd /home/daytona/hal-harness && "
-        "pip install --quiet -e '.[dev]' && "
-        "pip install --quiet pymysql && "
-        f"if [ -f '{spec.agent_dir}/requirements.txt' ]; then "
-        f"  pip install --quiet -r '{spec.agent_dir}/requirements.txt'; "
-        "fi && "
-        # Run the eval, capture exit code
-        f"python -m hal.cli "
+        f"echo '[eval] started' && "
+        f"apt-get update -qq 2>&1 | tail -1 && apt-get install -y -q git docker.io 2>&1 | tail -1 && "
+        f"(dockerd --host=unix:///var/run/docker.sock &) && sleep 3 && "
+        f"echo '[eval] apt done' && "
+        f"pip install pymysql && echo '[eval] pymysql done' && "
+        f"cd /home/daytona/hal-harness && "
+        f"pip install --no-deps -e . && "
+        f"pip install swebench python-dotenv docker tenacity cryptography && echo '[eval] hal installed' && "
+        f"REQ={spec.agent_dir}/requirements_{spec.benchmark}.txt && "
+        f"[ -f \"$REQ\" ] || REQ={spec.agent_dir}/requirements.txt && "
+        f"pip install -r \"$REQ\" && echo '[eval] agent deps installed' && "
+        f"echo '[eval] launching hal.cli' && python -m hal.cli "
         f"  --agent_name '{spec.agent}' "
         f"  --agent_function '{spec.agent_function}' "
         f"  --agent_dir '{spec.agent_dir}' "
@@ -149,11 +164,40 @@ def _build_sandbox_command(spec: DaytonaEvalSpec, run_id: str) -> str:
         f"  --task_ids '{spec.task_id}' "
         f"  --run_id '{run_id}' "
         f"  -A 'model_name={spec.model}' ; "
-        # Always run reporter regardless of eval exit code
-        f"HAL_EXIT_CODE=$? && "
-        f"export HAL_EXIT_CODE && "
-        f"python prefect/sandbox_reporter.py"
+        f"export HAL_EXIT_CODE=$? ; "
+        f"python /home/daytona/hal-harness/prefect/sandbox_reporter.py ; "
+        f"echo $HAL_EXIT_CODE > {_SANDBOX_DONE}"
     )
+
+
+def _poll_sandbox_log(sandbox, task_key: str, timeout_seconds: int = 1800) -> str:
+    """Poll eval.log every 30s, printing new lines. Returns full log when done sentinel appears."""
+    import time
+    deadline = time.time() + timeout_seconds
+    lines_seen = 0
+    while time.time() < deadline:
+        time.sleep(15)
+        # Check if done sentinel exists and has content
+        done = sandbox.process.exec(
+            f"[ -s {_SANDBOX_DONE} ] && cat {_SANDBOX_DONE} || echo __RUNNING__"
+        )
+        done_val = (done.result or "").strip()
+
+        # Stream new log lines
+        log = sandbox.process.exec(f"cat {_SANDBOX_LOG} 2>/dev/null || true")
+        full_log = log.result or ""
+        lines = full_log.splitlines()
+        new_lines = lines[lines_seen:]
+        if new_lines:
+            for line in new_lines:
+                print(f"[sandbox:{task_key[:12]}] {line}")
+            lines_seen = len(lines)
+
+        if done_val != "__RUNNING__":
+            print(f"[sandbox:{task_key[:12]}] Done (exit={done_val})")
+            return full_log
+
+    raise TimeoutError(f"Sandbox task {task_key} exceeded {timeout_seconds}s timeout")
 
 
 def run_eval_on_daytona(spec: DaytonaEvalSpec) -> dict:
@@ -173,6 +217,7 @@ def run_eval_on_daytona(spec: DaytonaEvalSpec) -> dict:
             language="python",
             env_vars=_sandbox_env_vars(spec, task_key, run_id),
             auto_stop_interval=0,
+            resources=Resources(cpu=2, memory=8, disk=10),
         ),
         timeout=300,
     )
@@ -188,20 +233,23 @@ def run_eval_on_daytona(spec: DaytonaEvalSpec) -> dict:
 
         print(f"Running eval + reporter | task_key={task_key}")
         cmd = _build_sandbox_command(spec, run_id)
-        response = sandbox.process.exec(cmd, timeout=1800)
-
-        stdout = response.result if response.result else ""
-        exit_code = response.exit_code
-
-        if exit_code != 0:
-            print(f"Warning: sandbox command exited with code {exit_code}")
+        script = "/home/daytona/eval.sh"
+        sandbox.fs.upload_file(cmd.encode(), script)
+        # Run synchronously — nohup backgrounding kills the process when the exec session ends
+        r = sandbox.process.exec(
+            f"bash {script} 2>&1 | tee {_SANDBOX_LOG}",
+            timeout=7200,
+        )
+        stdout = r.result or ""
+        exit_code = r.exit_code or 0
 
         # Results are already in TiDB — fetch them back for the Prefect artifact
         result = fetch_task_result(spec.job_id, task_key) or {}
         local_path = save_task_results_local(spec.job_id, task_key, result)
         print(f"Results in TiDB + local cache | local={local_path}")
 
-        result["_stdout"] = stdout[:5000]
+        print(f"[stdout tail]\n{stdout[-3000:]}")
+        result["_stdout"] = stdout[-5000:]
         return result
 
     finally:

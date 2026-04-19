@@ -362,12 +362,16 @@ class LocalRunner:
 import os
 import json
 import importlib.util
-import weave
+try:
+    import weave
+except ImportError:
+    weave = None
 import traceback
 import time
 
 def init_weave_with_retry(run_id, max_retries=5, base_delay=2.0):
-    """Initialize weave with retry logic for transient connection errors."""
+    if weave is None:
+        return None
     last_exception = None
     for attempt in range(max_retries):
         try:
@@ -375,24 +379,19 @@ def init_weave_with_retry(run_id, max_retries=5, base_delay=2.0):
         except Exception as e:
             last_exception = e
             error_str = str(e).lower()
-            # Check for transient errors (connection, timeout, gateway errors)
             is_transient = any(err in error_str for err in [
                 '502', '503', '504', 'bad gateway', 'service unavailable',
                 'gateway timeout', 'connection', 'timeout', 'temporarily', 'timed out'
             ])
-
             if not is_transient or attempt == max_retries - 1:
                 raise
-
             delay = base_delay * (2 ** attempt)
             print(f"Weave init failed (attempt {{attempt + 1}}/{{max_retries}}): {{e}}")
             print(f"Retrying in {{delay:.1f}}s...")
             time.sleep(delay)
-
     raise last_exception
 
 try:
-    # Initialize weave with retry logic
     init_weave_with_retry("{run_id}")
     
     # Load input data

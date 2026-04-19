@@ -1257,17 +1257,22 @@ def run(input: dict[str, dict], **kwargs) -> dict[str, str]:
         # Always pass filter_year=None to avoid "no results" errors from overly restrictive searches
         return _google_search_tool.forward(query=query, filter_year=None)
 
-    CORE_TOOLS = [
-        # DuckDuckGoSearchTool(),  # Unreliable - rate limited
-        web_search,  # Wrapped GoogleSearchTool that ignores year filter
-        VisitWebpageTool(),
-        PythonInterpreterTool(),
-        execute_bash,
-        TextInspectorTool(model=model, text_limit=5000),
-        edit_file,
-        file_content_search,
-        query_vision_language_model,
-    ]
+    # Maps tool names (used in disable_tools kwarg) to their instances.
+    # Pass disable_tools="web_search,vision_query" via -A to ablate specific tools.
+    _ALL_TOOLS = {
+        "web_search":    web_search,
+        "page_browse":   VisitWebpageTool(),
+        "python_exec":   PythonInterpreterTool(),
+        "execute_bash":  execute_bash,
+        "text_inspect":  TextInspectorTool(model=model, text_limit=5000),
+        "file_edit":     edit_file,
+        "file_search":   file_content_search,
+        "vision_query":  query_vision_language_model,
+    }
+    _disabled = {t.strip() for t in kwargs.get("disable_tools", "").split(",") if t.strip()}
+    if _disabled:
+        print(f"[ablation] disabled tools: {_disabled}")
+    CORE_TOOLS = [t for name, t in _ALL_TOOLS.items() if name not in _disabled]
 
     agent = CodeAgent(
         tools=CORE_TOOLS,

@@ -40,3 +40,4 @@ uv.lock
 # IRT datset
 irt_data/traces/
 irt_data/test_traces/
+hf_cache/

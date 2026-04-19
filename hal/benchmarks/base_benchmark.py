@@ -151,8 +151,12 @@ class BaseBenchmark(ABC):
                 task_step_counts[task_id] = metrics["step_count"]
 
         # Get cost and usage metrics
-        total_cost, total_usage = get_total_cost(weave_client)
-        raw_logging, latency_dict = get_weave_calls(weave_client)
+        if weave_client is not None:
+            total_cost, total_usage = get_total_cost(weave_client)
+            raw_logging, latency_dict = get_weave_calls(weave_client)
+        else:
+            total_cost, total_usage = None, {}
+            raw_logging, latency_dict = [], {}
 
         # Calculate prompt sensitivity metrics if enabled
         sensitivity_metrics = None

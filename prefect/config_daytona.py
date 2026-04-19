@@ -24,6 +24,7 @@ class DaytonaEvalSpec:
     task_id: str
     model: str
     job_id: str
+    benchmark_extra: str = "swebench"  # pyproject.toml optional-dep group to install
 
 
 # ---------------------------------------------------------------------------

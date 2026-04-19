@@ -555,12 +555,16 @@ class DockerRunner:
 import os
 import json
 import importlib.util
-import weave
+try:
+    import weave
+except ImportError:
+    weave = None
 import traceback
 import time
 
 def init_weave_with_retry(run_id, max_retries=5, base_delay=2.0):
-    """Initialize weave with retry logic for transient connection errors."""
+    if weave is None:
+        return None
     last_exception = None
     for attempt in range(max_retries):
         try:

@@ -15,138 +15,171 @@ import pandas as pd
 
 
 # ── Model taxonomy ──────────────────────────────────────────────────────────
+#
+# release_ym: year + (month - 1) / 12  (e.g. March 2025 → 2025.167)
+# param_count_full_b: total parameter count in billions (MoE = sum of all experts)
+# param_count_active_b: active parameters per forward pass (= full for dense models)
+# moe: True if Mixture-of-Experts architecture
+#
+# Counts marked with approximate estimates where not officially published.
 
 MODEL_REGISTRY: dict[str, dict] = {
-    # Anthropic
+    # Anthropic — dense architecture, param counts are estimates
     "claude-3-7-sonnet-20250219": {
-        "provider": "anthropic", "family": "claude", "generation": 3.7,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.083,
         "size_tier": "medium", "reasoning": False,
+        "param_count_full_b": 100.0, "param_count_active_b": 100.0, "moe": False,
     },
     "claude-sonnet-4-20250514": {
-        "provider": "anthropic", "family": "claude", "generation": 4.0,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.333,
         "size_tier": "medium", "reasoning": False,
+        "param_count_full_b": 100.0, "param_count_active_b": 100.0, "moe": False,
     },
     "claude-sonnet-4-5-20250929": {
-        "provider": "anthropic", "family": "claude", "generation": 4.5,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.667,
         "size_tier": "medium", "reasoning": True,
+        "param_count_full_b": 100.0, "param_count_active_b": 100.0, "moe": False,
     },
     "claude-sonnet-4-5": {
-        "provider": "anthropic", "family": "claude", "generation": 4.5,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.667,
         "size_tier": "medium", "reasoning": True,
+        "param_count_full_b": 100.0, "param_count_active_b": 100.0, "moe": False,
     },
     "claude-opus-4-20250514": {
-        "provider": "anthropic", "family": "claude", "generation": 4.0,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.333,
         "size_tier": "large", "reasoning": False,
+        "param_count_full_b": 200.0, "param_count_active_b": 200.0, "moe": False,
     },
     "claude-opus-4-1": {
-        "provider": "anthropic", "family": "claude", "generation": 4.1,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.583,
         "size_tier": "large", "reasoning": False,
+        "param_count_full_b": 200.0, "param_count_active_b": 200.0, "moe": False,
     },
     "claude-opus-4-1-20250805": {
-        "provider": "anthropic", "family": "claude", "generation": 4.1,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.583,
         "size_tier": "large", "reasoning": False,
+        "param_count_full_b": 200.0, "param_count_active_b": 200.0, "moe": False,
     },
     "claude-opus-4-5": {
-        "provider": "anthropic", "family": "claude", "generation": 4.5,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.833,
         "size_tier": "large", "reasoning": True,
+        "param_count_full_b": 200.0, "param_count_active_b": 200.0, "moe": False,
     },
     "claude-opus-4-5-20251101": {
-        "provider": "anthropic", "family": "claude", "generation": 4.5,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.833,
         "size_tier": "large", "reasoning": True,
+        "param_count_full_b": 200.0, "param_count_active_b": 200.0, "moe": False,
     },
     "claude-haiku-4-5": {
-        "provider": "anthropic", "family": "claude", "generation": 4.5,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.75,
         "size_tier": "small", "reasoning": True,
+        "param_count_full_b": 20.0, "param_count_active_b": 20.0, "moe": False,
     },
     "claude-haiku-4-5-20251001": {
-        "provider": "anthropic", "family": "claude", "generation": 4.5,
+        "provider": "anthropic", "family": "claude", "release_ym": 2025.75,
         "size_tier": "small", "reasoning": True,
+        "param_count_full_b": 20.0, "param_count_active_b": 20.0, "moe": False,
     },
-    # OpenAI
+    # OpenAI — dense unless noted; param counts are estimates
     "gpt-4o": {
-        "provider": "openai", "family": "gpt", "generation": 4.0,
+        "provider": "openai", "family": "gpt", "release_ym": 2024.333,
         "size_tier": "medium", "reasoning": False,
+        "param_count_full_b": 200.0, "param_count_active_b": 200.0, "moe": False,
     },
     "gpt-4o-2024-11-20": {
-        "provider": "openai", "family": "gpt", "generation": 4.0,
+        "provider": "openai", "family": "gpt", "release_ym": 2024.833,
         "size_tier": "medium", "reasoning": False,
+        "param_count_full_b": 200.0, "param_count_active_b": 200.0, "moe": False,
     },
     "gpt-4.1-2025-04-14": {
-        "provider": "openai", "family": "gpt", "generation": 4.1,
+        "provider": "openai", "family": "gpt", "release_ym": 2025.25,
         "size_tier": "medium", "reasoning": False,
+        "param_count_full_b": 200.0, "param_count_active_b": 200.0, "moe": False,
     },
     "gpt-5": {
-        "provider": "openai", "family": "gpt", "generation": 5.0,
+        "provider": "openai", "family": "gpt", "release_ym": 2025.333,
         "size_tier": "large", "reasoning": True,
+        # Standard/Main variant: 1.8T–3T total, 250B–500B active (midpoints)
+        "param_count_full_b": 2400.0, "param_count_active_b": 375.0, "moe": True,
     },
     "gpt-5-2025-08-07": {
-        "provider": "openai", "family": "gpt", "generation": 5.0,
+        "provider": "openai", "family": "gpt", "release_ym": 2025.583,
         "size_tier": "large", "reasoning": True,
+        "param_count_full_b": 2400.0, "param_count_active_b": 375.0, "moe": True,
     },
     "o1": {
-        "provider": "openai", "family": "o-series", "generation": 1.0,
+        "provider": "openai", "family": "o-series", "release_ym": 2024.667,
         "size_tier": "large", "reasoning": True,
+        "param_count_full_b": 200.0, "param_count_active_b": 200.0, "moe": False,
     },
     "o3-2025-04-16": {
-        "provider": "openai", "family": "o-series", "generation": 3.0,
+        "provider": "openai", "family": "o-series", "release_ym": 2025.25,
         "size_tier": "large", "reasoning": True,
+        "param_count_full_b": 200.0, "param_count_active_b": 200.0, "moe": False,
     },
     "o3-mini-2025-01-31": {
-        "provider": "openai", "family": "o-series", "generation": 3.0,
+        "provider": "openai", "family": "o-series", "release_ym": 2025.0,
         "size_tier": "small", "reasoning": True,
+        "param_count_full_b": 50.0, "param_count_active_b": 50.0, "moe": False,
     },
     "o4-mini-2025-04-16": {
-        "provider": "openai", "family": "o-series", "generation": 4.0,
+        "provider": "openai", "family": "o-series", "release_ym": 2025.25,
         "size_tier": "small", "reasoning": True,
+        "param_count_full_b": 50.0, "param_count_active_b": 50.0, "moe": False,
     },
     "gpt-oss-120b": {
-        "provider": "openai", "family": "gpt", "generation": 4.0,
+        "provider": "openai", "family": "gpt", "release_ym": np.nan,
         "size_tier": "large", "reasoning": False,
-        "param_count_b": 120.0,
+        # Sparse MoE: 117B total, 5.1B active per token
+        "param_count_full_b": 117.0, "param_count_active_b": 5.1, "moe": True,
     },
-    # Google
+    # Google — Gemini 2.5 Pro and later are MoE; param counts are estimates
     "gemini-2.0-flash": {
-        "provider": "google", "family": "gemini", "generation": 2.0,
+        "provider": "google", "family": "gemini", "release_ym": 2025.083,
         "size_tier": "small", "reasoning": False,
+        "param_count_full_b": 8.0, "param_count_active_b": 8.0, "moe": False,
     },
     "gemini-2.5-pro-preview-03-25": {
-        "provider": "google", "family": "gemini", "generation": 2.5,
+        "provider": "google", "family": "gemini", "release_ym": 2025.167,
         "size_tier": "large", "reasoning": True,
+        "param_count_full_b": 1000.0, "param_count_active_b": 100.0, "moe": True,
     },
     "gemini-3-pro-preview": {
-        "provider": "google", "family": "gemini", "generation": 3.0,
+        "provider": "google", "family": "gemini", "release_ym": 2026.0,
         "size_tier": "large", "reasoning": True,
+        # Ultra-sparse MoE: 2T–4T total, 150B–300B active (midpoints)
+        "param_count_full_b": 3000.0, "param_count_active_b": 225.0, "moe": True,
     },
-    # DeepSeek
+    # DeepSeek — MoE with 671B total / 37B active (published)
     "DeepSeek-R1": {
-        "provider": "deepseek", "family": "deepseek", "generation": 1.0,
+        "provider": "deepseek", "family": "deepseek", "release_ym": 2025.0,
         "size_tier": "large", "reasoning": True,
-        "param_count_b": 671.0,
+        "param_count_full_b": 671.0, "param_count_active_b": 37.0, "moe": True,
     },
     "DeepSeek-V3": {
-        "provider": "deepseek", "family": "deepseek", "generation": 3.0,
+        "provider": "deepseek", "family": "deepseek", "release_ym": 2024.917,
         "size_tier": "large", "reasoning": False,
-        "param_count_b": 671.0,
+        "param_count_full_b": 671.0, "param_count_active_b": 37.0, "moe": True,
     },
     "deepseek-chat-v3-0324": {
-        "provider": "deepseek", "family": "deepseek", "generation": 3.0,
+        "provider": "deepseek", "family": "deepseek", "release_ym": 2025.167,
         "size_tier": "large", "reasoning": False,
-        "param_count_b": 671.0,
+        "param_count_full_b": 671.0, "param_count_active_b": 37.0, "moe": True,
     },
     "deepseek-r1": {
-        "provider": "deepseek", "family": "deepseek", "generation": 1.0,
+        "provider": "deepseek", "family": "deepseek", "release_ym": 2025.0,
         "size_tier": "large", "reasoning": True,
-        "param_count_b": 671.0,
+        "param_count_full_b": 671.0, "param_count_active_b": 37.0, "moe": True,
     },
     "deepseek-r1-0528": {
-        "provider": "deepseek", "family": "deepseek", "generation": 1.0,
+        "provider": "deepseek", "family": "deepseek", "release_ym": 2025.333,
         "size_tier": "large", "reasoning": True,
-        "param_count_b": 671.0,
+        "param_count_full_b": 671.0, "param_count_active_b": 37.0, "moe": True,
     },
     "deepseek-chat-v3.1": {
-        "provider": "deepseek", "family": "deepseek", "generation": 3.1,
+        "provider": "deepseek", "family": "deepseek", "release_ym": 2025.5,
         "size_tier": "large", "reasoning": False,
-        "param_count_b": 671.0,
+        "param_count_full_b": 671.0, "param_count_active_b": 37.0, "moe": True,
     },
 }
 
@@ -169,6 +202,10 @@ MODEL_REGISTRY: dict[str, dict] = {
 #   has_instructions — has system prompt / agents.md with domain instructions
 #   self_critique   — has explicit critique/retry loop built into harness
 #   has_skills      — has pre-defined skill definitions beyond base tools
+#
+# Continuous/categorical:
+#   max_steps       — maximum agentic steps before forced termination (None = unknown)
+#   context_strategy — how the agent manages context: "full" | "rag"
 
 _SCAFFOLD_ENTRIES: dict[str, dict] = {
     "Claude Code": {
@@ -179,6 +216,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": False, "vision_query": False,
         "multi_agent": True, "has_instructions": True, "self_critique": True,
         "has_skills": True,
+        "max_steps": 200, "context_strategy": "full",
     },
     "HAL Generalist Agent": {
         "scaffold_type": "generalist",
@@ -188,6 +226,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": True, "vision_query": True,
         "multi_agent": False, "has_instructions": True, "self_critique": False,
         "has_skills": False,
+        "max_steps": 100, "context_strategy": "full",
     },
     "CORE-Agent": {
         "scaffold_type": "generalist",
@@ -197,6 +236,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": True, "vision_query": True,
         "multi_agent": False, "has_instructions": True, "self_critique": True,
         "has_skills": False,
+        "max_steps": 100, "context_strategy": "full",
     },
     "HF Open Deep Research": {
         "scaffold_type": "research_agent",
@@ -206,6 +246,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": True, "vision_query": False,
         "multi_agent": True, "has_instructions": True, "self_critique": False,
         "has_skills": False,
+        "max_steps": 50, "context_strategy": "rag",
     },
     "SeeAct": {
         "scaffold_type": "web_agent",
@@ -215,6 +256,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": False, "vision_query": False,
         "multi_agent": False, "has_instructions": True, "self_critique": False,
         "has_skills": False,
+        "max_steps": 30, "context_strategy": "full",
     },
     "Browser-Use": {
         "scaffold_type": "web_agent",
@@ -224,6 +266,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": False, "vision_query": False,
         "multi_agent": False, "has_instructions": False, "self_critique": False,
         "has_skills": False,
+        "max_steps": 50, "context_strategy": "full",
     },
     "Assistantbench Browser Agent": {
         "scaffold_type": "web_agent",
@@ -233,6 +276,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": False, "vision_query": False,
         "multi_agent": False, "has_instructions": True, "self_critique": False,
         "has_skills": False,
+        "max_steps": 30, "context_strategy": "full",
     },
     "SWE-Agent": {
         "scaffold_type": "code_agent",
@@ -242,6 +286,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": False, "vision_query": False,
         "multi_agent": False, "has_instructions": True, "self_critique": False,
         "has_skills": False,
+        "max_steps": 50, "context_strategy": "full",
     },
     "Scicode Tool Calling Agent": {
         "scaffold_type": "code_agent",
@@ -251,6 +296,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": True, "text_inspect": False, "vision_query": False,
         "multi_agent": False, "has_instructions": True, "self_critique": False,
         "has_skills": False,
+        "max_steps": 30, "context_strategy": "full",
     },
     "Scicode Zero Shot Agent": {
         "scaffold_type": "code_agent",
@@ -260,6 +306,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": False, "vision_query": False,
         "multi_agent": False, "has_instructions": True, "self_critique": False,
         "has_skills": False,
+        "max_steps": 1, "context_strategy": "full",
     },
     "SAB Self-Debug": {
         "scaffold_type": "code_agent",
@@ -269,6 +316,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": False, "vision_query": False,
         "multi_agent": False, "has_instructions": True, "self_critique": True,
         "has_skills": False,
+        "max_steps": 30, "context_strategy": "full",
     },
     "Colbench Example Agent": {
         "scaffold_type": "code_agent",
@@ -278,6 +326,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": False, "vision_query": False,
         "multi_agent": False, "has_instructions": True, "self_critique": False,
         "has_skills": False,
+        "max_steps": 20, "context_strategy": "full",
     },
     "My Agent": {
         "scaffold_type": "generalist",
@@ -287,6 +336,7 @@ _SCAFFOLD_ENTRIES: dict[str, dict] = {
         "wiki_search": False, "text_inspect": False, "vision_query": False,
         "multi_agent": False, "has_instructions": True, "self_critique": False,
         "has_skills": False,
+        "max_steps": 50, "context_strategy": "full",
     },
 }
 
@@ -415,19 +465,26 @@ def extract_model_features(model_raw: str) -> dict:
         "model_name": name,
         "model_provider": entry.get("provider", np.nan),
         "model_family": entry.get("family", np.nan),
-        "model_generation": entry.get("generation", np.nan),
+        "model_release_ym": entry.get("release_ym", np.nan),
         "model_size_tier": entry.get("size_tier", np.nan),
         "model_reasoning": entry.get("reasoning", np.nan),
-        "model_param_count_b": entry.get("param_count_b", np.nan),
+        "model_param_count_full_b": entry.get("param_count_full_b", np.nan),
+        "model_param_count_active_b": entry.get("param_count_active_b", np.nan),
+        "model_moe": entry.get("moe", np.nan),
     }
 
 
 def extract_scaffold_features(scaffold: str) -> dict:
     """Extract features for a scaffold name."""
     canonical, entry = _resolve_scaffold(scaffold)
-    result = {"scaffold_name": canonical, "scaffold_type": entry.get("scaffold_type", np.nan)}
-    for field in SCAFFOLD_TOOL_FIELDS:
-        result[f"scaffold_{field}"] = entry.get(field, np.nan)
+    result = {
+        "scaffold_name": canonical,
+        "scaffold_type": entry.get("scaffold_type", np.nan),
+        "scaffold_context_strategy": entry.get("context_strategy", np.nan),
+        "scaffold_max_steps": entry.get("max_steps", np.nan),
+    }
+    for f in SCAFFOLD_TOOL_FIELDS:
+        result[f"scaffold_{f}"] = entry.get(f, np.nan)
     return result
 
 
@@ -487,10 +544,17 @@ def build_feature_tables(response_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Da
     scaffold_bool_fields = [f"scaffold_{f}" for f in SCAFFOLD_TOOL_FIELDS]
 
     schema = FeatureSchema(
-        categorical_agent=["model_provider", "model_family", "model_size_tier",
-                           "scaffold_type", "model_name", "scaffold_name"],
-        continuous_agent=["model_generation", "model_param_count_b"],
-        boolean_agent=["model_reasoning"] + scaffold_bool_fields,
+        # model_name and scaffold_name kept as metadata in the DataFrame but excluded
+        # from model inputs — they are identity columns that don't generalize to new agents
+        categorical_agent=[
+            "model_provider", "model_family", "model_size_tier",
+            "scaffold_type", "scaffold_context_strategy",
+        ],
+        continuous_agent=[
+            "model_release_ym", "model_param_count_full_b", "model_param_count_active_b",
+            "scaffold_max_steps",
+        ],
+        boolean_agent=["model_reasoning", "model_moe"] + scaffold_bool_fields,
         categorical_task=["bench_domain", "bench_task_type"],
         boolean_task=["bench_requires_code", "bench_requires_web", "bench_requires_reasoning"],
     )
