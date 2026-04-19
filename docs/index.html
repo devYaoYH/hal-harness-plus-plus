@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HAL-IRT · Agent Evaluation Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset & Base ───────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #f5f2ec;
+    --bg1:      #ede9e1;
+    --bg2:      #e4dfd5;
+    --border:   #cdc8be;
+    --border2:  #b8b2a6;
+    --text:     #1c1e1a;
+    --text-dim: #5a5750;
+    --text-xs:  #9a968e;
+    --acid:     #2d7a35;   /* deep forest green */
+    --amber:    #9a6200;   /* warm ochre */
+    --coral:    #c0392b;   /* negative delta */
+    --sky:      #1a5fa0;   /* cold-start blue */
+    --mono:     'Azeret Mono', monospace;
+    --serif:    'DM Serif Display', serif;
+    --gutter:   clamp(1.5rem, 4vw, 4rem);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.6;
+    min-height: 100vh;
+    /* dot-grid texture */
+    background-image: radial-gradient(circle, #cdc8be 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* ── Header ─────────────────────────────────────────────────────── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(245,242,236,0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--acid);
+  }
+  .logo span { color: var(--text-dim); font-weight: 400; }
+
+  nav { display: flex; gap: 2rem; }
+  nav a {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--text); }
+
+  /* ── Tooltip ────────────────────────────────────────────────────── */
+  .tip-wrap {
+    display: inline-block;
+    position: relative;
+  }
+  .tip-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--text-dim);
+    cursor: default;
+    vertical-align: middle;
+    margin-left: 4px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .tip-trigger:hover { border-color: var(--sky); color: var(--sky); }
+  .tip-box {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    background: #1c1e1a;
+    color: #e8e4dc;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.65;
+    padding: 0.75rem 0.9rem;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 200;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+  .tip-box::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1c1e1a;
+  }
+  .tip-box strong { color: #9efca0; font-weight: 700; display: block; margin-bottom: 0.3rem; }
+  .tip-wrap:hover .tip-box { opacity: 1; }
+
+  /* ── Feature taxonomy ────────────────────────────────────────────── */
+  .feat-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-left: 3.7rem;
+  }
+  @media (max-width: 760px) { .feat-section { grid-template-columns: 1fr; } }
+
+  .feat-panel {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #faf8f3;
+    padding: 1.4rem 1.5rem;
+  }
+  .feat-panel-title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .feat-group { margin-bottom: 1rem; }
+  .feat-group:last-child { margin-bottom: 0; }
+  .feat-group-label {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-xs);
+    margin-bottom: 0.5rem;
+  }
+  .feat-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 3px;
+    border: 1px solid;
+    line-height: 1.4;
+  }
+  .chip-cat  { border-color: #1a5fa055; color: #1a5fa0; background: #1a5fa010; }
+  .chip-cont { border-color: #9a620055; color: #9a6200; background: #9a620010; }
+  .chip-bool { border-color: #2d7a3555; color: #2d7a35; background: #2d7a3510; }
+  .chip-bool.inactive { border-color: var(--border); color: var(--text-dim); background: transparent; }
+  .chip-norm {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--text-xs);
+    background: var(--bg2);
+    border-radius: 2px;
+    padding: 0 4px;
+  }
+
+  /* ── IRT Diagram ─────────────────────────────────────────────────── */
+  .diagram-wrap {
+    margin-left: 3.7rem;
+    margin-top: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #faf8f3;
+    padding: 2rem 2.4rem;
+    overflow-x: auto;
+  }
+  .diagram-title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 2rem;
+  }
+  .diagram {
+    display: grid;
+    grid-template-columns: auto 32px auto 32px auto 32px auto;
+    align-items: center;
+    gap: 0;
+    min-width: 560px;
+  }
+  .d-node {
+    border: 1.5px solid var(--border2);
+    border-radius: 5px;
+    padding: 0.7rem 1rem;
+    background: var(--bg);
+    text-align: center;
+  }
+  .d-node-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.3rem;
+  }
+  .d-node-val {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: var(--mono);
+  }
+  .d-node.accent-blue  { border-color: #1a5fa0; background: #1a5fa008; }
+  .d-node.accent-green { border-color: #2d7a35; background: #2d7a3508; }
+  .d-node.accent-amber { border-color: #9a6200; background: #9a620008; }
+  .d-node.accent-big {
+    border-color: var(--text);
+    background: var(--bg1);
+    padding: 1rem 1.4rem;
+  }
+  .d-node.accent-big .d-node-val { font-size: 15px; }
+  .d-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--border2);
+    font-size: 18px;
+    user-select: none;
+  }
+  .d-col-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .d-formula {
+    margin-top: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .d-formula-block { }
+  .d-formula-eq {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    font-family: var(--mono);
+  }
+  .d-formula-desc {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--text-dim);
+    max-width: 240px;
+    line-height: 1.55;
+  }
+  .d-formula-desc em { color: var(--text); font-style: normal; font-weight: 600; }
+
+  /* K-factor visual */
+  .k-visual {
+    margin-top: 2rem;
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+  .k-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: default;
+  }
+  .k-bar-outer {
+    width: 48px;
+    height: 80px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+  }
+  .k-bar-inner {
+    width: 100%;
+    background: var(--acid);
+    opacity: 0.7;
+    transition: height 0.8s cubic-bezier(.16,1,.3,1), opacity 0.2s;
+    position: absolute;
+    bottom: 0;
+  }
+  .k-bar-inner.auc-bar-vis { background: var(--sky); opacity: 0.75; }
+  .k-bar-wrap:hover .k-bar-inner { opacity: 1; }
+  .k-bar-label { font-size: 9px; font-weight: 700; color: var(--text-dim); letter-spacing: 0.06em; }
+  .k-bar-val   { font-size: 10.5px; font-weight: 600; color: var(--text); font-family: var(--mono); }
+  .k-bar-rec-label {
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--acid);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: -2px;
+  }
+  .k-legend {
+    display: flex;
+    gap: 1.2rem;
+    margin-left: 1.5rem;
+    align-self: flex-end;
+    padding-bottom: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .k-legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 500; color: var(--text-dim); }
+  .k-legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+  .k-visual-title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.8rem;
+  }
+
+  .badge {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--border2);
+    border-radius: 2px;
+    color: var(--text-dim);
+  }
+
+  /* ── Hero ───────────────────────────────────────────────────────── */
+  .hero {
+    padding: 6rem var(--gutter) 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--acid);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--acid);
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-weight: 400;
+    line-height: 1.08;
+    color: #1c1e1a;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--acid);
+  }
+
+  .hero-sub {
+    max-width: 560px;
+    color: var(--text-dim);
+    font-size: 12px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+  .stat { }
+  .stat-num {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 600;
+    color: var(--acid);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+  }
+
+  /* ── Section wrappers ───────────────────────────────────────────── */
+  .section {
+    border-top: 1px solid var(--border);
+    padding: 4rem var(--gutter);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-num {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text-xs);
+    min-width: 2.5rem;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 400;
+    color: #1c1e1a;
+  }
+
+  .section-desc {
+    margin-left: 3.7rem;
+    margin-bottom: 2.5rem;
+    color: var(--text-dim);
+    font-size: 11.5px;
+    max-width: 640px;
+    line-height: 1.75;
+  }
+
+  /* ── Tables ─────────────────────────────────────────────────────── */
+  .tbl-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  thead th {
+    background: var(--bg2);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(45,122,53,0.05); }
+
+  tbody td {
+    padding: 10px 14px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .num { font-weight: 600; color: #1c1e1a; }
+  .dim { color: var(--text-dim); }
+
+  /* Recommended row */
+  .rec-row { background: rgba(45,122,53,0.07) !important; }
+  .rec-row td { color: #1a3d1e; }
+  .rec-tag {
+    display: inline-block;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--acid);
+    color: #f5f2ec;
+    padding: 2px 6px;
+    border-radius: 2px;
+    margin-left: 8px;
+    font-weight: 700;
+    vertical-align: middle;
+  }
+
+  /* K-label pill */
+  .k-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .k-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--amber);
+  }
+  .feat-on  { color: var(--acid); font-size: 10px; }
+  .feat-off { color: var(--text-xs); font-size: 10px; }
+
+  /* AUC bar spark */
+  .auc-cell { display: flex; align-items: center; gap: 8px; }
+  .auc-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    width: 60px;
+    overflow: hidden;
+  }
+  .auc-fill {
+    height: 100%;
+    background: var(--acid);
+    border-radius: 2px;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.8s cubic-bezier(.16,1,.3,1);
+  }
+
+  /* Benchmark tags */
+  .bench-tag {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+    border: 1px solid;
+  }
+  .bench-swe    { border-color: #1a5fa0aa; color: #1a5fa0; background: #1a5fa012; }
+  .bench-gaia   { border-color: #9a6200aa; color: #9a6200; background: #9a620012; }
+  .bench-core   { border-color: #6a2d90aa; color: #6a2d90; background: #6a2d9012; }
+  .bench-sci    { border-color: #c05020aa; color: #c05020; background: #c0502012; }
+  .bench-mind   { border-color: #1a8060aa; color: #1a8060; background: #1a806012; }
+  .bench-asst   { border-color: #a01850aa; color: #a01850; background: #a0185012; }
+  .bench-col    { border-color: #5020a0aa; color: #5020a0; background: #5020a012; }
+  .bench-scib   { border-color: #7a7a00aa; color: #7a7a00; background: #7a7a0012; }
+
+  /* Reduction bar */
+  .reduc-cell { display: flex; align-items: center; gap: 10px; }
+  .reduc-bar {
+    width: 80px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .reduc-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--acid), #60f0c0);
+    border-radius: 2px;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 1s cubic-bezier(.16,1,.3,1);
+  }
+
+  /* ── Grid layout for sections ───────────────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-left: 3.7rem;
+  }
+  @media (max-width: 780px) { .two-col { grid-template-columns: 1fr; } }
+
+  .tbl-full { margin-left: 3.7rem; }
+
+  /* ── Cards ──────────────────────────────────────────────────────── */
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #faf8f3;
+    padding: 1.6rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border2); }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--acid), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover::before { opacity: 0.4; }
+
+  .card-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #1c1e1a;
+    margin-bottom: 0.4rem;
+    line-height: 1.2;
+  }
+
+  .card-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 1.4rem;
+    line-height: 1.6;
+  }
+
+  .accuracy-row {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-end;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .acc-block { }
+  .acc-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.2rem;
+  }
+  .acc-value {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .acc-value.predicted { color: var(--sky); }
+  .acc-value.baseline  { color: var(--text-dim); font-size: 1.3rem; }
+  .acc-value.improved  { color: var(--acid); }
+
+  .delta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+  .delta-pos { background: rgba(45,122,53,0.10); color: var(--acid); border: 1px solid rgba(45,122,53,0.25); }
+  .delta-neg { background: rgba(192,57,43,0.10); color: var(--coral); border: 1px solid rgba(192,57,43,0.25); }
+
+  /* Theta vector display */
+  .theta-display {
+    background: var(--bg1);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.8rem 1rem;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+  .theta-display .theta-label { color: var(--sky); font-weight: 600; margin-bottom: 0.3rem; }
+  .theta-dim {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.3rem;
+  }
+  .theta-dim-val {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--sky);
+  }
+  .theta-dim-label { font-size: 9px; color: var(--text-xs); }
+
+  /* Confidence bar */
+  .conf-wrap { margin-top: 0.8rem; }
+  .conf-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+  }
+  .conf-track {
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .conf-fill {
+    height: 100%;
+    border-radius: 3px;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 1.2s cubic-bezier(.16,1,.3,1);
+  }
+  .conf-sky   { background: linear-gradient(90deg, #2a80c8, var(--sky)); }
+  .conf-acid  { background: linear-gradient(90deg, #1a5020, var(--acid)); }
+  .conf-amber { background: linear-gradient(90deg, #7a4a00, var(--amber)); }
+
+  .method-note {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: var(--bg1);
+    border-left: 2px solid var(--sky);
+    font-size: 10.5px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .method-note strong { color: var(--sky); font-weight: 500; }
+
+  .pending-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border: 1px solid rgba(154,98,0,0.35);
+    background: rgba(154,98,0,0.08);
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .pending-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.3; }
+  }
+
+  /* Tool comparison micro-table */
+  .tool-grid {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    font-size: 10px;
+  }
+  .tool-col-hdr {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.4rem;
+  }
+  .tool-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 0;
+    color: var(--text-dim);
+  }
+  .tool-item.present { color: var(--text); }
+  .tool-item.removed { color: var(--coral); text-decoration: line-through; }
+  .tool-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .dot-on      { background: var(--acid); }
+  .dot-off     { background: var(--border); }
+  .dot-removed { background: var(--coral); }
+
+  /* Ablation cards layout */
+  .ablation-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1.5rem;
+    margin-left: 3.7rem;
+  }
+  @media (max-width: 860px) { .ablation-grid { grid-template-columns: 1fr; } }
+
+  /* ── Footer ─────────────────────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem var(--gutter);
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-dim);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+
+  /* ── Animations ─────────────────────────────────────────────────── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Counter animation */
+  .counter { display: inline; }
+
+  /* Hide Val Loss column in sweep table */
+  #sweep-table thead th:nth-child(2),
+  #sweep-table tbody td:nth-child(2) { display: none; }
+
+  /* Scanline hover on table rows */
+  tbody tr:hover td { position: relative; }
+
+  /* ── View toggle ─────────────────────────────────────────────────── */
+  .view-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .view-btn {
+    padding: 5px 14px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: var(--bg1);
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .view-btn + .view-btn { border-left: 1px solid var(--border); }
+  .view-btn.active {
+    background: var(--text);
+    color: var(--bg);
+  }
+  .view-btn:hover:not(.active) { background: var(--bg2); color: var(--text); }
+
+  /* ── Heatmap grid ─────────────────────────────────────────────────── */
+  .heatmap-wrap {
+    overflow-x: auto;
+  }
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: 110px repeat(4, 1fr);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    min-width: 440px;
+  }
+  .hm-cell {
+    padding: 10px 12px;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: filter 0.15s;
+    position: relative;
+  }
+  .hm-cell:last-child,
+  .hm-cell:nth-child(5n) { border-right: none; }
+  .hm-row-last .hm-cell { border-bottom: none; }
+  .hm-cell:hover { filter: brightness(0.94); }
+  .hm-header {
+    background: var(--bg2);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 10px 8px;
+  }
+  .hm-header-sub { font-size: 8px; font-weight: 500; letter-spacing: 0.06em; text-transform: none; opacity: 0.7; }
+  .hm-row-label {
+    background: var(--bg1);
+    font-size: 10px;
+    font-weight: 700;
+    text-align: left;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .hm-row-label .rl-k { font-size: 12px; color: var(--amber); }
+  .hm-row-label .rl-feat { font-size: 9px; color: var(--text-dim); font-weight: 500; }
+  .hm-rec-strip {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--acid);
+  }
+  .hm-val { position: relative; z-index: 1; }
+  .hm-rec-tag {
+    position: absolute;
+    bottom: 4px; right: 5px;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--acid);
+    opacity: 0.8;
+  }
+
+  /* ── Harness heatmap ─────────────────────────────────────────────── */
+  .hm2-wrap {
+    margin-left: 3.7rem;
+    margin-top: 2rem;
+    overflow-x: auto;
+  }
+  .hm2-grid {
+    display: grid;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .hm2-corner {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 12px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex;
+    align-items: flex-end;
+  }
+  .hm2-col-hdr {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    text-align: center;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hm2-col-hdr:last-child { border-right: none; }
+  .hm2-row-hdr {
+    background: var(--bg1);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 9px 12px;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+  .hm2-row-hdr.last-row { border-bottom: none; }
+  .hm2-cell {
+    border-right: 1px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 9px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    transition: filter 0.15s;
+    cursor: default;
+    position: relative;
+  }
+  .hm2-cell:hover { filter: brightness(0.93); z-index: 1; }
+  .hm2-cell.last-col { border-right: none; }
+  .hm2-cell.last-row { border-bottom: none; }
+  .hm2-null { color: rgba(0,0,0,0.18); font-weight: 500; font-size: 10px; }
+  .hm2-legend {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── Divider ────────────────────────────────────────────────────── */
+  .rule {
+    height: 1px;
+    background: var(--border);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* Add-card placeholder */
+  .add-card {
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    color: var(--text-xs);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: default;
+    transition: border-color 0.2s, color 0.2s;
+    min-height: 180px;
+  }
+  .add-card:hover { border-color: var(--border2); color: var(--text-dim); }
+  .add-icon { font-size: 1.5rem; opacity: 0.4; }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 0;
+    left: var(--gutter);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-xs);
+    animation: fadeHint 3s ease 2s forwards;
+    opacity: 0;
+  }
+  @keyframes fadeHint { 0%{opacity:0} 20%{opacity:1} 80%{opacity:1} 100%{opacity:0} }
+  .scroll-arrow {
+    width: 1px;
+    height: 20px;
+    background: var(--text-xs);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-arrow::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 1px;
+    height: 20px;
+    background: var(--acid);
+    animation: scrollDown 1.5s ease 2s infinite;
+  }
+  @keyframes scrollDown { to { top: 20px; } }
+
+</style>
+</head>
+<body>
+
+<!-- ── Header ───────────────────────────────────────────────────────────── -->
+<header>
+  <div class="logo">HAL<span>·</span>IRT <span>// Agent Evaluation Intelligence</span></div>
+  <nav>
+    <a href="#model-arch">Architecture</a>
+    <a href="#irt-model">IRT Results</a>
+    <a href="#predictions">Predictions</a>
+    <a href="#ablations">Ablations</a>
+    <a href="#references">References</a>
+  </nav>
+  <div class="badge">K=2 · 13 harnesses · 36 models · 1796 tasks</div>
+</header>
+
+<!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-eyebrow">HAL Leaderboard · IRT Analysis · April 2026</div>
+  <h1>Evaluating agents<br>with <em>fewer tasks,</em><br>more precision.</h1>
+  <p class="hero-sub">
+    A K=2 Multidimensional IRT model fitted on the public HAL leaderboard dataset — covering
+    13 harnesses across 36 models — identifies maximally discriminating tasks per benchmark,
+    enabling 40–44% evaluation cost reduction with minimal loss in ability estimation accuracy.
+    Feature-informed priors enable cold-start prediction for novel harness × model pairs.
+  </p>
+  <div class="stat-row">
+    <div class="stat">
+      <div class="stat-num counter" data-target="13">0</div>
+      <div class="stat-label">Harnesses</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num counter" data-target="36">0</div>
+      <div class="stat-label">Models</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num counter" data-target="1796">0</div>
+      <div class="stat-label">Tasks indexed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num counter" data-target="8">0</div>
+      <div class="stat-label">Benchmarks</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">~41<span style="font-size:1.2rem">%</span></div>
+      <div class="stat-label">Avg cost reduction</div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-arrow"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- ── Section 01: Model Architecture ───────────────────────────────────── -->
+<div class="rule"></div>
+<section class="section" id="model-arch">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Model Architecture &amp; Features</h2>
+  </div>
+  <p class="section-desc">
+    Each agent is described by two groups of metadata — model-level and scaffold-level.
+    These features feed into a projection network f<sub>agent</sub>(·) that provides a
+    cold-start prior for the latent ability vector θ, even for agents never seen during training.
+  </p>
+
+  <!-- Feature taxonomy -->
+  <div class="feat-section fade-up">
+    <!-- Model features -->
+    <div class="feat-panel">
+      <div class="feat-panel-title">Model features</div>
+
+      <div class="feat-group">
+        <div class="feat-group-label">Categorical — embedded then projected</div>
+        <div class="feat-chips">
+          <span class="chip chip-cat">provider</span>
+          <span class="chip chip-cat">family</span>
+          <span class="chip chip-cat">size_tier</span>
+        </div>
+      </div>
+
+      <div class="feat-group">
+        <div class="feat-group-label">Continuous — normalized before input</div>
+        <div class="feat-chips">
+          <span class="chip chip-cont">release_ym <span class="chip-norm">z-score</span></span>
+          <span class="chip chip-cont">param_count_full_b <span class="chip-norm">log1p</span></span>
+          <span class="chip chip-cont">param_count_active_b <span class="chip-norm">log1p</span></span>
+        </div>
+      </div>
+
+      <div class="feat-group">
+        <div class="feat-group-label">Boolean</div>
+        <div class="feat-chips">
+          <span class="chip chip-bool">reasoning</span>
+          <span class="chip chip-bool">moe</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scaffold features -->
+    <div class="feat-panel">
+      <div class="feat-panel-title">Scaffold features</div>
+
+      <div class="feat-group">
+        <div class="feat-group-label">Categorical</div>
+        <div class="feat-chips">
+          <span class="chip chip-cat">scaffold_type</span>
+          <span class="chip chip-cat">context_strategy</span>
+        </div>
+      </div>
+
+      <div class="feat-group">
+        <div class="feat-group-label">Continuous</div>
+        <div class="feat-chips">
+          <span class="chip chip-cont">max_steps <span class="chip-norm">log1p</span></span>
+        </div>
+      </div>
+
+      <div class="feat-group">
+        <div class="feat-group-label">Boolean tools (16 fields)</div>
+        <div class="feat-chips">
+          <span class="chip chip-bool">filesystem</span>
+          <span class="chip chip-bool">file_edit</span>
+          <span class="chip chip-bool">file_search</span>
+          <span class="chip chip-bool">python_exec</span>
+          <span class="chip chip-bool">execute_bash</span>
+          <span class="chip chip-bool">web_search</span>
+          <span class="chip chip-bool">page_browse</span>
+          <span class="chip chip-bool">text_inspect</span>
+          <span class="chip chip-bool">vision_query</span>
+          <span class="chip chip-bool inactive">self_critique</span>
+          <span class="chip chip-bool inactive">multi_agent</span>
+          <span class="chip chip-bool inactive">memory</span>
+          <span class="chip chip-bool inactive">+ 4 more</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IRT diagram -->
+  <div class="diagram-wrap fade-up">
+    <div class="diagram-title">Multidimensional IRT — computational graph</div>
+
+    <div class="diagram">
+      <!-- col 1: inputs -->
+      <div class="d-col-stack">
+        <div class="d-node accent-blue">
+          <div class="d-node-label">Agent features</div>
+          <div class="d-node-val">x<sub>i</sub></div>
+        </div>
+        <div class="d-node accent-blue">
+          <div class="d-node-label">Agent embedding</div>
+          <div class="d-node-val">e<sub>i</sub></div>
+        </div>
+      </div>
+      <!-- arrow -->
+      <div class="d-arrow">→</div>
+      <!-- col 2: projections -->
+      <div class="d-col-stack">
+        <div class="d-node accent-blue">
+          <div class="d-node-label">Feature projection</div>
+          <div class="d-node-val">f<sub>agent</sub>(x<sub>i</sub>)</div>
+        </div>
+        <div class="d-node accent-blue" style="opacity:0.5;">
+          <div class="d-node-label">Lookup (seen agents)</div>
+          <div class="d-node-val">θ<sub>embed</sub></div>
+        </div>
+      </div>
+      <!-- arrow -->
+      <div class="d-arrow">→</div>
+      <!-- col 3: theta -->
+      <div class="d-node accent-big">
+        <div class="d-node-label">Latent ability</div>
+        <div class="d-node-val">θ<sub>i</sub> ∈ ℝ<sup>K</sup></div>
+      </div>
+      <!-- arrow -->
+      <div class="d-arrow">→</div>
+      <!-- col 4: sigmoid -->
+      <div class="d-node accent-big" style="border-color:#2d7a35;background:#2d7a3508;">
+        <div class="d-node-label">Probability</div>
+        <div class="d-node-val">σ(θ<sub>i</sub>·a<sub>j</sub> + d<sub>j</sub>)</div>
+      </div>
+    </div>
+
+    <!-- Task params note -->
+    <div style="margin-top:0.8rem;margin-left:calc(2*(var(--gutter,2rem)) + 60px);font-size:10px;font-weight:500;color:var(--text-dim);">
+      ↑ task j parameters: <span style="color:var(--amber);font-weight:600;">a<sub>j</sub></span> discrimination vector (K-dim) · <span style="color:var(--amber);font-weight:600;">d<sub>j</sub></span> easiness scalar — fitted jointly during training
+    </div>
+
+    <!-- Formula legend -->
+    <div class="d-formula">
+      <div class="d-formula-block">
+        <div class="d-formula-eq">θ<sub>i</sub> = θ<sub>embed,i</sub> + f<sub>agent</sub>(x<sub>i</sub>)</div>
+        <div class="d-formula-desc">
+          Latent ability is a <em>sum</em> of a learned embedding (seen agents) and a feature-based projection.
+          For <em>novel agents</em>, only the projection is available — this is the cold-start prior.
+        </div>
+      </div>
+      <div class="d-formula-block">
+        <div class="d-formula-eq">P(y<sub>ij</sub>=1) = σ(θ<sub>i</sub>·a<sub>j</sub> + d<sub>j</sub>)</div>
+        <div class="d-formula-desc">
+          Inner product of agent ability and task discrimination determines difficulty.
+          <em>K</em> controls the number of latent dimensions — K=2 is recommended
+          for interpretability without sacrificing fit.
+        </div>
+      </div>
+      <div class="d-formula-block">
+        <div class="d-formula-eq">Loss = −log P(y<sub>ij</sub>) + λ‖θ‖²</div>
+        <div class="d-formula-desc">
+          Binary cross-entropy over observed response matrix entries,
+          with L2 regularisation on agent embeddings to prevent overfitting
+          on sparse agents.
+        </div>
+      </div>
+    </div>
+
+    <!-- K-factor visual -->
+    <div style="margin-top:2rem;">
+      <div class="k-visual-title">K-factor sweep — val AUC <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why AUC?</strong>Area Under the ROC Curve measures rank-order discrimination: does the model correctly rank a harder agent below an easier one on a given task? AUC = 0.5 is random; AUC = 1.0 is perfect ordering. It is threshold-agnostic — useful when we care about relative rankings across 273 agents more than a single cut-point.</span></span> &amp; calibration error <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why calibration?</strong>A calibrated model is right about its confidence: when it predicts 70% pass rate, ~70% of agents actually pass. Poor calibration inflates predicted probabilities for hard tasks or deflates them for easy ones, making adaptive task selection less reliable. We target cal err &lt; 0.05 — below that, the probability estimates are trustworthy enough to drive task-subset decisions.</span></span> (features on, K ∈ {1,2,4,8})</div>
+      <div class="k-visual" id="k-visual"></div>
+      <div class="k-legend">
+        <div class="k-legend-item"><div class="k-legend-dot" style="background:var(--sky);opacity:0.8;"></div>Val AUC (higher = better rank ordering)</div>
+        <div class="k-legend-item"><div class="k-legend-dot" style="background:var(--coral);opacity:0.8;"></div>Calibration error (lower = better)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Section 02: IRT Model ─────────────────────────────────────────────── -->
+<div class="rule"></div>
+<section class="section" id="irt-model">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">IRT Model Results</h2>
+  </div>
+  <p class="section-desc">
+    K-factor sweep across latent-only and feature-informed variants.
+    Features: model provider / family / release date / param counts (full + active) / MoE flag +
+    16 scaffold boolean tool fields + context strategy. K=2+features minimises calibration
+    error while remaining interpretable — recommended for adaptive testing.
+  </p>
+
+  <div class="two-col fade-up">
+    <!-- Sweep table / heatmap -->
+    <div>
+      <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.8rem;">K-factor sweep · val metrics</div>
+      <div class="tbl-wrap">
+        <table id="sweep-table">
+          <thead>
+            <tr>
+              <th>Config</th>
+              <th>Val Loss ↓</th>
+              <th>Val AUC ↑ <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why AUC?</strong>Measures rank-order discrimination: does the model correctly rank a weaker agent below a stronger one on each task? AUC = 0.5 is random; 1.0 is perfect. Threshold-agnostic — ideal for comparing harness × model pairs where no single cut-point matters.</span></span></th>
+              <th>Val Acc ↑</th>
+              <th>Cal Err ↓ <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why calibration?</strong>A calibrated model is right about its confidence: when it predicts 70% pass rate, ~70% of runs actually pass. Poor calibration makes adaptive task selection unreliable — we use predicted probabilities to rank tasks by discrimination, so accuracy of those probabilities matters. Target: &lt; 0.05.</span></span></th>
+            </tr>
+          </thead>
+          <tbody id="sweep-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Adaptive subset table -->
+    <div>
+      <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.8rem;">Adaptive subsets · 80% discrimination coverage</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Benchmark</th>
+              <th>Full → Subset</th>
+              <th>Reduction</th>
+            </tr>
+          </thead>
+          <tbody id="subset-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Harness × Benchmark heatmap -->
+  <div class="hm2-wrap fade-up">
+    <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.8rem;">
+      swebench_verified_mini · model × harness accuracy (from public HAL leaderboard)
+    </div>
+    <div class="hm2-grid" id="hm2-grid"></div>
+    <div class="hm2-legend">
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);">Scale</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:80px;height:8px;border-radius:2px;background:linear-gradient(90deg,#f0f4f0,#2d7a35);"></div>
+        <span style="font-size:9px;color:var(--text-dim);font-weight:500;">0% → high acc</span>
+      </div>
+      <div style="font-size:9px;color:var(--text-xs);font-weight:500;">— = not evaluated · color normalised per harness column</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Section 03: Novel Predictions ─────────────────────────────────────── -->
+<div class="rule"></div>
+<section class="section" id="predictions">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Novel Agent Predictions</h2>
+  </div>
+  <p class="section-desc">
+    For scaffold × model combinations absent from training, the feature projection
+    <code style="color:var(--sky);background:var(--bg2);padding:1px 5px;border-radius:2px;font-weight:600;">f_agent(features)</code>
+    serves as a cold-start prior for θ, enabling ability estimation without any
+    observed responses. Predicted probabilities are computed using frozen task parameters.
+  </p>
+
+  <div class="two-col fade-up" style="margin-left:3.7rem;">
+    <!-- Prediction card -->
+    <div class="card">
+      <div class="card-eyebrow">
+        <span>Cold-start prediction · swebench_verified_mini</span>
+        <div class="pending-badge"><div class="pending-dot"></div>Awaiting validation</div>
+      </div>
+      <div class="card-title">SWE-Agent × DeepSeek-R1</div>
+      <div class="card-sub">Novel combination — SWE-Agent has only been observed with claude-3-7-sonnet. Both scaffold and model are individually known; their pairing is absent from training.</div>
+
+      <div class="accuracy-row">
+        <div class="acc-block">
+          <div class="acc-label">Predicted accuracy</div>
+          <div class="acc-value predicted">38.4%</div>
+        </div>
+        <div class="acc-block">
+          <div class="acc-label">Baseline (SWE-Agent + claude-3-7)</div>
+          <div class="acc-value baseline">53.0%</div>
+        </div>
+        <div class="delta-badge delta-neg">−14.6 pp</div>
+      </div>
+
+      <div class="theta-display">
+        <div class="theta-label">θ cold-start (rescaled to training norm)</div>
+        <div class="theta-dim">
+          <span class="theta-dim-label">dim₀</span>
+          <span class="theta-dim-val">−5.6</span>
+          <span class="theta-dim-label" style="margin-left:1rem;">dim₁</span>
+          <span class="theta-dim-val">−10.4</span>
+        </div>
+        <div style="font-size:9px;color:var(--text-xs);margin-top:.5rem;">
+          dim₀: general agent capability · dim₁: code-task discrimination axis
+        </div>
+      </div>
+
+      <div class="conf-wrap">
+        <div class="conf-label"><span>Cold-start confidence</span><span>medium</span></div>
+        <div class="conf-track"><div class="conf-fill conf-sky" data-w="0.58"></div></div>
+      </div>
+
+      <div class="method-note">
+        <strong>Method:</strong> Feature projection only — no latent embedding (agent unseen).
+        Raw θ norm (242.7) rescaled to training distribution mean (11.8) before computing
+        task probabilities. Norm rescaling is applied when a novel feature combination
+        extrapolates beyond the training manifold.
+      </div>
+    </div>
+
+    <!-- Add card placeholder -->
+    <div class="add-card">
+      <div class="add-icon">+</div>
+      <div>Drop in another prediction</div>
+      <div style="font-size:9px;color:var(--text-xs);text-align:center;max-width:180px;">
+        Run predict_new_agent.py with any scaffold × model pair
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Section 04: Tool Ablations ─────────────────────────────────────────── -->
+<div class="rule"></div>
+<section class="section" id="ablations">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Tool Ablation Predictions</h2>
+  </div>
+  <p class="section-desc">
+    Model-matched observational analysis of the response matrix isolates per-tool
+    accuracy contributions. HAL Generalist's <code style="color:var(--acid);background:var(--bg2);padding:1px 5px;border-radius:2px;font-weight:600;">run()</code>
+    now accepts <code style="color:var(--acid);background:var(--bg2);padding:1px 5px;border-radius:2px;font-weight:600;">disable_tools=…</code>
+    to toggle individual tools without forking the agent.
+  </p>
+
+  <div class="ablation-grid fade-up">
+
+    <!-- Primary ablation card -->
+    <div class="card">
+      <div class="card-eyebrow">
+        <span>Primary experiment · swebench_verified_mini · 28 tasks</span>
+        <div class="pending-badge"><div class="pending-dot"></div>Pending validation</div>
+      </div>
+      <div class="card-title">HAL Generalist − web/doc tools</div>
+      <div class="card-sub">Remove the 4 web-oriented tools irrelevant to local repository repair.
+        Remaining set is a superset of both SWE-Agent and My Agent.</div>
+
+      <div class="accuracy-row">
+        <div class="acc-block">
+          <div class="acc-label">Baseline (full tools)</div>
+          <div class="acc-value baseline">32.0%</div>
+        </div>
+        <div class="acc-block">
+          <div class="acc-label">Predicted (ablated)</div>
+          <div class="acc-value improved">~50%</div>
+        </div>
+        <div class="delta-badge delta-pos">+18 pp</div>
+      </div>
+
+      <div class="conf-wrap">
+        <div class="conf-label"><span>Prediction confidence</span><span>high · 3 model-matched controls</span></div>
+        <div class="conf-track"><div class="conf-fill conf-acid" data-w="0.82"></div></div>
+      </div>
+
+      <div class="tool-grid">
+        <div>
+          <div class="tool-col-hdr">HAL full (8 tools)</div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>filesystem</div>
+          <div class="tool-item removed"><span class="tool-dot dot-removed"></span>web_search</div>
+          <div class="tool-item removed"><span class="tool-dot dot-removed"></span>page_browse</div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>python_exec</div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>file_edit</div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>file_search</div>
+          <div class="tool-item removed"><span class="tool-dot dot-removed"></span>text_inspect</div>
+          <div class="tool-item removed"><span class="tool-dot dot-removed"></span>vision_query</div>
+        </div>
+        <div>
+          <div class="tool-col-hdr">HAL ablated (4 tools)</div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>filesystem</div>
+          <div class="tool-item"><span class="tool-dot dot-off"></span><span style="color:var(--text-dim)">—</span></div>
+          <div class="tool-item"><span class="tool-dot dot-off"></span><span style="color:var(--text-dim)">—</span></div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>python_exec</div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>file_edit</div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>file_search</div>
+          <div class="tool-item"><span class="tool-dot dot-off"></span><span style="color:var(--text-dim)">—</span></div>
+          <div class="tool-item"><span class="tool-dot dot-off"></span><span style="color:var(--text-dim)">—</span></div>
+        </div>
+        <div>
+          <div class="tool-col-hdr">SWE-Agent (3 tools)</div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>filesystem</div>
+          <div class="tool-item"><span class="tool-dot dot-off"></span><span style="color:var(--text-dim)">—</span></div>
+          <div class="tool-item"><span class="tool-dot dot-off"></span><span style="color:var(--text-dim)">—</span></div>
+          <div class="tool-item"><span class="tool-dot dot-off"></span><span style="color:var(--text-dim)">—</span></div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>file_edit</div>
+          <div class="tool-item present"><span class="tool-dot dot-on"></span>file_search</div>
+          <div class="tool-item"><span class="tool-dot dot-off"></span><span style="color:var(--text-dim)">—</span></div>
+          <div class="tool-item"><span class="tool-dot dot-off"></span><span style="color:var(--text-dim)">—</span></div>
+        </div>
+      </div>
+
+      <div class="method-note" style="border-left-color:var(--acid);margin-top:1rem;">
+        <strong style="color:var(--acid)">Mechanism:</strong> web_search / page_browse / text_inspect / vision_query
+        have zero relevance to local repo repair. Agent wastes tool budget on them,
+        inflating decision overhead. Ablated set is the only configuration with both
+        python_exec (reproduce bugs) and file_search (grep codebase) simultaneously.
+      </div>
+    </div>
+
+    <!-- Secondary ablation card -->
+    <div class="card">
+      <div class="card-eyebrow">
+        <span>Secondary experiment · scicode · 49 tasks</span>
+        <div class="pending-badge"><div class="pending-dot"></div>Pending validation</div>
+      </div>
+      <div class="card-title">HAL Generalist − vision_query</div>
+      <div class="card-sub">Remove VLM tool on pure scientific code generation. No images in scicode tasks — vision_query is a distractor.</div>
+
+      <div class="accuracy-row">
+        <div class="acc-block">
+          <div class="acc-label">Baseline</div>
+          <div class="acc-value baseline" style="font-size:1.5rem">2.6%</div>
+        </div>
+        <div class="acc-block">
+          <div class="acc-label">Predicted</div>
+          <div class="acc-value improved" style="font-size:1.5rem">3.8%</div>
+        </div>
+        <div class="delta-badge delta-pos">+1.2 pp</div>
+      </div>
+
+      <div class="conf-wrap">
+        <div class="conf-label"><span>Prediction confidence</span><span>medium · 6 model-matched</span></div>
+        <div class="conf-track"><div class="conf-fill conf-amber" data-w="0.52"></div></div>
+      </div>
+
+      <div class="method-note" style="margin-top:1rem;border-left-color:var(--amber);">
+        <strong style="color:var(--amber)">Note:</strong> Small absolute effect (+1.2pp) but
+        consistent across 6 shared models (HAL Generalist vs Scicode-specialized agents).
+        Lower priority — run after primary swebench experiment.
+      </div>
+
+      <div style="margin-top:1.2rem;font-size:10px;color:var(--text-dim);">
+        <div style="margin-bottom:.4rem;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-xs);">Run command</div>
+        <code style="background:var(--bg1);border:1px solid var(--border);padding:.6rem .8rem;display:block;border-radius:3px;color:var(--amber);font-size:10px;line-height:1.6;font-weight:600;">DISABLE_TOOLS=vision_query<br>BENCHMARK=scicode<br>python3 -c "import run_tool_ablation; run_tool_ablation.main()"</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule" style="margin-top:2rem;"></div>
+
+<!-- ── References ────────────────────────────────────────────────────────── -->
+<section class="section" id="references" style="padding-top:2.5rem;padding-bottom:2.5rem;">
+  <div class="section-header" style="margin-bottom:1.5rem;">
+    <span class="section-num">Ref</span>
+    <h2 class="section-title" style="font-size:1.2rem;">Related Work</h2>
+  </div>
+  <div style="margin-left:3.7rem;display:flex;flex-direction:column;gap:1rem;">
+    <div style="border:1px solid var(--border);border-radius:4px;background:#faf8f3;padding:1rem 1.2rem;display:flex;gap:1.2rem;align-items:flex-start;">
+      <div style="font-size:11px;font-weight:700;color:var(--text-xs);min-width:2rem;padding-top:1px;">[0]</div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:0.2rem;">Holistic Agent Leaderboard: The Missing Infrastructure for AI Agent Evaluation</div>
+        <div style="font-size:11px;font-weight:500;color:var(--text-dim);margin-bottom:0.4rem;">Sayash Kapoor, Benedikt Stroebl, Peter Kirgis et al. · 2025</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:0.6rem;">Introduces a standardized harness and public leaderboard that orchestrates parallel agent evaluations across hundreds of VMs, covering coding, web navigation, and customer service tasks.</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text);background:var(--bg2);border-left:2px solid var(--acid);padding:0.5rem 0.75rem;border-radius:0 3px 3px 0;margin-bottom:0.6rem;line-height:1.6;">This work builds directly on the <em style="font-style:normal;color:var(--acid);">public HAL leaderboard dataset</em> — the response matrix of 13 harnesses × 36 models × 1796 tasks across 8 benchmarks is extracted from HAL's open evaluation results. HAL provides the infrastructure; we apply IRT on top to make that data actionable for adaptive evaluation.</div>
+        <a href="https://arxiv.org/abs/2510.11977" target="_blank" rel="noopener" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--sky);text-decoration:none;">arxiv.org/abs/2510.11977 ↗</a>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:4px;background:#faf8f3;padding:1rem 1.2rem;display:flex;gap:1.2rem;align-items:flex-start;">
+      <div style="font-size:11px;font-weight:700;color:var(--text-xs);min-width:2rem;padding-top:1px;">[1]</div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:0.2rem;">Reliable and Efficient Amortized Model-based Evaluation</div>
+        <div style="font-size:11px;font-weight:500;color:var(--text-dim);margin-bottom:0.4rem;">Sang Truong, Yuheng Tu, Percy Liang, Bo Li, Sanmi Koyejo · 2025</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:0.6rem;">Uses item response theory with trained difficulty predictors and adaptive question generation to enable reliable LM evaluation at a fraction of the cost across multiple benchmarks.</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text);background:var(--bg2);border-left:2px solid var(--sky);padding:0.5rem 0.75rem;border-radius:0 3px 3px 0;margin-bottom:0.6rem;line-height:1.6;">We draw on the idea of learning a <em style="font-style:normal;color:var(--sky);">latent capability embedding</em> per agent — the MIRT θ vector plays the same role as the amortised model representation here, letting us predict performance on unseen tasks from a compact learned prior rather than exhaustive evaluation.</div>
+        <a href="https://arxiv.org/abs/2503.13335" target="_blank" rel="noopener" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--sky);text-decoration:none;">arxiv.org/abs/2503.13335 ↗</a>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:4px;background:#faf8f3;padding:1rem 1.2rem;display:flex;gap:1.2rem;align-items:flex-start;">
+      <div style="font-size:11px;font-weight:700;color:var(--text-xs);min-width:2rem;padding-top:1px;">[2]</div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:0.2rem;">tinyBenchmarks: evaluating LLMs with fewer examples</div>
+        <div style="font-size:11px;font-weight:500;color:var(--text-dim);margin-bottom:0.4rem;">Felipe Maia Polo, Lucas Weber, Leshem Choshen, Yuekai Sun, Gongjun Xu, Mikhail Yurochkin · 2024</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:0.6rem;">Demonstrates that LLM benchmark performance can be accurately estimated from ~100 curated IRT-selected examples rather than full datasets of thousands, releasing compact versions of popular benchmarks.</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text);background:var(--bg2);border-left:2px solid var(--amber);padding:0.5rem 0.75rem;border-radius:0 3px 3px 0;margin-bottom:0.6rem;line-height:1.6;">We directly extend the <em style="font-style:normal;color:var(--amber);">CAT (Computerised Adaptive Testing)</em> principle to agent benchmarks: rank tasks by fitted IRT discrimination ‖a<sub>j</sub>‖ and keep only the high-signal subset. Where tinyBenchmarks targets LLM eval on fixed QA sets, we apply the same cost-reduction logic to longer-horizon agentic tasks across 8 benchmarks, achieving 25–44% task reduction.</div>
+        <a href="https://arxiv.org/abs/2402.14992" target="_blank" rel="noopener" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--sky);text-decoration:none;">arxiv.org/abs/2402.14992 ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ── Footer ────────────────────────────────────────────────────────────── -->
+<footer>
+  <div>HAL-IRT · K=2 Multidimensional IRT · 13 harnesses × 36 models × 1796 tasks · April 2026</div>
+  <div style="display:flex;gap:1.5rem;">
+    <a href="#">GENERALIZATION_TEST.md</a>
+    <a href="#">irt_data/</a>
+    <a href="#">prefect/run_tool_ablation.py</a>
+  </div>
+</footer>
+
+<!-- ── JS ────────────────────────────────────────────────────────────────── -->
+<script>
+// ── K-factor visual bars ──────────────────────────────────────────────────
+const K_FEAT = [
+  { k:1, auc:0.818, cal:0.066, rec:false },
+  { k:2, auc:0.832, cal:0.043, rec:true  },
+  { k:4, auc:0.831, cal:0.044, rec:false },
+  { k:8, auc:0.835, cal:0.043, rec:false },
+];
+const kContainer = document.getElementById('k-visual');
+const aucMin = 0.81, aucMax = 0.84;
+const calMin = 0.00, calMax = 0.08;
+
+K_FEAT.forEach(row => {
+  const aucH = Math.round(((row.auc - aucMin) / (aucMax - aucMin)) * 72 + 8);
+  const calH = Math.round(((row.cal - calMin) / (calMax - calMin)) * 72 + 4);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'k-bar-wrap';
+  wrap.innerHTML = `
+    <div style="display:flex;gap:4px;align-items:flex-end;height:80px;">
+      <div class="k-bar-outer" title="AUC: ${row.auc}">
+        <div class="k-bar-inner auc-bar-vis" data-h="${aucH}" style="height:0;"></div>
+      </div>
+      <div class="k-bar-outer" title="Cal err: ${row.cal}">
+        <div class="k-bar-inner" data-h="${calH}" style="height:0;background:var(--coral);opacity:0.7;"></div>
+      </div>
+    </div>
+    <div class="k-bar-label">K=${row.k}</div>
+    ${row.rec ? '<div class="k-bar-rec-label">★ rec</div>' : '<div style="height:14px;"></div>'}
+    <div class="k-bar-val" style="font-size:9px;color:var(--sky);">${row.auc}</div>
+    <div class="k-bar-val" style="font-size:9px;color:var(--coral);">${row.cal}</div>
+  `;
+  kContainer.appendChild(wrap);
+});
+
+// Animate k-visual bars on scroll
+const kObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.querySelectorAll('.k-bar-inner[data-h]').forEach((el, i) => {
+      setTimeout(() => {
+        el.style.transition = 'height 0.7s cubic-bezier(.16,1,.3,1)';
+        el.style.height = el.dataset.h + 'px';
+      }, i * 60);
+    });
+    kObs.unobserve(entry.target);
+  });
+}, { threshold: 0.3 });
+const kVis = document.getElementById('k-visual');
+if (kVis) kObs.observe(kVis.closest('.diagram-wrap'));
+
+// ── Data ──────────────────────────────────────────────────────────────────
+
+const SWEEP = [
+  { k:1, feat:false, loss:0.4829, auc:0.814, acc:0.779, cal:0.054, rec:false },
+  { k:1, feat:true,  loss:0.4762, auc:0.818, acc:0.784, cal:0.066, rec:false },
+  { k:2, feat:false, loss:0.4606, auc:0.836, acc:0.787, cal:0.046, rec:false },
+  { k:2, feat:true,  loss:0.4623, auc:0.832, acc:0.786, cal:0.043, rec:true  },
+  { k:4, feat:false, loss:0.4517, auc:0.841, acc:0.798, cal:0.047, rec:false },
+  { k:4, feat:true,  loss:0.4641, auc:0.831, acc:0.788, cal:0.044, rec:false },
+  { k:8, feat:false, loss:0.4382, auc:0.852, acc:0.811, cal:0.046, rec:false },
+  { k:8, feat:true,  loss:0.4600, auc:0.835, acc:0.795, cal:0.043, rec:false },
+];
+
+const SUBSETS = [
+  { bench:'swebench_verified_mini', cls:'bench-swe',  full:50,   sub:28,  pct:44 },
+  { bench:'gaia',                   cls:'bench-gaia', full:165,  sub:96,  pct:42 },
+  { bench:'corebench_hard',         cls:'bench-core', full:45,   sub:28,  pct:38 },
+  { bench:'scicode',                cls:'bench-sci',  full:65,   sub:49,  pct:25 },
+  { bench:'scienceagentbench',      cls:'bench-scib', full:102,  sub:61,  pct:40 },
+  { bench:'online_mind2web',        cls:'bench-mind', full:336,  sub:197, pct:41 },
+  { bench:'assistantbench',         cls:'bench-asst', full:33,   sub:22,  pct:33 },
+  { bench:'colbench_backend_programming', cls:'bench-col', full:1000, sub:588, pct:41 },
+];
+
+// ── Render sweep table ────────────────────────────────────────────────────
+const sweepBody = document.getElementById('sweep-body');
+const maxAUC = Math.max(...SWEEP.map(r => r.auc));
+
+SWEEP.forEach(r => {
+  const tr = document.createElement('tr');
+  if (r.rec) tr.classList.add('rec-row');
+
+  const aucPct = (r.auc - 0.79) / (maxAUC - 0.79); // normalise for bar
+  tr.innerHTML = `
+    <td>
+      <span class="k-pill">
+        <span class="k-num">K=${r.k}</span>
+        <span class="${r.feat ? 'feat-on' : 'feat-off'}">${r.feat ? '+ feat' : 'latent'}</span>
+      </span>
+      ${r.rec ? '<span class="rec-tag">Recommended</span>' : ''}
+    </td>
+    <td class="num">${r.loss.toFixed(4)}</td>
+    <td>
+      <div class="auc-cell">
+        <span class="num">${r.auc.toFixed(3)}</span>
+        <div class="auc-bar"><div class="auc-fill" data-w="${Math.max(0.05, aucPct)}"></div></div>
+      </div>
+    </td>
+    <td class="num">${r.acc.toFixed(3)}</td>
+    <td class="${r.cal <= 0.043 ? 'num' : 'dim'}">${r.cal.toFixed(3)}</td>
+  `;
+  sweepBody.appendChild(tr);
+});
+
+// ── Render swebench model × harness heatmap ───────────────────────────────
+const HM_HARNESSES = ['HAL Generalist Agent', 'My Agent', 'SWE-Agent'];
+
+const HM_MODELS = [
+  { name:'DeepSeek-R1',              'HAL Generalist Agent':0.060, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'DeepSeek-V3',              'HAL Generalist Agent':0.100, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'claude-3-7-sonnet',        'HAL Generalist Agent':0.320, 'My Agent':0.500, 'SWE-Agent':0.530 },
+  { name:'claude-haiku-4-5',         'HAL Generalist Agent':0.343, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'claude-opus-4-1',          'HAL Generalist Agent':0.540, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'claude-opus-4',            'HAL Generalist Agent':0.320, 'My Agent':0.600, 'SWE-Agent':null  },
+  { name:'claude-sonnet-4-5',        'HAL Generalist Agent':0.370, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'gemini-2.0-flash',         'HAL Generalist Agent':0.020, 'My Agent':0.224, 'SWE-Agent':null  },
+  { name:'gpt-4.1',                  'HAL Generalist Agent':0.020, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'gpt-4o',                   'HAL Generalist Agent':null,  'My Agent':0.292, 'SWE-Agent':null  },
+  { name:'gpt-4o-2024-11-20',        'HAL Generalist Agent':0.020, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'gpt-5',                    'HAL Generalist Agent':0.140, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'o1',                       'HAL Generalist Agent':null,  'My Agent':0.400, 'SWE-Agent':null  },
+  { name:'o3',                       'HAL Generalist Agent':null,  'My Agent':0.647, 'SWE-Agent':null  },
+  { name:'o3-mini',                  'HAL Generalist Agent':null,  'My Agent':0.408, 'SWE-Agent':null  },
+  { name:'o3-mini-2025-01-31',       'HAL Generalist Agent':0.000, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'o4-mini',                  'HAL Generalist Agent':0.040, 'My Agent':null,  'SWE-Agent':null  },
+];
+
+// Per-column (harness) min/max, ignoring nulls
+const hm2ColRange = {};
+HM_HARNESSES.forEach(h => {
+  const vals = HM_MODELS.map(m => m[h]).filter(v => v !== null);
+  hm2ColRange[h] = { min: Math.min(...vals), max: Math.max(...vals) };
+});
+
+function hm2Color(val, harness) {
+  const { min, max } = hm2ColRange[harness];
+  const t = max === min ? 0.5 : (val - min) / (max - min);
+  const l = Math.round(95 - t * 57);
+  const s = Math.round(18 + t * 52);
+  const textL = t > 0.42 ? 18 : 38;
+  return { bg: `hsl(142,${s}%,${l}%)`, color: `hsl(142,50%,${textL}%)` };
+}
+
+const hm2 = document.getElementById('hm2-grid');
+hm2.style.gridTemplateColumns = `160px repeat(${HM_HARNESSES.length}, 1fr)`;
+
+// Header row
+const corner = document.createElement('div');
+corner.className = 'hm2-corner';
+corner.textContent = 'Model';
+hm2.appendChild(corner);
+HM_HARNESSES.forEach(h => {
+  const hdr = document.createElement('div');
+  hdr.className = 'hm2-col-hdr';
+  hdr.textContent = h;
+  hm2.appendChild(hdr);
+});
+
+// Data rows
+HM_MODELS.forEach((row, ri) => {
+  const isLast = ri === HM_MODELS.length - 1;
+  const lbl = document.createElement('div');
+  lbl.className = 'hm2-row-hdr' + (isLast ? ' last-row' : '');
+  lbl.textContent = row.name;
+  hm2.appendChild(lbl);
+
+  HM_HARNESSES.forEach((h, hi) => {
+    const val = row[h];
+    const cell = document.createElement('div');
+    cell.className = 'hm2-cell' + (isLast ? ' last-row' : '') + (hi === HM_HARNESSES.length - 1 ? ' last-col' : '');
+    if (val === null) {
+      cell.style.background = 'var(--bg1)';
+      cell.innerHTML = '<span class="hm2-null">—</span>';
+    } else {
+      const { bg, color } = hm2Color(val, h);
+      cell.style.cssText = `background:${bg};color:${color};`;
+      cell.textContent = (val * 100).toFixed(1) + '%';
+    }
+    hm2.appendChild(cell);
+  });
+});
+
+// Animate hm2 on scroll
+const hm2Obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.style.opacity = '1';
+    hm2Obs.unobserve(entry.target);
+  });
+}, { threshold: 0.1 });
+if (hm2) { hm2.style.opacity = '0'; hm2.style.transition = 'opacity 0.5s'; hm2Obs.observe(hm2); }
+
+// ── Render subset table ───────────────────────────────────────────────────
+const subsetBody = document.getElementById('subset-body');
+SUBSETS.forEach(s => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><span class="bench-tag ${s.cls}">${s.bench.replace(/_/g,'·')}</span></td>
+    <td class="num">${s.full} <span class="dim">→</span> ${s.sub}</td>
+    <td>
+      <div class="reduc-cell">
+        <span class="num">${s.pct}%</span>
+        <div class="reduc-bar"><div class="reduc-fill" data-w="${s.pct/100}"></div></div>
+      </div>
+    </td>
+  `;
+  subsetBody.appendChild(tr);
+});
+
+// ── Counter animation ─────────────────────────────────────────────────────
+function animateCounter(el, target, duration=1200) {
+  const start = performance.now();
+  const update = now => {
+    const t = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(ease * target).toLocaleString();
+    if (t < 1) requestAnimationFrame(update);
+    else el.textContent = target.toLocaleString();
+  };
+  requestAnimationFrame(update);
+}
+
+// ── Intersection observer for animations ─────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+
+    // Fade-up elements
+    if (entry.target.classList.contains('fade-up')) {
+      entry.target.classList.add('visible');
+    }
+
+    // AUC bars
+    entry.target.querySelectorAll('.auc-fill[data-w]').forEach(el => {
+      el.style.transform = `scaleX(${el.dataset.w})`;
+    });
+
+    // Reduction bars
+    entry.target.querySelectorAll('.reduc-fill[data-w]').forEach(el => {
+      el.style.transform = `scaleX(${el.dataset.w})`;
+    });
+
+    // Confidence bars
+    entry.target.querySelectorAll('.conf-fill[data-w]').forEach(el => {
+      el.style.transform = `scaleX(${el.dataset.w})`;
+    });
+
+    observer.unobserve(entry.target);
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.fade-up, .card, .tbl-wrap, .two-col, .ablation-grid').forEach(el => {
+  observer.observe(el);
+});
+
+// Counters
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const target = parseInt(entry.target.dataset.target);
+      animateCounter(entry.target, target);
+      counterObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter[data-target]').forEach(el => counterObs.observe(el));
+
+// ── Immediate trigger for elements in viewport on load ────────────────────
+setTimeout(() => {
+  document.querySelectorAll('[data-w]').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) {
+      el.style.transform = `scaleX(${el.dataset.w})`;
+    }
+  });
+  document.querySelectorAll('.fade-up').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) el.classList.add('visible');
+  });
+  document.querySelectorAll('.counter[data-target]').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) {
+      animateCounter(el, parseInt(el.dataset.target));
+    }
+  });
+}, 100);
+</script>
+</body>
+</html>

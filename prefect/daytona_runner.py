@@ -151,7 +151,7 @@ def _build_install_command(spec: DaytonaEvalSpec) -> str:
         f"(dockerd --host=unix:///var/run/docker.sock &) && sleep 3 && "
         f"echo '[eval] apt done' && "
         f"cd /home/daytona/hal-harness && "
-        f"pip install --no-deps -e . && "
+        f"pip install -e . && "
         f"pip install swebench python-dotenv docker tenacity cryptography && echo '[eval] hal installed' && "
         f"REQ={spec.agent_dir}/requirements_{spec.benchmark}.txt && "
         f"[ -f \"$REQ\" ] || REQ={spec.agent_dir}/requirements.txt && "
@@ -268,9 +268,10 @@ def run_eval_on_daytona(spec: DaytonaEvalSpec) -> dict:
 
         # Phase 1: install deps synchronously (safe to block — no eval running yet)
         print(f"Installing deps | task_key={task_key}")
-        install_cmd = _build_install_command(spec)
-        r = sandbox.process.exec(f"bash -c {repr(install_cmd)} 2>&1 | tee {_SANDBOX_LOG}", timeout=1800)
-        print(f"Install done (exit={r.exit_code})")
+        install_script = "/home/daytona/install.sh"
+        sandbox.fs.upload_file(_build_install_command(spec).encode(), install_script)
+        r = sandbox.process.exec(f"bash {install_script} 2>&1 | tee {_SANDBOX_LOG}", timeout=1800)
+        print(f"Install done (exit={r.exit_code})\n{(r.result or '')[-2000:]}")
 
         # Phase 2: launch eval + reporter in background, poll for reporter_output.json
         print(f"Launching eval | task_key={task_key}")
