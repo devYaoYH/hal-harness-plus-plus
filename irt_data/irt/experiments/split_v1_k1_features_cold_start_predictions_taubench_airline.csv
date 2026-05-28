@@ -1,0 +1,501 @@
+agent_id,scaffold,model,benchmark,task_id,correct,run_id,predicted_prob,label,model_name,model_family,scaffold_name,scaffold_tool_exposure_mechanism,discrimination,easiness,semantic_unit
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,25,0,taubench_airline_1743994890,0.0010239176,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.5124140977859497,-0.1022542640566825,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,25,0,taubench_airline_1744000536,0.0010239176,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.5124140977859497,-0.1022542640566825,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,9,1,taubench_airline_1743994890,0.0010498755,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.5100669264793396,-0.1082533225417137,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,9,0,taubench_airline_1744000536,0.0010498755,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.5100669264793396,-0.1082533225417137,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,19,0,taubench_airline_1743994890,0.017795594,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.2947014570236206,-0.1110269650816917,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,19,0,taubench_airline_1744000536,0.017795594,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.2947014570236206,-0.1110269650816917,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,2,0,taubench_airline_1743994890,0.023224222,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.2705843150615692,-0.1583851277828216,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,2,0,taubench_airline_1744000536,0.023224222,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.2705843150615692,-0.1583851277828216,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,23,0,taubench_airline_1743994890,0.072581865,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.193098783493042,0.0076110935769975,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,23,0,taubench_airline_1744000536,0.072581865,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.193098783493042,0.0076110935769975,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,42,1,taubench_airline_1743994890,0.9124873,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1693297922611236,0.103627972304821,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,42,1,taubench_airline_1744000536,0.9124873,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1693297922611236,0.103627972304821,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,32,0,taubench_airline_1743994890,0.1296748,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1563125550746917,0.1646665185689926,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,32,1,taubench_airline_1744000536,0.1296748,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1563125550746917,0.1646665185689926,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,28,0,taubench_airline_1743994890,0.15060008,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1375803649425506,0.0907159969210624,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,28,0,taubench_airline_1744000536,0.15060008,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1375803649425506,0.0907159969210624,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,22,0,taubench_airline_1743994890,0.15890534,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1303891539573669,0.0590605959296226,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,22,0,taubench_airline_1744000536,0.15890534,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1303891539573669,0.0590605959296226,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,45,0,taubench_airline_1743994890,0.14431483,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1225043833255767,-0.1587893515825271,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,45,0,taubench_airline_1744000536,0.14431483,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1225043833255767,-0.1587893515825271,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,18,1,taubench_airline_1743994890,0.8125406,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.116302765905857,-0.0724458917975425,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,18,1,taubench_airline_1744000536,0.8125406,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.116302765905857,-0.0724458917975425,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,8,0,taubench_airline_1743994890,0.16011147,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1117078885436058,-0.1791543662548065,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,8,0,taubench_airline_1744000536,0.16011147,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1117078885436058,-0.1791543662548065,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,12,1,taubench_airline_1743994890,0.83581984,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1109708920121193,0.158957153558731,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,12,0,taubench_airline_1744000536,0.83581984,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1109708920121193,0.158957153558731,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,38,1,taubench_airline_1743994890,0.80023026,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1038896068930625,0.0129496855661273,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,38,1,taubench_airline_1744000536,0.80023026,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.1038896068930625,0.0129496855661273,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,49,0,taubench_airline_1743994890,0.78080475,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0927770882844924,0.0426315292716026,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,49,1,taubench_airline_1744000536,0.78080475,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0927770882844924,0.0426315292716026,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,36,1,taubench_airline_1743994890,0.74629396,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0897871330380439,-0.1092213317751884,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,36,1,taubench_airline_1744000536,0.74629396,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0897871330380439,-0.1092213317751884,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,10,0,taubench_airline_1743994890,0.2397121,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0882384628057479,0.0134121235460042,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,10,1,taubench_airline_1744000536,0.2397121,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0882384628057479,0.0134121235460042,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,33,0,taubench_airline_1743994890,0.25419962,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0805298238992691,-0.0106767797842621,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,33,1,taubench_airline_1744000536,0.25419962,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0805298238992691,-0.0106767797842621,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,46,0,taubench_airline_1743994890,0.2804486,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0803805589675903,0.1214484423398971,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,46,0,taubench_airline_1744000536,0.2804486,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0803805589675903,0.1214484423398971,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,26,0,taubench_airline_1743994890,0.28777567,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0769109725952148,0.1115607842803001,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,26,1,taubench_airline_1744000536,0.28777567,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0769109725952148,0.1115607842803001,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,35,0,taubench_airline_1743994890,0.7067453,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0753059163689613,-0.1169037818908691,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,35,1,taubench_airline_1744000536,0.7067453,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0753059163689613,-0.1169037818908691,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,3,0,taubench_airline_1743994890,0.26191372,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0726214945316314,-0.0750363022089004,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,3,0,taubench_airline_1744000536,0.26191372,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0726214945316314,-0.0750363022089004,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,31,1,taubench_airline_1743994890,0.34412324,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0646714568138122,0.2108324915170669,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,31,1,taubench_airline_1744000536,0.34412324,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0646714568138122,0.2108324915170669,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,43,1,taubench_airline_1743994890,0.72842044,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0602488964796066,0.1893420368432998,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,43,1,taubench_airline_1744000536,0.72842044,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0602488964796066,0.1893420368432998,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,5,0,taubench_airline_1743994890,0.40186828,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0536911934614181,0.3128156661987304,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,5,1,taubench_airline_1744000536,0.40186828,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0536911934614181,0.3128156661987304,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,27,1,taubench_airline_1743994890,0.3300353,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0497327297925949,-0.049906026571989,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,27,1,taubench_airline_1744000536,0.3300353,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0497327297925949,-0.049906026571989,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,17,0,taubench_airline_1743994890,0.3162369,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0452785491943359,-0.1719430685043335,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,17,1,taubench_airline_1744000536,0.3162369,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0452785491943359,-0.1719430685043335,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,34,1,taubench_airline_1743994890,0.3644004,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0447239875793457,0.0355226434767246,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,34,1,taubench_airline_1744000536,0.3644004,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0447239875793457,0.0355226434767246,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,41,1,taubench_airline_1743994890,0.6708453,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0404908210039138,0.1761907637119293,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,41,1,taubench_airline_1744000536,0.6708453,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0404908210039138,0.1761907637119293,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,47,0,taubench_airline_1743994890,0.4041636,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0348456352949142,0.0729703828692436,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,47,0,taubench_airline_1744000536,0.4041636,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0348456352949142,0.0729703828692436,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,48,1,taubench_airline_1743994890,0.61498135,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0316331535577774,0.0496949218213558,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,48,0,taubench_airline_1744000536,0.61498135,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0316331535577774,0.0496949218213558,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,37,1,taubench_airline_1743994890,0.60054773,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0304603464901447,0.0046621984802186,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,37,1,taubench_airline_1744000536,0.60054773,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0304603464901447,0.0046621984802186,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,16,0,taubench_airline_1743994890,0.3821612,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.026774238795042,-0.1260783076286316,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,16,1,taubench_airline_1744000536,0.3821612,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.026774238795042,-0.1260783076286316,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,24,0,taubench_airline_1743994890,0.6045212,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0234976410865783,0.1133922263979911,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,24,0,taubench_airline_1744000536,0.6045212,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0234976410865783,0.1133922263979911,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,7,0,taubench_airline_1743994890,0.6222699,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0226830542087554,0.1990262418985366,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,7,1,taubench_airline_1744000536,0.6222699,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0226830542087554,0.1990262418985366,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,1,1,taubench_airline_1743994890,0.65278107,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0214119665324687,0.3479390144348144,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,1,1,taubench_airline_1744000536,0.65278107,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0214119665324687,0.3479390144348144,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,11,0,taubench_airline_1743994890,0.43686184,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0205029975622892,0.017410721629858,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,11,1,taubench_airline_1744000536,0.43686184,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0205029975622892,0.017410721629858,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,39,0,taubench_airline_1743994890,0.44375333,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0193870086222887,0.0306076053529977,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,39,0,taubench_airline_1744000536,0.44375333,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0193870086222887,0.0306076053529977,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,6,0,taubench_airline_1743994890,0.520857,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0174836963415145,0.3148404061794281,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,6,0,taubench_airline_1744000536,0.520857,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0174836963415145,0.3148404061794281,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,44,1,taubench_airline_1743994890,0.47519144,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0122030433267354,0.0621686689555645,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,44,1,taubench_airline_1744000536,0.47519144,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0122030433267354,0.0621686689555645,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,15,1,taubench_airline_1743994890,0.4085973,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0082301506772637,-0.2608565092086792,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,15,1,taubench_airline_1744000536,0.4085973,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0082301506772637,-0.2608565092086792,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,20,0,taubench_airline_1743994890,0.542627,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0072705671191215,0.0747105181217193,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,20,1,taubench_airline_1744000536,0.542627,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0072705671191215,0.0747105181217193,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,29,0,taubench_airline_1743994890,0.49071047,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0071638543158769,0.0576377846300601,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,29,0,taubench_airline_1744000536,0.49071047,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0071638543158769,0.0576377846300601,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,4,0,taubench_airline_1743994890,0.56990886,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0069094561040401,0.1900456398725509,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,4,1,taubench_airline_1744000536,0.56990886,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0069094561040401,0.1900456398725509,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,14,0,taubench_airline_1743994890,0.54667616,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0068136323243379,0.2774154245853424,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,14,1,taubench_airline_1744000536,0.54667616,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0068136323243379,0.2774154245853424,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,30,0,taubench_airline_1743994890,0.46786875,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0064557436853647,-0.0432725921273231,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,30,1,taubench_airline_1744000536,0.46786875,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0064557436853647,-0.0432725921273231,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,40,0,taubench_airline_1743994890,0.482438,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0059252046048641,0.0081321224570274,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,40,1,taubench_airline_1744000536,0.482438,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0059252046048641,0.0081321224570274,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,0,1,taubench_airline_1743994890,0.53024054,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0036953352391719,0.0722090452909469,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,0,1,taubench_airline_1744000536,0.53024054,1.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0036953352391719,0.0722090452909469,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,13,0,taubench_airline_1743994890,0.55261,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0032358653843402,0.1684009432792663,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,13,0,taubench_airline_1744000536,0.55261,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0032358653843402,0.1684009432792663,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1743994890,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,21,0,taubench_airline_1743994890,0.49665228,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0001654084771871,-0.0155799547210335,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+TAU-bench FewShot__claude-3-7-sonnet-20250219__taubench_airline_1744000536,TAU-bench FewShot,claude-3-7-sonnet-20250219,taubench_airline,21,0,taubench_airline_1744000536,0.49665228,0.0,Claude 3.7 Sonnet,Claude Sonnet,TAU-bench FewShot,native_tool_schema,0.0001654084771871,-0.0155799547210335,"Claude 3.7 Sonnet
+TAU-bench FewShot"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,25,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.00011792988,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.5124140977859497,-0.1022542640566825,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,9,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.00012212578,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.5100669264793396,-0.1082533225417137,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,19,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.005197402,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.2947014570236206,-0.1110269650816917,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,2,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.0075335065,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.2705843150615692,-0.1583851277828216,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,23,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.03348825,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.193098783493042,0.0076110935769975,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,42,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.9551654,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.1693297922611236,0.103627972304821,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,32,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.07152998,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.1563125550746917,0.1646665185689926,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,28,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.09026173,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.1375803649425506,0.0907159969210624,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,22,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.09827038,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.1303891539573669,0.0590605959296226,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,45,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.09138577,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.1225043833255767,-0.1587893515825271,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,18,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.876247,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.116302765905857,-0.0724458917975425,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,8,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.10633209,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.1117078885436058,-0.1791543662548065,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,12,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.8904853,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.1109708920121193,0.158957153558731,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,38,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.86129785,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.1038896068930625,0.0129496855661273,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,49,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.8404861,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0927770882844924,0.0426315292716026,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,36,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.811198,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0897871330380439,-0.1092213317751884,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,10,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.17849256,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0882384628057479,0.0134121235460042,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,33,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.19526653,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0805298238992691,-0.0106767797842621,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,46,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.21730939,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0803805589675903,0.1214484423398971,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,26,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.22605032,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0769109725952148,0.1115607842803001,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,35,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.7680608,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0753059163689613,-0.1169037818908691,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,3,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.20710203,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0726214945316314,-0.0750363022089004,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,31,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.28539333,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0646714568138122,0.2108324915170669,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,43,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.7757124,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0602488964796066,0.1893420368432998,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,5,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.3488167,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0536911934614181,0.3128156661987304,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,27,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.28539002,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0497327297925949,-0.049906026571989,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,17,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.27644205,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0452785491943359,-0.1719430685043335,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,34,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.3219041,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0447239875793457,0.0355226434767246,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,41,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.7074162,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0404908210039138,0.1761907637119293,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,47,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.36930895,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0348456352949142,0.0729703828692436,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,48,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.64606375,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0316331535577774,0.0496949218213558,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,37,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.6309466,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0304603464901447,0.0046621984802186,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,16,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.35586357,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.026774238795042,-0.1260783076286316,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,24,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.6279638,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0234976410865783,0.1133922263979911,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,7,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.64449054,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0226830542087554,0.1990262418985366,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,1,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.67296743,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0214119665324687,0.3479390144348144,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,11,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.41570657,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0205029975622892,0.017410721629858,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,39,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.42366415,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0193870086222887,0.0306076053529977,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,6,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.5024253,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0174836963415145,0.3148404061794281,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,44,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.46236923,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0122030433267354,0.0621686689555645,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,15,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.40023276,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0082301506772637,-0.2608565092086792,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,20,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.5502305,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0072705671191215,0.0747105181217193,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,29,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.48315853,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0071638543158769,0.0576377846300601,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,4,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.5770402,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0069094561040401,0.1900456398725509,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,14,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.5395419,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0068136323243379,0.2774154245853424,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,30,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.461093,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0064557436853647,-0.0432725921273231,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,40,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.47619823,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0059252046048641,0.0081321224570274,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,0,0,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.5341226,0.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0036953352391719,0.0722090452909469,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,13,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.5559832,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0032358653843402,0.1684009432792663,"Gemini 2.0 Flash
+HAL Generalist Agent"
+HAL Generalist Agent__gemini/gemini-2.0-flash__taubench_airline_hal_generalist_agent_gemini20flash_1746038655,HAL Generalist Agent,gemini/gemini-2.0-flash,taubench_airline,21,1,taubench_airline_hal_generalist_agent_gemini20flash_1746038655,0.49682677,1.0,Gemini 2.0 Flash,Gemini Flash,HAL Generalist Agent,code_agent_tool_registry,0.0001654084771871,-0.0155799547210335,"Gemini 2.0 Flash
+HAL Generalist Agent"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,25,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.00035654975,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.5124140977859497,-0.1022542640566825,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,25,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.00035654975,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.5124140977859497,-0.1022542640566825,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,9,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.0003673664,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.5100669264793396,-0.1082533225417137,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,9,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.0003673664,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.5100669264793396,-0.1082533225417137,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,19,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.009776585,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.2947014570236206,-0.1110269650816917,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,19,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.009776585,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.2947014570236206,-0.1110269650816917,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,2,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.0134336,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.2705843150615692,-0.1583851277828216,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,2,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.0134336,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.2705843150615692,-0.1583851277828216,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,23,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.04995068,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.193098783493042,0.0076110935769975,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,23,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.04995068,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.193098783493042,0.0076110935769975,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,42,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.93662506,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1693297922611236,0.103627972304821,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,42,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.93662506,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1693297922611236,0.103627972304821,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,32,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.097453505,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1563125550746917,0.1646665185689926,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,32,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.097453505,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1563125550746917,0.1646665185689926,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,28,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.11781136,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1375803649425506,0.0907159969210624,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,28,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.11781136,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1375803649425506,0.0907159969210624,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,22,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.12619816,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1303891539573669,0.0590605959296226,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,22,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.12619816,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1303891539573669,0.0590605959296226,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,45,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.11585647,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1225043833255767,-0.1587893515825271,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,45,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.11585647,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1225043833255767,-0.1587893515825271,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,18,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.84634143,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.116302765905857,-0.0724458917975425,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,18,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.84634143,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.116302765905857,-0.0724458917975425,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,8,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.13152751,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1117078885436058,-0.1791543662548065,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,8,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.13152751,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1117078885436058,-0.1791543662548065,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,12,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.86483604,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1109708920121193,0.158957153558731,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,12,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.86483604,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1109708920121193,0.158957153558731,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,38,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.8322627,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1038896068930625,0.0129496855661273,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,38,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.8322627,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.1038896068930625,0.0129496855661273,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,49,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.8117597,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0927770882844924,0.0426315292716026,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,49,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.8117597,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0927770882844924,0.0426315292716026,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,36,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.7796979,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0897871330380439,-0.1092213317751884,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,36,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.7796979,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0897871330380439,-0.1092213317751884,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,10,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.20816337,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0882384628057479,0.0134121235460042,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,10,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.20816337,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0882384628057479,0.0134121235460042,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,33,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.22404781,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0805298238992691,-0.0106767797842621,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,33,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.22404781,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0805298238992691,-0.0106767797842621,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,46,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.24827687,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0803805589675903,0.1214484423398971,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,46,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.24827687,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0803805589675903,0.1214484423398971,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,26,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.2564218,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0769109725952148,0.1115607842803001,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,26,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.2564218,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0769109725952148,0.1115607842803001,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,35,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.7378378,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0753059163689613,-0.1169037818908691,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,35,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.7378378,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0753059163689613,-0.1169037818908691,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,3,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.23403823,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0726214945316314,-0.0750363022089004,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,3,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.23403823,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0726214945316314,-0.0750363022089004,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,31,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.31470844,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0646714568138122,0.2108324915170669,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,31,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.31470844,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0646714568138122,0.2108324915170669,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,43,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.7522666,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0602488964796066,0.1893420368432998,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,43,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.7522666,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0602488964796066,0.1893420368432998,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,5,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.37559408,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0536911934614181,0.3128156661987304,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,5,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.37559408,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0536911934614181,0.3128156661987304,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,27,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.30778903,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0497327297925949,-0.049906026571989,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,27,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.30778903,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0497327297925949,-0.049906026571989,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,17,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.29642197,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0452785491943359,-0.1719430685043335,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,17,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.29642197,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0452785491943359,-0.1719430685043335,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,34,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.34333935,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0447239875793457,0.0355226434767246,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,34,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.34333935,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0447239875793457,0.0355226434767246,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,41,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.6889946,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0404908210039138,0.1761907637119293,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,41,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.6889946,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0404908210039138,0.1761907637119293,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,47,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.38700265,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0348456352949142,0.0729703828692436,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,47,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.38700265,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0348456352949142,0.0729703828692436,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,48,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.630291,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0316331535577774,0.0496949218213558,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,48,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.630291,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0316331535577774,0.0496949218213558,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,37,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.61550134,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0304603464901447,0.0046621984802186,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,37,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.61550134,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0304603464901447,0.0046621984802186,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,16,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.36922556,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.026774238795042,-0.1260783076286316,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,16,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.36922556,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.026774238795042,-0.1260783076286316,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,24,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.6160333,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0234976410865783,0.1133922263979911,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,24,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.6160333,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0234976410865783,0.1133922263979911,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,7,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.63318884,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0226830542087554,0.1990262418985366,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,7,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.63318884,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0226830542087554,0.1990262418985366,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,1,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.66271025,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0214119665324687,0.3479390144348144,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,1,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.66271025,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0214119665324687,0.3479390144348144,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,11,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.42650023,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0205029975622892,0.017410721629858,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,11,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.42650023,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0205029975622892,0.017410721629858,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,39,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.4339186,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0193870086222887,0.0306076053529977,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,39,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.4339186,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0193870086222887,0.0306076053529977,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,6,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.51186264,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0174836963415145,0.3148404061794281,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,6,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.51186264,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0174836963415145,0.3148404061794281,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,44,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.46892652,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0122030433267354,0.0621686689555645,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,44,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.46892652,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0122030433267354,0.0621686689555645,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,15,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.40450677,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0082301506772637,-0.2608565092086792,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,15,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.40450677,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0082301506772637,-0.2608565092086792,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,20,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.5463417,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0072705671191215,0.0747105181217193,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,20,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.5463417,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0072705671191215,0.0747105181217193,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,29,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.4870229,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0071638543158769,0.0576377846300601,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,29,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.4870229,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0071638543158769,0.0576377846300601,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,4,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.5733942,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0069094561040401,0.1900456398725509,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,4,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.5733942,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0069094561040401,0.1900456398725509,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,14,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.5431954,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0068136323243379,0.2774154245853424,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,14,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.5431954,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0068136323243379,0.2774154245853424,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,30,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.46455923,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0064557436853647,-0.0432725921273231,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,30,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.46455923,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0064557436853647,-0.0432725921273231,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,40,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.47939095,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0059252046048641,0.0081321224570274,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,40,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.47939095,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0059252046048641,0.0081321224570274,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,0,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.5321362,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0036953352391719,0.0722090452909469,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,0,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.5321362,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0036953352391719,0.0722090452909469,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,13,0,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.5542574,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0032358653843402,0.1684009432792663,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,13,1,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.5542574,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0032358653843402,0.1684009432792663,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,21,1,taubench_airline_taubench_toolcalling_o4mini20250416_high_1760993011,0.49673745,1.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0001654084771871,-0.0155799547210335,"o4-mini
+TAU-bench ToolCalling"
+Taubench ToolCalling__openai/o4-mini-2025-04-16__taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,Taubench ToolCalling,openai/o4-mini-2025-04-16,taubench_airline,21,0,taubench_airline_taubench_toolcalling_o4mini20250416_low_1760991692,0.49673745,0.0,o4-mini,o-series,TAU-bench ToolCalling,native_tool_schema,0.0001654084771871,-0.0155799547210335,"o4-mini
+TAU-bench ToolCalling"

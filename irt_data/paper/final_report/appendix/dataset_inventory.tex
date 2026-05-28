@@ -1,0 +1,104 @@
+\section{Dataset Inventory}
+\label{app:dataset-inventory}
+
+This appendix groups the benchmark, model, and harness/scaffold labels present in the regenerated training response matrix. The raw HAL metadata contains provider prefixes, date suffixes, reasoning-setting suffixes, and model names embedded in some harness labels. For modeling, we therefore treat the raw labels as aliases and normalize them into semantic model and harness groups. This is especially important for harnesses: labels such as ``Core Agent Opus 4.5'' describe a CORE-Agent run paired with a particular model, not a fundamentally separate harness. Likewise, ``HAL Generalist High Reasoning'' is normalized as the HAL Generalist harness paired with a model configuration that sets a reasoning/thinking budget.
+
+\subsection{Benchmarks}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.58\linewidth}}
+\toprule
+Benchmark & Brief description \\
+\midrule
+assistantbench & Assistant-oriented web and information-seeking tasks evaluated with browser-capable agents. \\
+colbench\_backend\_programming & Backend programming tasks from ColBench. \\
+corebench\_hard & Hard CORE-Bench tasks emphasizing complex tool-using problem solving. \\
+gaia & General Assistant benchmark tasks requiring multi-step reasoning and external information use. \\
+online\_mind2web & Web navigation and interaction tasks derived from Mind2Web-style environments. \\
+scicode & Scientific coding tasks requiring code synthesis and problem-specific reasoning. \\
+scienceagentbench & ScienceAgentBench tasks evaluating scientific analysis and self-debugging workflows. \\
+swebench\_verified\_mini & A compact verified SWE-bench subset for software-engineering issue resolution. \\
+taubench\_airline & TAU-bench airline customer-service tool-use tasks. \\
+usaco & Competitive-programming tasks from the USACO-style coding environment. \\
+\bottomrule
+\end{tabular}
+\caption{Benchmarks represented in the regenerated response matrix.}
+\end{table}
+
+\subsection{Semantic Model and Model-Configuration Groups}
+
+The 59 recorded model labels collapse to 20 semantic base-model groups. When a run sets reasoning\_effort or an equivalent provider reasoning-token budget, we treat that as part of the model configuration rather than as a separate harness. Thus, for example, gpt-5 with high reasoning effort and gpt-5 with minimal reasoning effort are distinct model configurations paired with the same HAL Generalist harness. We keep the raw aliases visible so that the normalization remains auditable. The joinable model normalization table used for analysis is stored in \texttt{irt\_data/model\_metadata.csv}; it preserves each raw model label while recording the normalized base-model group and provider/family metadata.
+
+\begingroup
+\footnotesize
+\begin{itemize}
+\item \textbf{Claude 3.7 Sonnet}: Anthropic Claude Sonnet model. Aliases: anthropic/claude-3-7-sonnet-20250219; anthropic/claude-3.7-sonnet; claude-3-7-sonnet-20250219; openrouter/anthropic/claude-3.7-sonnet; openrouter/anthropic/claude-3.7-sonnet:thinking.
+\item \textbf{Claude Haiku 4.5}: Anthropic Claude Haiku model. Aliases: anthropic/claude-haiku-4-5; claude-haiku-4-5; claude-haiku-4-5-20251001; openrouter/anthropic/claude-haiku-4.5.
+\item \textbf{Claude Opus 4}: Anthropic Claude Opus model. Aliases: claude-opus-4-20250514; openrouter/anthropic/claude-opus-4.
+\item \textbf{Claude Opus 4.1}: Anthropic Claude Opus model. Aliases: anthropic/claude-opus-4.1; claude-opus-4-1; claude-opus-4-1-20250805; openrouter/anthropic/claude-opus-4.1.
+\item \textbf{Claude Opus 4.5}: Anthropic Claude Opus model. Aliases: anthropic/claude-opus-4-5-20251101; claude-opus-4-5; claude-opus-4-5-20251101.
+\item \textbf{Claude Sonnet 4}: Anthropic Claude Sonnet model. Alias: claude-sonnet-4-20250514.
+\item \textbf{Claude Sonnet 4.5}: Anthropic Claude Sonnet model. Aliases: anthropic/claude-sonnet-4-5; anthropic/claude-sonnet-4-5-20250929; claude-sonnet-4-5; claude-sonnet-4-5-20250929; openrouter/anthropic/claude-sonnet-4.5.
+\item \textbf{DeepSeek R1}: DeepSeek reasoning model. Aliases: deepseek-ai/DeepSeek-R1; deepseek/deepseek-r1; openrouter/deepseek/deepseek-r1; openrouter/deepseek/deepseek-r1-0528; together\_ai/deepseek-ai/DeepSeek-R1.
+\item \textbf{DeepSeek V3 / Chat}: DeepSeek chat model family. Aliases: deepseek-ai/DeepSeek-V3; deepseek/deepseek-chat; openrouter/deepseek/deepseek-chat-v3-0324; openrouter/deepseek/deepseek-chat-v3.1; together\_ai/deepseek-ai/DeepSeek-V3.
+\item \textbf{Gemini 2.0 Flash}: Google Gemini Flash model. Aliases: gemini-2.0-flash; gemini/gemini-2.0-flash; google/gemini-2.0-flash-001.
+\item \textbf{Gemini 2.5 Pro Preview}: Google Gemini Pro preview model. Aliases: gemini-2.5-pro-preview-03-25; gemini/gemini-2.5-pro-preview-03-25.
+\item \textbf{Gemini 3 Pro Preview}: Google Gemini Pro preview model. Alias: google/gemini-3-pro-preview.
+\item \textbf{GPT-4.1}: OpenAI GPT-4.1 model. Aliases: gpt-4.1; gpt-4.1-2025-04-14; openai/gpt-4.1-2025-04-14.
+\item \textbf{GPT-4o}: OpenAI GPT-4o model. Aliases: gpt-4o; gpt-4o-2024-11-20.
+\item \textbf{GPT-5}: OpenAI GPT-5 model. Aliases: gpt-5; gpt-5-2025-08-07; openai/gpt-5; openai/gpt-5-2025-08-07.
+\item \textbf{GPT-OSS 120B}: OpenAI open-weight GPT-OSS model. Alias: openrouter/openai/gpt-oss-120b.
+\item \textbf{o1}: OpenAI reasoning model. Alias: o1.
+\item \textbf{o3}: OpenAI reasoning model. Aliases: o3-2025-04-03; o3-2025-04-16; openai/o3-2025-04-16.
+\item \textbf{o3-mini}: OpenAI smaller reasoning model. Aliases: o3-mini; o3-mini-2025-01-31; openai/o3-mini-2025-01-31.
+\item \textbf{o4-mini}: OpenAI smaller reasoning model. Aliases: o4-mini-2025-04-16; openai/o4-mini-2025-04-16.
+\end{itemize}
+\endgroup
+
+\subsection{Reasoning-Effort Normalization}
+
+Reasoning-effort labels in raw run names are normalized onto the model-configuration side. For direct providers that support the parameter, HAL Generalist passes reasoning\_effort to the model call. For OpenRouter-backed runs, the same setting is mapped to a reasoning-token budget. The normalized harness remains unchanged.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}}
+\toprule
+Raw label pattern & Normalized harness & Normalized model configuration \\
+\midrule
+HAL Generalist High Reasoning with gpt-5 & HAL Generalist & GPT-5 with high reasoning effort \\
+HAL Generalist Minimal Reasoning with gpt-5 & HAL Generalist & GPT-5 with minimal reasoning effort \\
+HAL Generalist No Reasoning with Claude Opus 4.1 & HAL Generalist & Claude Opus 4.1 with no explicit reasoning budget \\
+HAL Generalist Agent o4-mini high/low & HAL Generalist & o4-mini with high/low reasoning effort \\
+HAL Generalist Agent o3 medium & HAL Generalist & o3 with medium reasoning effort \\
+\bottomrule
+\end{tabular}
+\caption{Examples of reasoning-effort normalization. Reasoning settings are treated as model-call configuration, not as different HAL Generalist harnesses.}
+\end{table}
+
+\subsection{Semantic Harness and Scaffold Groups}
+
+The 68 recorded harness/scaffold labels collapse to 15 semantic harness groups. Where a raw scaffold label includes a model name or reasoning setting, the normalized harness removes that suffix and relies on the separate model/model-configuration field for the crossing. The joinable normalization table used for analysis is stored in \texttt{irt\_data/harness\_metadata.csv}; it preserves each raw scaffold label, records the tool-exposure mechanism and exposed-tool inventory, records embedded model and reasoning-effort hints when they appear in the scaffold label, and records curation notes such as the historical \texttt{My Agent} alias. The one-row-per-normalized-harness affordance flags are additionally stored in \texttt{irt\_data/harness\_affordances.csv} and mirrored onto \texttt{harness\_metadata.csv} for raw-scaffold joins.
+
+\begingroup
+\footnotesize
+\begin{itemize}
+\item \textbf{AssistantBench Browser Agent}: AssistantBench browser-agent scaffold. Alias: Assistantbench Browser Agent.
+\item \textbf{Browser-Use}: Browser-use web navigation scaffold. Aliases: Browser-Use; Browser-Use\_test.
+\item \textbf{Claude Code}: Claude Code software-engineering scaffold. Alias: Claude Code.
+\item \textbf{ColBench Example Agent}: ColBench programming scaffold. Aliases: colbench\_backend\_programming colbench\_example\_agent; colbench\_example\_agent\_gpt41.
+\item \textbf{CORE-Agent}: CORE-Bench problem-solving scaffold. Aliases: CORE-Agent; CORE-Agent(Claude- Sonnet-4-5); Core Agent; Core Agent Opus 4.5; Core Agent Opus 4.5 high; Core-Agent; Coreagent; coreagent.
+\item \textbf{HAL Generalist Agent}: General-purpose HAL scaffold. Reasoning-effort variants are model configurations, not separate harnesses. Aliases: HAL Generalist; HAL Generalist Agent; HAL Generalist High Reasoning; HAL Generalist Minimal Reasoning; HAL Generalist No Reasoning; HAL-Generalist-Agent; Hal Generalist Agent; Hal Generalist Agent Opus 4.5; Hal Generalist Agent Opus 4.5 high; hal\_generalist\_agent\_deepseekaideepseekr1; hal\_generalist\_agent\_deepseekaideepseekv3; hal\_generalist\_agent\_gemini20flash; hal\_generalist\_agent\_o3mini20250131\_high; hal\_generalist\_agent\_o3mini20250131\_low.
+\item \textbf{HF Open Deep Research}: Open Deep Research scaffold for research-style tasks. Alias: HF Open Deep Research.
+\item \textbf{SAB Self-Debug}: ScienceAgentBench self-debug scaffold. Aliases: SAB Self-Debug Claude-3-7; SAB Self-Debug Claude-3-7 high; SAB Self-Debug Claude-3-7 low; SAB Self-Debug Claude-Haiku-4-5; SAB Self-Debug Claude-Haiku-4-5 High; SAB Self-Debug Claude-Opus-4-1; SAB Self-Debug Claude-Opus-4-1-High; SAB Self-Debug Claude-Sonnet-4-5; SAB Self-Debug Claude-Sonnet-4-5 High; SAB Self-Debug DS-V3; SAB Self-Debug GPT-5-Medium; SAB Self-Debug gemini-2-0-flash; SAB Self-Debug gemini-2-5-pro; SAB Self-Debug o3 medium; SAB Self-Debug o4-mini high; SAB Self-Debug o4-mini low; sab\_selfdebug\_dsr1; sab\_selfdebug\_gpt\_41.
+\item \textbf{SciCode Tool Calling Agent}: SciCode tool-calling scaffold. Aliases: SciCode Tool Calling Agent; Scicode Tool Calling Agent.
+\item \textbf{SciCode Zero Shot Agent}: SciCode zero-shot scaffold. Alias: Scicode Zero Shot Agent.
+\item \textbf{SeeAct}: SeeAct web interaction scaffold. Alias: SeeAct.
+\item \textbf{SWE-Agent}: SWE-Agent software-engineering scaffold. Aliases: SWE-Agent; My Agent. The \texttt{My Agent} raw label is retained in metadata as a curation flag; trace metadata identifies these runs as \texttt{agents/SWE-agent-v1.0} filemap/simple-review configs.
+\item \textbf{TAU-bench FewShot}: TAU-bench few-shot scaffold. Aliases: TAU-bench FewShot; TauBench Few Shot; TauBench Few Shot High Reasoning; TauBench Few-Shot High Reasoning; TauBench Few-Shot Minimal Reasoning; TauBench FewShot High Reasoning; TauBench FewShot No Reasoning; taubench\_fewshot\_o3mini20250131\_high.
+\item \textbf{TAU-bench ToolCalling}: TAU-bench tool-calling scaffold. Alias: Taubench ToolCalling.
+\item \textbf{USACO Episodic + Semantic}: USACO coding scaffold. Aliases: USACO Episodic + Semantic; usaco\_episodic\_\_semantic\_deepseekaideepseekr1; usaco\_episodic\_\_semantic\_deepseekaideepseekv3; usaco\_episodic\_\_semantic\_gpt4120250414; usaco\_episodic\_\_semantic\_o3mini20250131\_high; usaco\_episodic\_\_semantic\_o3mini20250131\_low.
+\end{itemize}
+\endgroup

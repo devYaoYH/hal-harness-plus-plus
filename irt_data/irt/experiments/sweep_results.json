@@ -1,0 +1,90 @@
+[
+  {
+    "k": 1,
+    "use_features": false,
+    "val_loss": 0.482864648103714,
+    "val_acc": 0.779190182685852,
+    "val_auc": 0.8138274440787063,
+    "val_cal_err": 0.05431829020380974,
+    "baseline_acc": 0.7029190207156308,
+    "baseline_auc": 0.5,
+    "n_epochs": 175
+  },
+  {
+    "k": 1,
+    "use_features": true,
+    "val_loss": 0.4762451946735382,
+    "val_acc": 0.7838982939720154,
+    "val_auc": 0.8179130713535856,
+    "val_cal_err": 0.06567136943340302,
+    "baseline_acc": 0.7029190207156308,
+    "baseline_auc": 0.5,
+    "n_epochs": 40
+  },
+  {
+    "k": 2,
+    "use_features": false,
+    "val_loss": 0.46064189076423645,
+    "val_acc": 0.7871939539909363,
+    "val_auc": 0.8356217021217875,
+    "val_cal_err": 0.04648023843765259,
+    "baseline_acc": 0.7029190207156308,
+    "baseline_auc": 0.5,
+    "n_epochs": 200
+  },
+  {
+    "k": 2,
+    "use_features": true,
+    "val_loss": 0.46233370900154114,
+    "val_acc": 0.7857815623283386,
+    "val_auc": 0.8322886624639232,
+    "val_cal_err": 0.04335733875632286,
+    "baseline_acc": 0.7029190207156308,
+    "baseline_auc": 0.5,
+    "n_epochs": 66
+  },
+  {
+    "k": 4,
+    "use_features": false,
+    "val_loss": 0.45167019963264465,
+    "val_acc": 0.7980226278305054,
+    "val_auc": 0.8414375378814818,
+    "val_cal_err": 0.04661675542593002,
+    "baseline_acc": 0.7029190207156308,
+    "baseline_auc": 0.5,
+    "n_epochs": 200
+  },
+  {
+    "k": 4,
+    "use_features": true,
+    "val_loss": 0.4640739858150482,
+    "val_acc": 0.7881355881690979,
+    "val_auc": 0.8308482373633745,
+    "val_cal_err": 0.04382585734128952,
+    "baseline_acc": 0.7029190207156308,
+    "baseline_auc": 0.5,
+    "n_epochs": 53
+  },
+  {
+    "k": 8,
+    "use_features": false,
+    "val_loss": 0.4382028877735138,
+    "val_acc": 0.8107344508171082,
+    "val_auc": 0.851521575062919,
+    "val_cal_err": 0.04608561843633652,
+    "baseline_acc": 0.7029190207156308,
+    "baseline_auc": 0.5,
+    "n_epochs": 200
+  },
+  {
+    "k": 8,
+    "use_features": true,
+    "val_loss": 0.46001267433166504,
+    "val_acc": 0.7947269082069397,
+    "val_auc": 0.8349561556678127,
+    "val_cal_err": 0.0429619625210762,
+    "baseline_acc": 0.7029190207156308,
+    "baseline_auc": 0.5,
+    "n_epochs": 66
+  }
+]

@@ -1,0 +1,461 @@
+[
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "DeepSeek-R1",
+    "predicted_accuracy": 0.08332031220197678,
+    "tasks": 50,
+    "actual_accuracy": 0.06,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "DeepSeek-V3",
+    "predicted_accuracy": 0.09310184419155121,
+    "tasks": 50,
+    "actual_accuracy": 0.1,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "claude-3-7-sonnet",
+    "predicted_accuracy": 0.25127339363098145,
+    "tasks": 50,
+    "actual_accuracy": 0.32,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "claude-haiku-4-5",
+    "predicted_accuracy": 0.23710185289382935,
+    "tasks": 50,
+    "actual_accuracy": 0.3087248322147651,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "claude-opus-4",
+    "predicted_accuracy": 0.2990826368331909,
+    "tasks": 50,
+    "actual_accuracy": 0.32,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "claude-opus-4-1",
+    "predicted_accuracy": 0.2990826368331909,
+    "tasks": 50,
+    "actual_accuracy": 0.54,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "claude-sonnet-4-5",
+    "predicted_accuracy": 0.25127339363098145,
+    "tasks": 50,
+    "actual_accuracy": 0.37,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "gemini-2.0-flash",
+    "predicted_accuracy": 0.08140259981155396,
+    "tasks": 50,
+    "actual_accuracy": 0.02,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "gpt-4.1",
+    "predicted_accuracy": 0.16966676712036133,
+    "tasks": 50,
+    "actual_accuracy": 0.02,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "gpt-4o",
+    "predicted_accuracy": 0.16966676712036133,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "gpt-4o-2024-11-20",
+    "predicted_accuracy": 0.16966676712036133,
+    "tasks": 50,
+    "actual_accuracy": 0.02,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "gpt-5",
+    "predicted_accuracy": 0.16966676712036133,
+    "tasks": 50,
+    "actual_accuracy": 0.14,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "o1",
+    "predicted_accuracy": 0.15701690316200256,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "o3",
+    "predicted_accuracy": 0.15701690316200256,
+    "tasks": 50,
+    "actual_accuracy": 0.0,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "o3-mini",
+    "predicted_accuracy": 0.15701690316200256,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "o3-mini-2025-01-31",
+    "predicted_accuracy": 0.15701690316200256,
+    "tasks": 50,
+    "actual_accuracy": 0.0,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "HAL Generalist Agent",
+    "display_model": "o4-mini",
+    "predicted_accuracy": 0.15701690316200256,
+    "tasks": 50,
+    "actual_accuracy": 0.04,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "DeepSeek-R1",
+    "predicted_accuracy": 0.05855100229382515,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "DeepSeek-V3",
+    "predicted_accuracy": 0.0624161995947361,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "claude-3-7-sonnet",
+    "predicted_accuracy": 0.12494685500860214,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "claude-haiku-4-5",
+    "predicted_accuracy": 0.11987410485744476,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "claude-opus-4",
+    "predicted_accuracy": 0.14275464415550232,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "claude-opus-4-1",
+    "predicted_accuracy": 0.14275464415550232,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "claude-sonnet-4-5",
+    "predicted_accuracy": 0.12494685500860214,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "gemini-2.0-flash",
+    "predicted_accuracy": 0.05673573166131973,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "gpt-4.1",
+    "predicted_accuracy": 0.11700273305177689,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "gpt-4o",
+    "predicted_accuracy": 0.11700273305177689,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "gpt-4o-2024-11-20",
+    "predicted_accuracy": 0.11700273305177689,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "gpt-5",
+    "predicted_accuracy": 0.11700273305177689,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "o1",
+    "predicted_accuracy": 0.10808780044317245,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "o3",
+    "predicted_accuracy": 0.10808780044317245,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "o3-mini",
+    "predicted_accuracy": 0.10808780044317245,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "o3-mini-2025-01-31",
+    "predicted_accuracy": 0.10808780044317245,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SAB Self-Debug",
+    "display_model": "o4-mini",
+    "predicted_accuracy": 0.10808780044317245,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "DeepSeek-R1",
+    "predicted_accuracy": 0.17317022383213043,
+    "tasks": 50,
+    "actual_accuracy": 0.0,
+    "observed_tasks": 1.0,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "DeepSeek-V3",
+    "predicted_accuracy": 0.19151535630226135,
+    "tasks": 50,
+    "actual_accuracy": 0.41935483870967744,
+    "observed_tasks": 31.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "claude-3-7-sonnet",
+    "predicted_accuracy": 0.4903547763824463,
+    "tasks": 50,
+    "actual_accuracy": 0.52,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "claude-haiku-4-5",
+    "predicted_accuracy": 0.43325966596603394,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "claude-opus-4",
+    "predicted_accuracy": 0.5580050349235535,
+    "tasks": 50,
+    "actual_accuracy": 0.6,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "claude-opus-4-1",
+    "predicted_accuracy": 0.5580050349235535,
+    "tasks": 50,
+    "actual_accuracy": 0.6266666666666667,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "claude-sonnet-4-5",
+    "predicted_accuracy": 0.4903547763824463,
+    "tasks": 50,
+    "actual_accuracy": 0.7070707070707071,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "gemini-2.0-flash",
+    "predicted_accuracy": 0.16677673161029816,
+    "tasks": 50,
+    "actual_accuracy": 0.22448979591836735,
+    "observed_tasks": 49.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "gpt-4.1",
+    "predicted_accuracy": 0.4004649221897125,
+    "tasks": 50,
+    "actual_accuracy": 0.46938775510204084,
+    "observed_tasks": 49.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "gpt-4o",
+    "predicted_accuracy": 0.4004649221897125,
+    "tasks": 50,
+    "actual_accuracy": 0.2916666666666667,
+    "observed_tasks": 48.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "gpt-4o-2024-11-20",
+    "predicted_accuracy": 0.4004649221897125,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "gpt-5",
+    "predicted_accuracy": 0.4004649221897125,
+    "tasks": 50,
+    "actual_accuracy": 0.64,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "o1",
+    "predicted_accuracy": 0.37223151326179504,
+    "tasks": 50,
+    "actual_accuracy": 0.4,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "o3",
+    "predicted_accuracy": 0.37223151326179504,
+    "tasks": 50,
+    "actual_accuracy": 0.5925925925925926,
+    "observed_tasks": 48.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "o3-mini",
+    "predicted_accuracy": 0.37223151326179504,
+    "tasks": 50,
+    "actual_accuracy": 0.4084507042253521,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "o3-mini-2025-01-31",
+    "predicted_accuracy": 0.37223151326179504,
+    "tasks": 50,
+    "actual_accuracy": NaN,
+    "observed_tasks": NaN,
+    "is_observed": false
+  },
+  {
+    "display_harness": "SWE-Agent",
+    "display_model": "o4-mini",
+    "predicted_accuracy": 0.37223151326179504,
+    "tasks": 50,
+    "actual_accuracy": 0.5510204081632653,
+    "observed_tasks": 50.0,
+    "is_observed": true
+  }
+]

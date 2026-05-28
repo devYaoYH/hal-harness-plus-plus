@@ -1,0 +1,151 @@
+{
+  "experiment": "high_k_sweep",
+  "description": "K values exceeding feature input dimensions. Agent feat dim=62 (5 cat\u00d7embed8 + 22 cont/bool), task feat dim=19, projection hidden=64. Prior sweep K in {1,2,4,8}; new K in {16,32,64,128}.",
+  "context": {
+    "agent_feature_input_dim": 62,
+    "task_feature_input_dim": 19,
+    "projection_hidden_dim": 64,
+    "n_agents": 273,
+    "n_tasks": 1796
+  },
+  "prior_results": [
+    {
+      "k": 1,
+      "use_features": false,
+      "val_loss": 0.483,
+      "val_auc": 0.814,
+      "val_acc": 0.775,
+      "val_cal_err": 0.053
+    },
+    {
+      "k": 1,
+      "use_features": true,
+      "val_loss": 0.468,
+      "val_auc": 0.821,
+      "val_acc": 0.782,
+      "val_cal_err": 0.055
+    },
+    {
+      "k": 2,
+      "use_features": false,
+      "val_loss": 0.481,
+      "val_auc": 0.815,
+      "val_acc": 0.773,
+      "val_cal_err": 0.04
+    },
+    {
+      "k": 2,
+      "use_features": true,
+      "val_loss": 0.457,
+      "val_auc": 0.833,
+      "val_acc": 0.79,
+      "val_cal_err": 0.032
+    },
+    {
+      "k": 4,
+      "use_features": false,
+      "val_loss": 0.475,
+      "val_auc": 0.823,
+      "val_acc": 0.774,
+      "val_cal_err": 0.053
+    },
+    {
+      "k": 4,
+      "use_features": true,
+      "val_loss": 0.459,
+      "val_auc": 0.833,
+      "val_acc": 0.79,
+      "val_cal_err": 0.037
+    },
+    {
+      "k": 8,
+      "use_features": false,
+      "val_loss": 0.428,
+      "val_auc": 0.857,
+      "val_acc": 0.812,
+      "val_cal_err": 0.047
+    },
+    {
+      "k": 8,
+      "use_features": true,
+      "val_loss": 0.449,
+      "val_auc": 0.842,
+      "val_acc": 0.796,
+      "val_cal_err": 0.041
+    }
+  ],
+  "new_results": [
+    {
+      "k": 16,
+      "use_features": true,
+      "val_loss": 0.4547,
+      "val_auc": 0.833,
+      "val_acc": 0.791,
+      "val_cal_err": 0.05,
+      "n_epochs": 29
+    },
+    {
+      "k": 16,
+      "use_features": false,
+      "val_loss": 0.4256,
+      "val_auc": 0.86,
+      "val_acc": 0.824,
+      "val_cal_err": 0.048,
+      "n_epochs": 200
+    },
+    {
+      "k": 32,
+      "use_features": true,
+      "val_loss": 0.4561,
+      "val_auc": 0.838,
+      "val_acc": 0.8,
+      "val_cal_err": 0.037,
+      "n_epochs": 36
+    },
+    {
+      "k": 32,
+      "use_features": false,
+      "val_loss": 0.4269,
+      "val_auc": 0.858,
+      "val_acc": 0.819,
+      "val_cal_err": 0.045,
+      "n_epochs": 171
+    },
+    {
+      "k": 64,
+      "use_features": true,
+      "val_loss": 0.4543,
+      "val_auc": 0.839,
+      "val_acc": 0.798,
+      "val_cal_err": 0.049,
+      "n_epochs": 37
+    },
+    {
+      "k": 64,
+      "use_features": false,
+      "val_loss": 0.4274,
+      "val_auc": 0.859,
+      "val_acc": 0.817,
+      "val_cal_err": 0.04,
+      "n_epochs": 133
+    },
+    {
+      "k": 128,
+      "use_features": true,
+      "val_loss": 0.4524,
+      "val_auc": 0.834,
+      "val_acc": 0.782,
+      "val_cal_err": 0.052,
+      "n_epochs": 23
+    },
+    {
+      "k": 128,
+      "use_features": false,
+      "val_loss": 0.4283,
+      "val_auc": 0.859,
+      "val_acc": 0.824,
+      "val_cal_err": 0.046,
+      "n_epochs": 102
+    }
+  ]
+}

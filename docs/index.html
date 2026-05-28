@@ -893,7 +893,7 @@
   /* Counter animation */
   .counter { display: inline; }
 
-  /* Hide Val Loss column in sweep table */
+  /* Hide BCE column in the compact sweep table */
   #sweep-table thead th:nth-child(2),
   #sweep-table tbody td:nth-child(2) { display: none; }
 
@@ -1157,39 +1157,39 @@
     <a href="#ablations">Ablations</a>
     <a href="#references">References</a>
   </nav>
-  <div class="badge">K=2 · 13 harnesses · 36 models · 1796 tasks</div>
+  <div class="badge">K=1/2 · 15 harnesses · 20 model groups · 2153 tasks</div>
 </header>
 
 <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
 <section class="hero">
-  <div class="hero-eyebrow">HAL Leaderboard · IRT Analysis · April 2026</div>
+  <div class="hero-eyebrow">HAL Leaderboard · IRT Analysis · May 2026</div>
   <h1>Evaluating agents<br>with <em>fewer tasks,</em><br>more precision.</h1>
   <p class="hero-sub">
-    A K=2 Multidimensional IRT model fitted on the public HAL leaderboard dataset — covering
-    13 harnesses across 36 models — identifies maximally discriminating tasks per benchmark,
-    enabling 40–44% evaluation cost reduction with minimal loss in ability estimation accuracy.
-    Feature-informed priors enable cold-start prediction for novel harness × model pairs.
+    Feature-informed multidimensional IRT models fitted to the HAL response matrix separate
+    task discrimination from model–harness compatibility. K=1 gives the best metadata-only
+    cold-start log loss; K=2 gives the best holdout ranking signal and item geometry,
+    enabling principled task downscaling while surfacing harness × model predictions.
   </p>
   <div class="stat-row">
     <div class="stat">
-      <div class="stat-num counter" data-target="13">0</div>
-      <div class="stat-label">Harnesses</div>
+      <div class="stat-num counter" data-target="15">0</div>
+      <div class="stat-label">Norm. harnesses</div>
     </div>
     <div class="stat">
-      <div class="stat-num counter" data-target="36">0</div>
-      <div class="stat-label">Models</div>
+      <div class="stat-num counter" data-target="20">0</div>
+      <div class="stat-label">Model groups</div>
     </div>
     <div class="stat">
-      <div class="stat-num counter" data-target="1796">0</div>
+      <div class="stat-num counter" data-target="2153">0</div>
       <div class="stat-label">Tasks indexed</div>
     </div>
     <div class="stat">
-      <div class="stat-num counter" data-target="8">0</div>
+      <div class="stat-num counter" data-target="10">0</div>
       <div class="stat-label">Benchmarks</div>
     </div>
     <div class="stat">
-      <div class="stat-num">~41<span style="font-size:1.2rem">%</span></div>
-      <div class="stat-label">Avg cost reduction</div>
+      <div class="stat-num">45k</div>
+      <div class="stat-label">Binary outcomes</div>
     </div>
   </div>
   <div class="scroll-hint">
@@ -1206,7 +1206,7 @@
     <h2 class="section-title">Model Architecture &amp; Features</h2>
   </div>
   <p class="section-desc">
-    Each agent is described by two groups of metadata — model-level and scaffold-level.
+    Each agent is described by model-level and normalized harness-level metadata.
     These features feed into a projection network f<sub>agent</sub>(·) that provides a
     cold-start prior for the latent ability vector θ, even for agents never seen during training.
   </p>
@@ -1251,7 +1251,7 @@
       <div class="feat-group">
         <div class="feat-group-label">Categorical</div>
         <div class="feat-chips">
-          <span class="chip chip-cat">scaffold_type</span>
+          <span class="chip chip-cat">tool_exposure_mechanism</span>
           <span class="chip chip-cat">context_strategy</span>
         </div>
       </div>
@@ -1259,26 +1259,29 @@
       <div class="feat-group">
         <div class="feat-group-label">Continuous</div>
         <div class="feat-chips">
+          <span class="chip chip-cont">tool_exposure_strength</span>
           <span class="chip chip-cont">max_steps <span class="chip-norm">log1p</span></span>
         </div>
       </div>
 
       <div class="feat-group">
-        <div class="feat-group-label">Boolean tools (16 fields)</div>
+        <div class="feat-group-label">Boolean affordances (16 fields)</div>
         <div class="feat-chips">
-          <span class="chip chip-bool">filesystem</span>
+          <span class="chip chip-bool">code_generation</span>
+          <span class="chip chip-bool">code_execution</span>
+          <span class="chip chip-bool">shell_access</span>
+          <span class="chip chip-bool">file_read</span>
           <span class="chip chip-bool">file_edit</span>
-          <span class="chip chip-bool">file_search</span>
-          <span class="chip chip-bool">python_exec</span>
-          <span class="chip chip-bool">execute_bash</span>
           <span class="chip chip-bool">web_search</span>
-          <span class="chip chip-bool">page_browse</span>
-          <span class="chip chip-bool">text_inspect</span>
-          <span class="chip chip-bool">vision_query</span>
-          <span class="chip chip-bool inactive">self_critique</span>
-          <span class="chip chip-bool inactive">multi_agent</span>
-          <span class="chip chip-bool inactive">memory</span>
-          <span class="chip chip-bool inactive">+ 4 more</span>
+          <span class="chip chip-bool">page_visit</span>
+          <span class="chip chip-bool">browser_control</span>
+          <span class="chip chip-bool">vision</span>
+          <span class="chip chip-bool">native_domain_tools</span>
+          <span class="chip chip-bool">benchmark_api_tools</span>
+          <span class="chip chip-bool">human_dialogue</span>
+          <span class="chip chip-bool inactive">self_debug_feedback</span>
+          <span class="chip chip-bool inactive">complete_program_prompt</span>
+          <span class="chip chip-bool inactive">+ 2 more</span>
         </div>
       </div>
     </div>
@@ -1355,8 +1358,8 @@
         <div class="d-formula-eq">P(y<sub>ij</sub>=1) = σ(θ<sub>i</sub>·a<sub>j</sub> + d<sub>j</sub>)</div>
         <div class="d-formula-desc">
           Inner product of agent ability and task discrimination determines difficulty.
-          <em>K</em> controls the number of latent dimensions — K=2 is recommended
-          for interpretability without sacrificing fit.
+          <em>K</em> controls the number of latent dimensions — K=1 is strongest for
+          metadata-only cold-start log loss, while K=2 is used for discrimination geometry.
         </div>
       </div>
       <div class="d-formula-block">
@@ -1371,10 +1374,10 @@
 
     <!-- K-factor visual -->
     <div style="margin-top:2rem;">
-      <div class="k-visual-title">K-factor sweep — val AUC <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why AUC?</strong>Area Under the ROC Curve measures rank-order discrimination: does the model correctly rank a harder agent below an easier one on a given task? AUC = 0.5 is random; AUC = 1.0 is perfect ordering. It is threshold-agnostic — useful when we care about relative rankings across 273 agents more than a single cut-point.</span></span> &amp; calibration error <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why calibration?</strong>A calibrated model is right about its confidence: when it predicts 70% pass rate, ~70% of agents actually pass. Poor calibration inflates predicted probabilities for hard tasks or deflates them for easy ones, making adaptive task selection less reliable. We target cal err &lt; 0.05 — below that, the probability estimates are trustworthy enough to drive task-subset decisions.</span></span> (features on, K ∈ {1,2,4,8})</div>
+      <div class="k-visual-title">K-factor sweep — semantic holdout AUC <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why AUC?</strong>Area Under the ROC Curve measures rank-order discrimination on held-out benchmark × normalized model × normalized harness units. AUC = 0.5 is random; AUC = 1.0 is perfect ordering.</span></span> &amp; calibration error <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why calibration?</strong>A calibrated model is right about its confidence: when it predicts 70% pass rate, ~70% of held-out rows actually pass. Calibration matters because cold-start predictions are probabilities, not only ranks.</span></span> (features on, K ∈ {1,2,4,8})</div>
       <div class="k-visual" id="k-visual"></div>
       <div class="k-legend">
-        <div class="k-legend-item"><div class="k-legend-dot" style="background:var(--sky);opacity:0.8;"></div>Val AUC (higher = better rank ordering)</div>
+        <div class="k-legend-item"><div class="k-legend-dot" style="background:var(--sky);opacity:0.8;"></div>Holdout AUC (higher = better rank ordering)</div>
         <div class="k-legend-item"><div class="k-legend-dot" style="background:var(--coral);opacity:0.8;"></div>Calibration error (lower = better)</div>
       </div>
     </div>
@@ -1392,25 +1395,25 @@
     <h2 class="section-title">IRT Model Results</h2>
   </div>
   <p class="section-desc">
-    K-factor sweep across latent-only and feature-informed variants.
-    Features: model provider / family / release date / param counts (full + active) / MoE flag +
-    16 scaffold boolean tool fields + context strategy. K=2+features minimises calibration
-    error while remaining interpretable — recommended for adaptive testing.
+    K-factor sweep across latent-only and feature-informed variants on the semantic holdout split.
+    All holdout agent configurations are unseen in training, so feature-informed models use only
+    metadata projections for their cold-start ability vectors. K=1+features has the best holdout
+    BCE and calibration; K=2+features gives the best AUC and is used for discrimination plots.
   </p>
 
   <div class="two-col fade-up">
     <!-- Sweep table / heatmap -->
     <div>
-      <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.8rem;">K-factor sweep · val metrics</div>
+      <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.8rem;">K-factor sweep · semantic holdout</div>
       <div class="tbl-wrap">
         <table id="sweep-table">
           <thead>
             <tr>
               <th>Config</th>
-              <th>Val Loss ↓</th>
-              <th>Val AUC ↑ <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why AUC?</strong>Measures rank-order discrimination: does the model correctly rank a weaker agent below a stronger one on each task? AUC = 0.5 is random; 1.0 is perfect. Threshold-agnostic — ideal for comparing harness × model pairs where no single cut-point matters.</span></span></th>
-              <th>Val Acc ↑</th>
-              <th>Cal Err ↓ <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why calibration?</strong>A calibrated model is right about its confidence: when it predicts 70% pass rate, ~70% of runs actually pass. Poor calibration makes adaptive task selection unreliable — we use predicted probabilities to rank tasks by discrimination, so accuracy of those probabilities matters. Target: &lt; 0.05.</span></span></th>
+              <th>Holdout BCE ↓</th>
+              <th>Holdout AUC ↑ <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why AUC?</strong>Measures rank-order discrimination on held-out semantic model–harness units. AUC = 0.5 is random; 1.0 is perfect.</span></span></th>
+              <th>Holdout Acc ↑</th>
+              <th>Cal Err ↓ <span class="tip-wrap"><span class="tip-trigger">?</span><span class="tip-box"><strong>Why calibration?</strong>A calibrated model is right about its confidence on held-out rows. This matters because cold-start cells are interpreted as predicted probabilities.</span></span></th>
             </tr>
           </thead>
           <tbody id="sweep-body"></tbody>
@@ -1420,7 +1423,7 @@
 
     <!-- Adaptive subset table -->
     <div>
-      <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.8rem;">Adaptive subsets · 80% discrimination coverage</div>
+      <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.8rem;">K=2 task subsets · 80% discrimination coverage</div>
       <div class="tbl-wrap">
         <table>
           <thead>
@@ -1440,7 +1443,7 @@
   <div class="hm2-wrap fade-up">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.6rem;">
       <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);">
-        swebench_verified_mini · model × harness accuracy (from public HAL leaderboard)
+        swebench_verified_mini · normalized model × harness accuracy
       </div>
       <div class="view-toggle">
         <button class="view-btn active" id="hm-btn-actual" onclick="setHmView('actual')">Actual</button>
@@ -1477,22 +1480,22 @@
     <!-- Prediction card -->
     <div class="card">
       <div class="card-eyebrow">
-        <span>Cold-start prediction · swebench_verified_mini</span>
+        <span>K=1 cold-start prediction · swebench_verified_mini</span>
         <div class="pending-badge"><div class="pending-dot"></div>Awaiting validation</div>
       </div>
       <div class="card-title">SWE-Agent × DeepSeek-R1</div>
-      <div class="card-sub">Novel combination — SWE-Agent has only been observed with claude-3-7-sonnet. Both scaffold and model are individually known; their pairing is absent from training.</div>
+      <div class="card-sub">Sparse normalized combination — model and harness metadata are known, but the cell lacks enough benchmark coverage to treat as an observed accuracy.</div>
 
       <div class="accuracy-row">
         <div class="acc-block">
           <div class="acc-label">Predicted accuracy</div>
-          <div class="acc-value predicted">66.0%</div>
+          <div class="acc-value predicted">17.3%</div>
         </div>
         <div class="acc-block">
           <div class="acc-label">Baseline (SWE-Agent + claude-3-7)</div>
-          <div class="acc-value baseline">53.0%</div>
+          <div class="acc-value baseline">52.0%</div>
         </div>
-        <div class="delta-badge delta-pos">+13.0 pp</div>
+        <div class="delta-badge delta-neg">−34.7 pp</div>
       </div>
 
       <div class="theta-display">
@@ -1515,31 +1518,30 @@
 
       <div class="method-note">
         <strong>Method:</strong> Feature projection only — no latent embedding (agent unseen).
-        Raw θ norm rescaled to training distribution mean before computing task probabilities.
-        The +13pp prediction over baseline reflects DeepSeek-R1's chain-of-thought reasoning
-        compensating strongly on hard code tasks despite SWE-Agent's prompting being tuned for Anthropic models.
+        The current normalized feature model predicts that SWE-Agent's code-oriented harness
+        does not transfer strongly to this DeepSeek-R1 configuration without observed response history.
       </div>
     </div>
 
-    <!-- SWE-Agent × DeepSeek-V3 prediction card -->
+    <!-- SWE-Agent × Claude Haiku prediction card -->
     <div class="card">
       <div class="card-eyebrow">
-        <span>Cold-start prediction · swebench_verified_mini</span>
+        <span>K=1 cold-start prediction · swebench_verified_mini</span>
         <div class="pending-badge"><div class="pending-dot"></div>Awaiting validation</div>
       </div>
-      <div class="card-title">SWE-Agent × DeepSeek-V3</div>
-      <div class="card-sub">Novel combination — SWE-Agent has only been observed with claude-3-7-sonnet. DeepSeek-V3 is a dense MoE model without chain-of-thought reasoning, contrasting with R1's explicit reasoning traces.</div>
+      <div class="card-title">SWE-Agent × claude-haiku-4-5</div>
+      <div class="card-sub">Cold-start normalized combination — the harness family is observed and the model family is observed, but this benchmark-specific pairing is absent.</div>
 
       <div class="accuracy-row">
         <div class="acc-block">
           <div class="acc-label">Predicted accuracy</div>
-          <div class="acc-value predicted">38.4%</div>
+          <div class="acc-value predicted">43.3%</div>
         </div>
         <div class="acc-block">
           <div class="acc-label">Baseline (SWE-Agent + claude-3-7)</div>
-          <div class="acc-value baseline">53.0%</div>
+          <div class="acc-value baseline">52.0%</div>
         </div>
-        <div class="delta-badge delta-neg">−14.6 pp</div>
+        <div class="delta-badge delta-neg">−8.7 pp</div>
       </div>
 
       <div class="conf-wrap">
@@ -1548,7 +1550,7 @@
       </div>
 
       <div class="method-note">
-        <strong>vs DeepSeek-R1:</strong> V3 lacks the reasoning flag and has a lower active parameter count (37B active vs 671B full for R1). The feature projection yields a similar predicted drop from baseline, but the mechanism differs — R1's reasoning partially compensates on hard code tasks; V3 relies on scale alone.
+        <strong>Interpretation:</strong> the prediction is close to the Claude 3.7 Sonnet/SWE-Agent baseline, consistent with the model-family feature carrying useful signal while still penalizing the smaller Haiku configuration.
       </div>
     </div>
   </div>
@@ -1578,7 +1580,7 @@
       </div>
       <div class="card-title">HAL Generalist − web/doc tools</div>
       <div class="card-sub">Remove the 4 web-oriented tools irrelevant to local repository repair.
-        Remaining set is a superset of both SWE-Agent and My Agent.</div>
+        Remaining set is a superset of the normalized SWE-Agent harness.</div>
 
       <div class="accuracy-row">
         <div class="acc-block">
@@ -1696,7 +1698,7 @@
         <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:0.2rem;">Holistic Agent Leaderboard: The Missing Infrastructure for AI Agent Evaluation</div>
         <div style="font-size:11px;font-weight:500;color:var(--text-dim);margin-bottom:0.4rem;">Sayash Kapoor, Benedikt Stroebl, Peter Kirgis et al. · 2025</div>
         <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:0.6rem;">Introduces a standardized harness and public leaderboard that orchestrates parallel agent evaluations across hundreds of VMs, covering coding, web navigation, and customer service tasks.</div>
-        <div style="font-size:11px;font-weight:600;color:var(--text);background:var(--bg2);border-left:2px solid var(--acid);padding:0.5rem 0.75rem;border-radius:0 3px 3px 0;margin-bottom:0.6rem;line-height:1.6;">This work builds directly on the <em style="font-style:normal;color:var(--acid);">public HAL leaderboard dataset</em> — the response matrix of 13 harnesses × 36 models × 1796 tasks across 8 benchmarks is extracted from HAL's open evaluation results. HAL provides the infrastructure; we apply IRT on top to make that data actionable for adaptive evaluation.</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text);background:var(--bg2);border-left:2px solid var(--acid);padding:0.5rem 0.75rem;border-radius:0 3px 3px 0;margin-bottom:0.6rem;line-height:1.6;">This work builds directly on the <em style="font-style:normal;color:var(--acid);">public HAL leaderboard dataset</em> — the regenerated response matrix contains 45,069 outcomes over 2,153 tasks, 20 normalized model groups, 15 normalized harness groups, and 10 benchmarks. HAL provides the infrastructure; we apply IRT on top to make that data actionable for adaptive evaluation.</div>
         <a href="https://arxiv.org/abs/2510.11977" target="_blank" rel="noopener" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--sky);text-decoration:none;">arxiv.org/abs/2510.11977 ↗</a>
       </div>
     </div>
@@ -1716,7 +1718,7 @@
         <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:0.2rem;">tinyBenchmarks: evaluating LLMs with fewer examples</div>
         <div style="font-size:11px;font-weight:500;color:var(--text-dim);margin-bottom:0.4rem;">Felipe Maia Polo, Lucas Weber, Leshem Choshen, Yuekai Sun, Gongjun Xu, Mikhail Yurochkin · 2024</div>
         <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:0.6rem;">Demonstrates that LLM benchmark performance can be accurately estimated from ~100 curated IRT-selected examples rather than full datasets of thousands, releasing compact versions of popular benchmarks.</div>
-        <div style="font-size:11px;font-weight:600;color:var(--text);background:var(--bg2);border-left:2px solid var(--amber);padding:0.5rem 0.75rem;border-radius:0 3px 3px 0;margin-bottom:0.6rem;line-height:1.6;">We directly extend the <em style="font-style:normal;color:var(--amber);">CAT (Computerised Adaptive Testing)</em> principle to agent benchmarks: rank tasks by fitted IRT discrimination ‖a<sub>j</sub>‖ and keep only the high-signal subset. Where tinyBenchmarks targets LLM eval on fixed QA sets, we apply the same cost-reduction logic to longer-horizon agentic tasks across 8 benchmarks, achieving 25–44% task reduction.</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text);background:var(--bg2);border-left:2px solid var(--amber);padding:0.5rem 0.75rem;border-radius:0 3px 3px 0;margin-bottom:0.6rem;line-height:1.6;">We directly extend the <em style="font-style:normal;color:var(--amber);">CAT (Computerised Adaptive Testing)</em> principle to agent benchmarks: rank tasks by fitted IRT discrimination ‖a<sub>j</sub>‖ and keep only the high-signal subset. In the current K=2 feature model, retaining 80% of discrimination mass removes about 20.6% of tasks on average.</div>
         <a href="https://arxiv.org/abs/2402.14992" target="_blank" rel="noopener" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--sky);text-decoration:none;">arxiv.org/abs/2402.14992 ↗</a>
       </div>
     </div>
@@ -1727,9 +1729,9 @@
 
 <!-- ── Footer ────────────────────────────────────────────────────────────── -->
 <footer>
-  <div>HAL-IRT · K=2 Multidimensional IRT · 13 harnesses × 36 models × 1796 tasks · April 2026</div>
+  <div>HAL-IRT · K=1/2 feature-informed MIRT · 45,069 outcomes × 2,153 tasks · May 2026</div>
   <div style="display:flex;gap:1.5rem;">
-    <a href="#">GENERALIZATION_TEST.md</a>
+    <a href="#">final_report.tex</a>
     <a href="#">irt_data/</a>
     <a href="#">prefect/run_tool_ablation.py</a>
   </div>
@@ -1739,14 +1741,14 @@
 <script>
 // ── K-factor visual bars ──────────────────────────────────────────────────
 const K_FEAT = [
-  { k:1, auc:0.818, cal:0.066, rec:false },
-  { k:2, auc:0.832, cal:0.043, rec:true  },
-  { k:4, auc:0.831, cal:0.044, rec:false },
-  { k:8, auc:0.835, cal:0.043, rec:false },
+  { k:1, auc:0.895, cal:0.030, rec:false },
+  { k:2, auc:0.900, cal:0.086, rec:true  },
+  { k:4, auc:0.896, cal:0.072, rec:false },
+  { k:8, auc:0.890, cal:0.124, rec:false },
 ];
 const kContainer = document.getElementById('k-visual');
-const aucMin = 0.81, aucMax = 0.84;
-const calMin = 0.00, calMax = 0.08;
+const aucMin = 0.88, aucMax = 0.905;
+const calMin = 0.00, calMax = 0.13;
 
 K_FEAT.forEach(row => {
   const aucH = Math.round(((row.auc - aucMin) / (aucMax - aucMin)) * 72 + 8);
@@ -1790,25 +1792,27 @@ if (kVis) kObs.observe(kVis.closest('.diagram-wrap'));
 // ── Data ──────────────────────────────────────────────────────────────────
 
 const SWEEP = [
-  { k:1, feat:false, loss:0.4829, auc:0.814, acc:0.779, cal:0.054, rec:false },
-  { k:1, feat:true,  loss:0.4762, auc:0.818, acc:0.784, cal:0.066, rec:false },
-  { k:2, feat:false, loss:0.4606, auc:0.836, acc:0.787, cal:0.046, rec:false },
-  { k:2, feat:true,  loss:0.4623, auc:0.832, acc:0.786, cal:0.043, rec:true  },
-  { k:4, feat:false, loss:0.4517, auc:0.841, acc:0.798, cal:0.047, rec:false },
-  { k:4, feat:true,  loss:0.4641, auc:0.831, acc:0.788, cal:0.044, rec:false },
-  { k:8, feat:false, loss:0.4382, auc:0.852, acc:0.811, cal:0.046, rec:false },
-  { k:8, feat:true,  loss:0.4600, auc:0.835, acc:0.795, cal:0.043, rec:false },
+  { k:1, feat:true,  loss:0.358, auc:0.895, acc:0.835, cal:0.030, rec:false },
+  { k:2, feat:true,  loss:0.362, auc:0.900, acc:0.833, cal:0.086, rec:true  },
+  { k:4, feat:true,  loss:0.376, auc:0.896, acc:0.832, cal:0.072, rec:false },
+  { k:8, feat:true,  loss:0.425, auc:0.890, acc:0.821, cal:0.124, rec:false },
+  { k:1, feat:false, loss:0.566, auc:0.861, acc:0.823, cal:0.191, rec:false },
+  { k:2, feat:false, loss:0.583, auc:0.852, acc:0.827, cal:0.184, rec:false },
+  { k:4, feat:false, loss:0.596, auc:0.844, acc:0.823, cal:0.195, rec:false },
+  { k:8, feat:false, loss:0.604, auc:0.842, acc:0.825, cal:0.228, rec:false },
 ];
 
 const SUBSETS = [
-  { bench:'swebench_verified_mini', cls:'bench-swe',  full:50,   sub:28,  pct:44 },
-  { bench:'gaia',                   cls:'bench-gaia', full:165,  sub:96,  pct:42 },
-  { bench:'corebench_hard',         cls:'bench-core', full:45,   sub:28,  pct:38 },
-  { bench:'scicode',                cls:'bench-sci',  full:65,   sub:49,  pct:25 },
-  { bench:'scienceagentbench',      cls:'bench-scib', full:102,  sub:61,  pct:40 },
-  { bench:'online_mind2web',        cls:'bench-mind', full:336,  sub:197, pct:41 },
-  { bench:'assistantbench',         cls:'bench-asst', full:33,   sub:22,  pct:33 },
-  { bench:'colbench_backend_programming', cls:'bench-col', full:1000, sub:588, pct:41 },
+  { bench:'assistantbench',         cls:'bench-asst', full:33,   sub:26,  pct:21 },
+  { bench:'colbench_backend_programming', cls:'bench-col', full:1000, sub:790, pct:21 },
+  { bench:'corebench_hard',         cls:'bench-core', full:45,   sub:36,  pct:20 },
+  { bench:'gaia',                   cls:'bench-gaia', full:165,  sub:130, pct:21 },
+  { bench:'online_mind2web',        cls:'bench-mind', full:336,  sub:262, pct:22 },
+  { bench:'scicode',                cls:'bench-sci',  full:65,   sub:52,  pct:20 },
+  { bench:'scienceagentbench',      cls:'bench-scib', full:102,  sub:81,  pct:21 },
+  { bench:'swebench_verified_mini', cls:'bench-swe',  full:50,   sub:40,  pct:20 },
+  { bench:'taubench_airline',       cls:'bench-tau',  full:50,   sub:40,  pct:20 },
+  { bench:'usaco',                  cls:'bench-usaco', full:307, sub:246, pct:20 },
 ];
 
 // ── Render sweep table ────────────────────────────────────────────────────
@@ -1819,7 +1823,7 @@ SWEEP.forEach(r => {
   const tr = document.createElement('tr');
   if (r.rec) tr.classList.add('rec-row');
 
-  const aucPct = (r.auc - 0.79) / (maxAUC - 0.79); // normalise for bar
+  const aucPct = (r.auc - 0.84) / (maxAUC - 0.84); // normalise for bar
   tr.innerHTML = `
     <td>
       <span class="k-pill">
@@ -1836,48 +1840,48 @@ SWEEP.forEach(r => {
       </div>
     </td>
     <td class="num">${r.acc.toFixed(3)}</td>
-    <td class="${r.cal <= 0.043 ? 'num' : 'dim'}">${r.cal.toFixed(3)}</td>
+    <td class="${r.cal <= 0.03 ? 'num' : 'dim'}">${r.cal.toFixed(3)}</td>
   `;
   sweepBody.appendChild(tr);
 });
 
-// ── Render swebench model × harness heatmap ───────────────────────────────
-const HM_HARNESSES = ['HAL Generalist Agent', 'My Agent', 'SWE-Agent'];
+// ── Render swebench normalized model × harness heatmap ────────────────────
+const HM_HARNESSES = ['HAL Generalist Agent', 'SAB Self-Debug', 'SWE-Agent'];
 
 const HM_MODELS = [
-  { name:'DeepSeek-R1',        'HAL Generalist Agent':0.060, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'DeepSeek-V3',        'HAL Generalist Agent':0.100, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'claude-3-7-sonnet',  'HAL Generalist Agent':0.320, 'My Agent':0.500, 'SWE-Agent':0.530 },
-  { name:'claude-haiku-4-5',   'HAL Generalist Agent':0.343, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'claude-opus-4-1',    'HAL Generalist Agent':0.540, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'claude-opus-4',      'HAL Generalist Agent':0.320, 'My Agent':0.600, 'SWE-Agent':null  },
-  { name:'claude-sonnet-4-5',  'HAL Generalist Agent':0.370, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'gemini-2.0-flash',   'HAL Generalist Agent':0.020, 'My Agent':0.224, 'SWE-Agent':null  },
-  { name:'gpt-4.1',            'HAL Generalist Agent':0.020, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'gpt-4o',             'HAL Generalist Agent':null,  'My Agent':0.292, 'SWE-Agent':null  },
-  { name:'gpt-4o-2024-11-20',  'HAL Generalist Agent':0.020, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'gpt-5',              'HAL Generalist Agent':0.140, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'o1',                 'HAL Generalist Agent':null,  'My Agent':0.400, 'SWE-Agent':null  },
-  { name:'o3',                 'HAL Generalist Agent':null,  'My Agent':0.647, 'SWE-Agent':null  },
-  { name:'o3-mini',            'HAL Generalist Agent':null,  'My Agent':0.408, 'SWE-Agent':null  },
-  { name:'o3-mini-2025-01-31', 'HAL Generalist Agent':0.000, 'My Agent':null,  'SWE-Agent':null  },
-  { name:'o4-mini',            'HAL Generalist Agent':0.040, 'My Agent':null,  'SWE-Agent':null  },
+  { name:'DeepSeek-R1',        'HAL Generalist Agent':0.060, 'SAB Self-Debug':null, 'SWE-Agent':null  },
+  { name:'DeepSeek-V3',        'HAL Generalist Agent':0.100, 'SAB Self-Debug':null, 'SWE-Agent':0.419 },
+  { name:'claude-3-7-sonnet',  'HAL Generalist Agent':0.320, 'SAB Self-Debug':null, 'SWE-Agent':0.520 },
+  { name:'claude-haiku-4-5',   'HAL Generalist Agent':0.309, 'SAB Self-Debug':null, 'SWE-Agent':null  },
+  { name:'claude-opus-4-1',    'HAL Generalist Agent':0.540, 'SAB Self-Debug':null, 'SWE-Agent':0.627 },
+  { name:'claude-opus-4',      'HAL Generalist Agent':0.320, 'SAB Self-Debug':null, 'SWE-Agent':0.600 },
+  { name:'claude-sonnet-4-5',  'HAL Generalist Agent':0.370, 'SAB Self-Debug':null, 'SWE-Agent':0.707 },
+  { name:'gemini-2.0-flash',   'HAL Generalist Agent':0.020, 'SAB Self-Debug':null, 'SWE-Agent':0.224 },
+  { name:'gpt-4.1',            'HAL Generalist Agent':0.020, 'SAB Self-Debug':null, 'SWE-Agent':0.469 },
+  { name:'gpt-4o',             'HAL Generalist Agent':null,  'SAB Self-Debug':null, 'SWE-Agent':0.292 },
+  { name:'gpt-4o-2024-11-20',  'HAL Generalist Agent':0.020, 'SAB Self-Debug':null, 'SWE-Agent':null  },
+  { name:'gpt-5',              'HAL Generalist Agent':0.140, 'SAB Self-Debug':null, 'SWE-Agent':0.640 },
+  { name:'o1',                 'HAL Generalist Agent':null,  'SAB Self-Debug':null, 'SWE-Agent':0.400 },
+  { name:'o3',                 'HAL Generalist Agent':0.000, 'SAB Self-Debug':null, 'SWE-Agent':0.593 },
+  { name:'o3-mini',            'HAL Generalist Agent':null,  'SAB Self-Debug':null, 'SWE-Agent':0.408 },
+  { name:'o3-mini-2025-01-31', 'HAL Generalist Agent':0.000, 'SAB Self-Debug':null, 'SWE-Agent':null  },
+  { name:'o4-mini',            'HAL Generalist Agent':0.040, 'SAB Self-Debug':null, 'SWE-Agent':0.551 },
 ];
 
 // IRT cold-start predictions for null cells
 const HM_PREDICTED = {
-  'HAL Generalist Agent': { 'gpt-4o':0.464, 'o1':0.367, 'o3':0.367, 'o3-mini':0.380 },
-  'My Agent': {
-    'DeepSeek-R1':0.390, 'DeepSeek-V3':0.387, 'claude-haiku-4-5':0.329,
-    'claude-opus-4-1':0.558, 'claude-sonnet-4-5':0.378, 'gpt-4.1':0.378,
-    'gpt-4o-2024-11-20':0.342, 'gpt-5':0.388, 'o3-mini-2025-01-31':0.373, 'o4-mini':0.345,
+  'HAL Generalist Agent': { 'gpt-4o':0.170, 'o1':0.157, 'o3-mini':0.157 },
+  'SAB Self-Debug': {
+    'DeepSeek-R1':0.059, 'DeepSeek-V3':0.062, 'claude-3-7-sonnet':0.125,
+    'claude-haiku-4-5':0.120, 'claude-opus-4-1':0.143, 'claude-opus-4':0.143,
+    'claude-sonnet-4-5':0.125, 'gemini-2.0-flash':0.057, 'gpt-4.1':0.117,
+    'gpt-4o':0.117, 'gpt-4o-2024-11-20':0.117, 'gpt-5':0.117,
+    'o1':0.108, 'o3':0.108, 'o3-mini':0.108,
+    'o3-mini-2025-01-31':0.108, 'o4-mini':0.108,
   },
   'SWE-Agent': {
-    'DeepSeek-R1':0.660, 'DeepSeek-V3':0.384, 'claude-haiku-4-5':0.363,
-    'claude-opus-4-1':0.364, 'claude-opus-4':0.356, 'claude-sonnet-4-5':0.329,
-    'gemini-2.0-flash':0.344, 'gpt-4.1':0.351, 'gpt-4o':0.385,
-    'gpt-4o-2024-11-20':0.365, 'gpt-5':0.539, 'o1':0.360, 'o3':0.447,
-    'o3-mini':0.361, 'o3-mini-2025-01-31':0.356, 'o4-mini':0.528,
+    'DeepSeek-R1':0.173, 'claude-haiku-4-5':0.433,
+    'gpt-4o-2024-11-20':0.400, 'o3-mini-2025-01-31':0.372,
   },
 };
 

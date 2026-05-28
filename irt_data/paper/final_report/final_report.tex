@@ -1,0 +1,332 @@
+\documentclass{article}
+
+\usepackage[final,main]{neurips_2025}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{microtype}
+
+\makeatletter
+\renewcommand{\@notice}{}
+\makeatother
+
+\title{Which Tasks Tell, Which Tools Help: IRT-Guided Agent Benchmarking}
+
+\author{%
+  Yiheng Yao\\
+  Stanford University\\
+  \texttt{yaoyh@stanford.edu}\\
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Agent benchmarks usually report aggregate pass rates, but those scores hide large variation in which tasks distinguish strong and weak model--harness systems, and which tool affordances make those differences possible. This project treats agent benchmark outcomes as measurement data. Using response matrices from the Holistic Agent Leaderboard (HAL), we model binary task outcomes with multidimensional item response theory (IRT), estimate task difficulty and discrimination, and study whether trace-derived harness features explain systematic residual structure. The central question is whether a smaller high-information subset of tasks can preserve useful ranking and calibration signal while also revealing which harness tools help which models on which kinds of items.
+\end{abstract}
+
+\section{Introduction}
+
+Modern agent evaluations are expensive because each new model--harness combination may require running hundreds or thousands of tasks. They are also statistically blunt: an aggregate benchmark score treats every item as equally informative, even though some tasks are solved by nearly every agent, some by almost none, and only a subset separates systems in ways that are useful for model selection or harness design. This creates two related measurement problems. First, we need to know which benchmark items carry high information about agent capability. Second, we need to know whether performance differences come from the base model, the harness, the benchmark domain, or interactions among models, tools, and task types.
+
+The research question is: \emph{can IRT models fit to historical agent benchmark outcomes identify high-value tasks that preserve evaluation signal at lower cost, and can trace-derived harness features help explain which tools help which models on which kinds of items?}
+
+Our approach differs from standard leaderboard analysis in three ways. First, we treat benchmark outcomes as a sparse item-response matrix rather than as aggregate pass rates. Second, we treat an evaluated agent as a model--harness system: the same base model may behave differently under different scaffolds, tools, prompts, and execution policies. Third, we use item-level residual structure to motivate tool and harness diagnostics, rather than assuming that benchmark-level labels such as ``SWE-bench'' or ``GAIA'' are sufficiently granular measurement units.
+
+This project leverages the collected model $\times$ harness $\times$ benchmark dataset introduced by HAL \citep{hal2026}. The version analyzed here spans 59 recorded model labels and 68 recorded harness/scaffold labels, which we group into 20 semantic base-model groups and 15 semantic harness groups, across 10 benchmarks. Model-call settings such as reasoning effort are treated as model-configuration differences rather than separate harnesses. This normalization supports the paper's three analyses: item-level IRT for measurement, discrimination-based task downscaling for cheaper evaluation, and harness-aware residual analysis for generating targeted tool ablation hypotheses.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Benchmark & Tasks & Run configs & Norm. models & Norm. harnesses & Outcomes \\
+\midrule
+assistantbench & 33 & 33 & 10 & 2 & 1{,}089 \\
+colbench\_backend\_programming & 1{,}000 & 10 & 7 & 1 & 10{,}000 \\
+corebench\_hard & 45 & 66 & 17 & 3 & 2{,}970 \\
+gaia & 165 & 37 & 13 & 2 & 6{,}104 \\
+online\_mind2web & 336 & 36 & 12 & 2 & 10{,}800 \\
+scicode & 65 & 38 & 11 & 3 & 2{,}470 \\
+scienceagentbench & 102 & 25 & 12 & 2 & 2{,}550 \\
+swebench\_verified\_mini & 50 & 45 & 15 & 2 & 2{,}147 \\
+taubench\_airline & 50 & 47 & 12 & 3 & 2{,}334 \\
+usaco & 307 & 15 & 10 & 2 & 4{,}605 \\
+\bottomrule
+\end{tabular}
+\caption{Dataset coverage after regenerating the master binary outcome CSV and joining normalized metadata. The full matrix contains 45{,}069 observed outcomes across 10 benchmarks.}
+\label{tab:dataset-coverage}
+\end{table}
+
+\section{Background and Related Work}
+
+This project sits at the intersection of AI measurement science, item response theory, efficient evaluation, and process-level agent evaluation. Recent AI evaluation work argues that benchmarks should be understood as measurement instruments tied to explicit constructs and claims \citep{wallach2025socialmeasurement,salaudeen2025measurement,sun2025beyondbenchmarks}. We adopt that stance for agent harnesses: the target construct is not ``general intelligence,'' but the ability of model--harness systems to solve agentic benchmark items under particular tool affordances.
+
+Item response theory was originally developed for educational testing, where the goal is to infer a respondent's latent ability from responses to items with varying difficulty and discrimination. The Rasch model and two-parameter logistic models provide a natural formalism for separating respondent ability from item difficulty and item informativeness \citep{rasch1960probabilistic,baker2001basics}. The same latent-variable view is closely related to probabilistic ranking models such as Bradley--Terry and Plackett--Luce models \citep{bradley1952rank,luce1959individual}, which infer strengths or utilities from noisy observations. In this project, agents replace students, benchmark tasks replace exam items, and binary pass/fail outcomes replace exam responses.
+
+Recent LLM evaluation work has used IRT-style models to improve benchmark measurement and compression \citep{lalor2016evaluation,zhou2025lost}. Truong et al.'s amortized model-based evaluation uses related structure to predict benchmark performance from partial item responses \citep{truong2025amortized}. TinyBenchmarks similarly asks whether small curated subsets can recover full-benchmark estimates \citep{maiapolo2024tinybenchmarks}, while Zhang et al. caution that such prediction can fail when new frontier models differ from historical systems \citep{zhang2025missesmark}. This tension motivates our emphasis on held-out prediction, calibration, ranking stability, and cold-start evaluation.
+
+Agentic benchmarks make the measurement problem sharper because final correctness is only one view of tool-using behavior. TRAJECT-Bench evaluates whether tools are selected, parameterized, and ordered correctly \citep{he2025traject}. AgentProcessBench provides human-labeled step annotations for tool-augmented trajectories \citep{fan2026agentprocessbench}. HAL addresses the complementary infrastructure problem by standardizing agent evaluation across models, scaffolds, and benchmarks \citep{hal2026}. Our contribution is the statistical measurement layer on top of such data: estimating which items are informative and whether harness/tool features explain model--item residual structure.
+
+\section{Methods}
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Model terms & Features & Log loss & Pseudo-$R^2$ & AUC \\
+\midrule
+Benchmark & 10 & 0.536 & 0.111 & 0.674 \\
+Benchmark + model + harness & 45 & 0.521 & 0.136 & 0.715 \\
++ model:harness + benchmark:harness & 232 & 0.513 & 0.150 & 0.733 \\
+Task + model + harness & 2{,}188 & 0.361 & 0.401 & 0.905 \\
++ model:harness + benchmark:harness & 2{,}375 & 0.346 & 0.427 & 0.913 \\
++ task:harness & 5{,}618 & 0.331 & 0.451 & 0.920 \\
+\bottomrule
+\end{tabular}
+\caption{Staged L2-regularized logistic audit. Pseudo-$R^2$ is McFadden-style deviance reduction relative to an intercept-only model. ``Task'' denotes task identity nested within benchmark.}
+\label{tab:gstudy}
+\end{table}
+
+\paragraph{Data.}
+The primary data source is constructed from HAL benchmark outcomes. We use ``agent configuration'' to mean an observed model--harness run configuration: conceptually a base model paired with a harness/scaffold, and operationally identified in the extracted data by model, scaffold, run id, and benchmark. The regenerated master binary outcome file, \texttt{irt\_data/response\_matrix.csv}, contains 45{,}069 observed responses from 352 such configurations, corresponding to 222 distinct raw model--scaffold pairs, 165 normalized model--harness pairs, 59 recorded model labels, 68 recorded harness/scaffold labels, and 2{,}153 benchmark-task pairs. Because some raw model and harness labels include provider names, model names, or reasoning settings, Appendix~\ref{app:dataset-inventory} reports the normalization from raw aliases to 20 semantic base-model groups and 15 semantic harness groups; reasoning effort is normalized onto the model-configuration side of the crossing rather than treated as a separate harness. Each row is an observed response $y_{ij} \in \{0,1\}$ for agent configuration $i$ on task $j$. The joinable metadata tables \texttt{irt\_data/model\_metadata.csv}, \texttt{irt\_data/harness\_metadata.csv}, and \texttt{irt\_data/harness\_affordances.csv} provide the canonical source of truth for normalized model labels, normalized harness labels, tool-exposure mechanisms, exposed-tool inventories, and binary harness affordance flags. Appendix~\ref{app:tool-exposure-taxonomy} defines the tool-passage taxonomy, records the exposed tools for each normalized harness, and explains how the affordance flags are generated from harness source, configuration, and trace metadata.
+
+\subsection{Pseudo G-Study: Measurement Design Audit}
+
+Before fitting IRT, we run a lightweight generalizability-theory-inspired audit to decide where the measurement model needs resolution. The HAL matrix is sparse and unbalanced, and full crossed Bernoulli mixed models with high-cardinality interactions were computationally unstable. We therefore fit staged L2-regularized logistic models and compare McFadden-style pseudo-$R^2$, deviance, AUC, and residual structure (details in Appendix~\ref{app:pseudo-gstudy}):
+\[
+\begin{aligned}
+  y &\sim \text{benchmark} + \text{model} + \text{harness}
+       + \text{model}:\text{harness}
+       + \text{benchmark}:\text{harness},\\
+  y &\sim \text{task}(\text{benchmark}) + \text{model} + \text{harness}
+       + \text{model}:\text{harness}
+       + \text{benchmark}:\text{harness},\\
+  y &\sim \text{task}(\text{benchmark}) + \text{model} + \text{harness}
+       + \text{task}:\text{harness}.
+\end{aligned}
+\]
+This audit is not a causal tool analysis and does not estimate literal Gaussian variance components. It is a likelihood-based measurement diagnostic. If task identity and harness interactions materially reduce Bernoulli deviance, then aggregate benchmark scores are too coarse, and the subsequent model should be item-level and harness-aware.
+
+\subsection{Multidimensional IRT Model}
+
+The main model is a multidimensional two-parameter IRT model:
+\[
+  P(y_{ij}=1) = \sigma(\theta_i^\top a_j + d_j),
+\]
+where $\theta_i \in \mathbb{R}^K$ is the latent ability vector of agent configuration $i$, $a_j \in \mathbb{R}^K$ is the discrimination vector for task $j$, $d_j$ is task easiness, and $\sigma$ is the logistic function. We train by minimizing binary cross-entropy over observed agent--task outcomes. We sweep small values of $K$ and compare latent-only models against feature-informed models in which agent and task metadata are projected into the same $K$-dimensional space and added to the learned latent embeddings. The fitted model supports two co-equal analyses: task discrimination for reducing benchmark size, and residual structure for identifying model--harness and harness--task interactions.
+
+\subsection{Harness Feature and Residual Model}
+
+The feature-informed model decomposes each agent configuration into model, harness, and task features. Model features include provider, normalized model family, and model-call configuration metadata such as reasoning effort where available. Harness features come from the normalized taxonomy in Appendix~\ref{app:tool-exposure-taxonomy}: a categorical tool-passage mechanism, a concrete exposed-tool inventory, and binary affordance flags for code generation, code execution, shell access, file read/edit, web search, page browsing, browser control, vision, native domain tools, benchmark API tools, human dialogue, retrieval context, external judging/evaluation, self-debug feedback, and complete-program prompting. Task features include benchmark domain and coarse task type.
+
+We use these features in two ways. First, in the feature-informed IRT model, metadata provides a cold-start prior for configurations with weak or absent response history. We distinguish three cold-start information regimes: \emph{different-harness}, where the model is known but evaluated through a harness not observed with that model in the benchmark; \emph{open-code}, where source/configuration inspection gives harness affordance flags before any outcomes are observed; and \emph{partially open-trace}, where a small trace subsample is available to refine affordance labels before predicting the remaining tasks. Second, after fitting the IRT model, we compute response residuals $r_{ij}=y_{ij}-\hat p_{ij}$ and aggregate them by normalized model family, harness, benchmark/task type, and affordance flags. This residual analysis asks whether particular tool-passage mechanisms or affordances are associated with systematic over- or under-performance after accounting for item difficulty and overall agent ability. These estimates are observational and hypothesis-generating: tool exposure is confounded with many harness design choices, and exposure does not guarantee effective tool use.
+
+\subsection{Task Selection and Adaptive Evaluation}
+
+After fitting the model, we rank tasks by discrimination magnitude $\|a_j\|$ within each benchmark. We construct fixed subsets that cover 50\%, 70\%, 80\%, and 90\% of total estimated discrimination mass. These subsets operationalize the question: how much of the benchmark's agent-separating signal can be preserved with fewer tasks? This connects the IRT model to active learning and sample-efficient measurement: the fixed subsets are a static approximation to adaptive testing policies that would select high-information items as evidence accumulates.
+
+\subsection{Evaluation Protocol}
+
+We evaluate predictive and ranking quality on a reproducible semantic holdout split. The leakage unit is benchmark $\times$ normalized model $\times$ normalized harness, since a row-level random split would place the same semantic model--harness unit in both train and test through raw aliases or repeated runs. For each benchmark $\times$ normalized harness cell, the split holds out one representative normalized model whose pass rate is closest to that cell's median, avoiding obvious cherry-picking of only unusually strong or weak systems. The resulting split contains 39{,}461 training rows and 5{,}608 holdout rows, with no leakage-unit overlap between train and holdout.
+
+Metrics include binary cross-entropy, AUC, accuracy, Brier score, calibration error, rank correlation between full-suite and subset-based agent rankings, and stability of selected high-discrimination tasks under resampling. For the feature analysis, we compare latent-only and metadata-informed models on held-out semantic units. For cost-aware evaluation, we report task-count reduction at each discrimination-coverage threshold and the loss in predictive or ranking fidelity relative to the full benchmark.
+
+\section{Results and Discussion}
+
+\subsection{Exploratory Measurement Audit}
+
+Table~\ref{tab:gstudy} reports the pseudo G-study on the regenerated 45{,}069-row response matrix. Benchmark labels alone reduce Bernoulli deviance only modestly relative to the intercept-only model ($R^2_{\mathrm{pseudo}}=0.111$). Adding normalized model and harness main effects raises this to 0.136, while model--harness compatibility raises it to 0.150. In contrast, replacing benchmark identity with task identity nested within benchmark produces a much larger jump ($R^2_{\mathrm{pseudo}}=0.401$). Adding model--harness and benchmark--harness interactions reaches 0.427, and a task--harness term reaches 0.451. This supports the paper's central modeling choice: benchmark-level aggregation is too coarse, and the useful resolution is item-level and harness-aware.
+
+The regularized interaction coefficients also provide an initial qualitative check that harness effects are not scalar. HF Open Deep Research shows positive model--harness residual structure with GPT-5, o4-mini, GPT-4.1, and Claude Opus 4, but negative residual structure with Claude Opus 4.1 and Claude Sonnet 4.5. HAL Generalist shows the complementary pattern of stronger residual performance with several Claude-family configurations and weaker residual performance with o3, Gemini, and DeepSeek variants. These are descriptive in-sample diagnostics, not causal tool effects, but they motivate the later held-out MIRT residual analysis of which harness mechanisms fit which model families and item types.
+
+\subsection{MIRT Model Comparison}
+
+Table~\ref{tab:mirt-sweep} reports the semantic-holdout sweep. Because all
+holdout agent configurations are unseen under the split unit, latent-only
+models cannot estimate a held-out agent ability vector from response history.
+For this evaluation, unseen latent-only agents are scored with zero
+$\theta_i$, so their predictions reduce mostly to task easiness. The
+feature-informed models also zero unseen learned embeddings, but retain the
+metadata projection $f_{\mathrm{agent}}(x_i)$, giving a genuine cold-start
+agent vector without fitting on held-out responses. Feature-informed models
+therefore dominate latent-only models on holdout BCE and Brier score. The
+$K=2$ feature-informed model is the best prediction model by holdout AUC,
+while the $K=1$ feature-informed model gives the strongest
+benchmark-compression operating point.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{rr rrrrr}
+\toprule
+$K$ & Features & BCE & AUC & Accuracy & Brier & Cal. error \\
+\midrule
+1 & yes & 0.358 & 0.895 & 0.835 & 0.113 & 0.030 \\
+2 & yes & 0.362 & 0.900 & 0.833 & 0.116 & 0.086 \\
+4 & yes & 0.376 & 0.896 & 0.832 & 0.117 & 0.072 \\
+8 & yes & 0.425 & 0.890 & 0.821 & 0.129 & 0.124 \\
+1 & no & 0.566 & 0.861 & 0.823 & 0.188 & 0.191 \\
+2 & no & 0.583 & 0.852 & 0.827 & 0.196 & 0.184 \\
+4 & no & 0.596 & 0.844 & 0.823 & 0.202 & 0.195 \\
+8 & no & 0.604 & 0.842 & 0.825 & 0.206 & 0.228 \\
+\bottomrule
+\end{tabular}
+\caption{Holdout performance on the split-v1 semantic holdout. The leakage
+unit is benchmark $\times$ normalized model $\times$ normalized harness. Lower
+BCE, Brier, and calibration error are better; higher AUC and accuracy are
+better.}
+\label{tab:mirt-sweep}
+\end{table}
+
+There is also a prediction--reduction tradeoff across fitted models. At the
+80\% discrimination-coverage threshold, the $K=2$ feature-informed model has
+the best holdout AUC (0.900) but removes only 20.6\% of tasks on average.
+The $K=1$ feature-informed model has slightly lower AUC (0.895) and the best
+holdout BCE (0.358), but its discrimination mass is more concentrated: it
+removes 46.2\% of tasks on average at the same 80\% coverage threshold.
+Thus the Pareto frontier contains at least two useful operating points: $K=2$
+for maximum ranking signal, and $K=1$ for a more aggressive screening subset
+with only a small AUC loss.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.82\linewidth]{figures/split_v1_auc_reduction_tradeoff.png}
+\caption{Tradeoff between holdout AUC and mean task-count reduction at the
+80\% discrimination-coverage threshold. Feature-informed $K=1$ and $K=2$
+models form the useful frontier: $K=2$ maximizes AUC, while $K=1$ gives much
+larger task reduction with a small AUC decrease.}
+\label{fig:auc-reduction-tradeoff}
+\end{figure}
+
+\subsection{Benchmark Downscaling}
+
+Using the compression-oriented $K=1$ feature-informed model, we rank tasks
+within each benchmark by $|a_j|$ and compute the number of tasks needed to
+retain fixed fractions of total discrimination mass.
+Figure~\ref{fig:cost-reduction} shows the resulting downscaling curves.
+The fitted one-dimensional discrimination spectrum is substantially more
+concentrated than the higher-dimensional spectra: retaining 80\% of
+discrimination mass keeps a mean of 53.8\% of tasks across benchmarks,
+corresponding to a mean 46.2\% task-count reduction. At 70\% discrimination
+coverage, the mean task-count reduction is 55.6\%; at 90\% coverage, it is
+32.1\%. In aggregate task-count terms, the conservative 90\% threshold retains
+1{,}426 of 2{,}153 tasks and removes 727 tasks, corresponding to a 33.8\%
+estimated benchmark-cost reduction. This gives the strongest screening
+contribution: the $K=1$ feature model gives up only 0.004 holdout AUC relative
+to $K=2$ with features while cutting nearly half of benchmark tasks at the
+80\% discrimination threshold and roughly one-third of tasks even at the
+conservative 90\% threshold.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/split_v1_k1_features_cost_reduction.png}
+\caption{Fraction of tasks retained to preserve fixed fractions of total
+estimated discrimination mass under the compression-oriented $K=1$
+feature-informed MIRT model. Bar labels give the retained task count.}
+\label{fig:cost-reduction}
+\end{figure}
+
+\subsection{Which Tool Interfaces Help?}
+
+The strongest tool result is a negative one: broad code-agent tool registries
+often underperform benchmark-specialized interfaces in matched comparisons.
+Table~\ref{tab:harness-contrasts} reports same-benchmark, same-model contrasts
+where the base model is held fixed and only the harness/tool interface changes.
+On SWE-bench, SWE-Agent's repository workflow---file-map navigation, shell and
+editor commands, diff/review state, and explicit submit actions---substantially
+outperforms HAL Generalist's code-agent registry for every shared model shown.
+On TAU-bench Airline, native airline tool schemas outperform HAL Generalist's
+wrapped domain actions. On ScienceAgentBench, SAB Self-Debug outperforms HAL
+Generalist for the shared o3 run, suggesting that complete-program generation
+plus harness execution/debug feedback is better aligned with scientific coding
+tasks than a general-purpose registry loop.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{ll>{\raggedright\arraybackslash}p{1.45in}rrr}
+\toprule
+Benchmark & Model & Interface contrast & Task-specific & HAL registry & $\Delta$ \\
+\midrule
+SWE-bench & o3 & SWE-Agent vs. HAL Generalist & 0.593 & 0.000 & 0.593 \\
+SWE-bench & o4-mini & SWE-Agent vs. HAL Generalist & 0.551 & 0.040 & 0.511 \\
+SWE-bench & GPT-5 & SWE-Agent vs. HAL Generalist & 0.640 & 0.140 & 0.500 \\
+SWE-bench & GPT-4.1 & SWE-Agent vs. HAL Generalist & 0.469 & 0.020 & 0.449 \\
+TAU-bench & GPT-4.1 & TAU FewShot vs. HAL Generalist & 0.560 & 0.160 & 0.400 \\
+TAU-bench & o4-mini & TAU FewShot vs. HAL Generalist & 0.545 & 0.200 & 0.345 \\
+TAU-bench & o3 & TAU ToolCalling vs. HAL Generalist & 0.540 & 0.208 & 0.332 \\
+ScienceAgentBench & o3 & SAB Self-Debug vs. HAL Generalist & 0.333 & 0.098 & 0.235 \\
+\bottomrule
+\end{tabular}
+\caption{Matched same-model, same-benchmark pass-rate contrasts.
+``Task-specific'' means the benchmark-specialized interface, which may be a
+repo-repair workflow, native domain-tool schema, or execution/debug scaffold.
+``HAL registry'' is HAL Generalist's code-agent tool registry. These
+observational contrasts motivate targeted ablations; they do not by themselves
+identify causal effects of individual tools.}
+\label{tab:harness-contrasts}
+\end{table}
+
+The pattern suggests that ``which tools help'' is conditional on the task's
+latent work loop. Repository-editing affordances help software repair, native
+domain schemas help transactional customer-service tasks, and execution/debug
+feedback helps scientific coding. Conversely, simply exposing many tools
+through a broad code-agent registry is not enough: the interface must make the
+task-relevant workflow easy for the model to represent and execute.
+A targeted tool-count check supports this interpretation: across matched
+benchmark $\times$ normalized-model configurations, the lower-tool-count
+harness wins 61.7\% of comparisons, but the largest counterexamples are
+task-aligned native schemas such as TAU-bench.
+Appendix~\ref{app:swebench-trace-audit} audits matched SWE-bench traces and
+shows that HAL Generalist does have live execution and edit affordances; the
+stark SWE-bench gap therefore motivates interface-level ablations rather than a
+simple sandbox/no-sandbox explanation.
+
+\paragraph{Model--harness heatmap.}
+Figure~\ref{fig:cold-start-heatmap} shows the demo heatmap view for SWE-bench Verified Mini, aggregating outcomes by normalized model and harness. Green cells are observed accuracies; blue italic cells are IRT cold-start predictions for model--harness pairs without observed runs in that benchmark slice. The view makes the main qualitative pattern visible: SWE-Agent's repository-specific workflow dominates the broad HAL Generalist registry on shared models, while the SAB Self-Debug column is an extrapolated prediction rather than a measured SWE-bench result.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.88\linewidth]{figures/swebench_verified_mini_accuracy_demo_heatmap.png}
+\caption{Demo heatmap for SWE-bench Verified Mini accuracy by normalized model and harness. Green cells are observed pass rates; blue italic cells are IRT cold-start predictions for unobserved model--harness combinations.}
+\label{fig:cold-start-heatmap}
+\end{figure}
+
+\paragraph{Targeted ablation hypotheses.}
+These contrasts suggest three concrete small-budget ablations: pass TAU-bench
+native schemas directly through HAL Generalist rather than through registry
+wrappers; add a SWE-Agent-like file-map/edit/review loop to HAL Generalist on
+SWE-bench, or disable pieces of that loop inside SWE-Agent; and run SAB with
+self-debug feedback disabled to separate complete-program prompting from
+execution-loop feedback. The goal is not to exhaustively optimize a harness,
+but to test whether the measurement model produces plausible interventions.
+
+\paragraph{Limitations.}
+The main limitations are sparsity, benchmark heterogeneity, non-random tool exposure, and dependence on the semantic split. A harness may expose a tool without using it well; conversely, a missing tool may proxy for many other scaffold design choices. The holdout split tests generalization across benchmark-specific model--harness units, but it does not prove performance on entirely unseen future models or unseen harnesses. We therefore treat tool-feature estimates as hypothesis-generating and rely on targeted ablations for stronger evidence.
+
+\newpage
+\section{Conclusion}
+
+HAL outcomes are more informative when modeled as item-response data for model--harness systems than when reduced to aggregate leaderboard scores. In the 45{,}069-row matrix, task identity and task--harness interactions explain far more deviance than benchmark labels alone, motivating item-level IRT. On the semantic holdout, feature-informed MIRT gives a cold-start gain over latent-only models: $K=2$ with features is the best prediction setting (AUC 0.900), while $K=1$ with features is the best screening setting. At a conservative 90\% discrimination-mass threshold it removes 727 of 2{,}153 tasks, a 33.8\% aggregate cost reduction; at 80\% it removes nearly half of tasks on average. The tool analysis points to a conditional answer to ``which tools help'': specialized, task-aligned interfaces---repository editing for SWE-bench, native schemas for TAU-bench, and execution/debug feedback for scientific coding---beat a broad code-agent registry in matched comparisons. The resulting ablation agenda is concrete: test native-schema passthrough, repo-workflow components, and self-debug feedback as targeted interventions rather than treating tool exposure as a monolithic capability.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\appendix
+\input{appendix/pseudo_gstudy}
+\input{appendix/dataset_inventory}
+\input{appendix/tool_exposure_taxonomy}
+\input{appendix/swebench_trace_audit}
+
+\end{document}

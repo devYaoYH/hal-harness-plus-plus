@@ -36,12 +36,15 @@ from pathlib import Path
 
 # ── Config ──────────────────────────────────────────────────────────────────
 
-AGENT       = os.getenv("AGENT",     "SWE-agent")
-MODEL       = os.getenv("MODEL",     "together_ai/deepseek-ai/DeepSeek-R1")
+AGENT       = os.getenv("AGENT",     "SWE-agent-v1.0")
+MODEL       = os.getenv("MODEL",     "openrouter/deepseek/deepseek-r1")
 BENCHMARK   = os.getenv("BENCHMARK", "swebench_verified_mini")
 THRESHOLD   = os.getenv("THRESHOLD", "80pct")
-JOB_ID      = os.getenv("JOB_ID",   "irt-val-sweagent-deepseekr1-001")
-MAX_WORKERS = int(os.getenv("MAX_WORKERS", "10"))
+MAX_WORKERS = int(os.getenv("MAX_WORKERS", "2"))
+
+_model_slug = MODEL.split("/")[-1].lower().replace("-", "")
+_agent_slug = AGENT.lower().replace("-", "").replace(".", "")
+JOB_ID      = os.getenv("JOB_ID", f"irt-val-{_agent_slug}-{_model_slug}-001")
 
 # Agent registry — add entries as new scaffolds are validated
 _AGENT_REGISTRY: dict[str, dict] = {
@@ -49,17 +52,33 @@ _AGENT_REGISTRY: dict[str, dict] = {
         "function": "main.run",
         "dir":      "agents/SWE-agent",
         "benchmark_extra": "swebench",
+        "model_arg_key": "agent.model.name",
+    },
+    "SWE-agent-v1.0": {
+        "function": "main.run",
+        "dir":      "agents/SWE-agent-v1.0",
+        "benchmark_extra": "swebench",
+        "model_arg_key": "agent.model.name",
     },
     "hal_generalist_agent": {
         "function": "main.run",
         "dir":      "agents/hal_generalist_agent",
         "benchmark_extra": "swebench",
+        "model_arg_key": "model_name",
     },
 }
 
-REPO_ROOT  = Path(__file__).resolve().parent.parent
-SUBSETS    = REPO_ROOT / "irt_data" / "adaptive_task_subsets.json"
-PREDS_CSV  = REPO_ROOT / "irt_data" / f"pred_{AGENT.replace('-','').lower()}_{MODEL.split('/')[-1].replace('-','').lower()}.csv"
+# IRT cold-start predicted accuracy per (agent, model-suffix) from docs/index.html
+_PREDICTED_ACCS: dict[tuple[str, str], float] = {
+    ("SWE-agent",     "deepseekr1"): 0.660,
+    ("SWE-agent-v1.0","deepseekr1"): 0.660,
+    ("SWE-agent",     "deepseekv3"): 0.384,
+    ("SWE-agent-v1.0","deepseekv3"): 0.384,
+}
+
+REPO_ROOT   = Path(__file__).resolve().parent.parent
+SUBSETS     = REPO_ROOT / "irt_data" / "adaptive_task_subsets.json"
+PREDS_CSV   = REPO_ROOT / "irt_data" / f"pred_{_agent_slug}_{_model_slug}.csv"
 RESULTS_OUT = REPO_ROOT / "irt_data" / f"actuals_{JOB_ID}.csv"
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
@@ -96,49 +115,64 @@ def run_one(task_id: str, agent_cfg: dict) -> dict:
         model=MODEL,
         job_id=JOB_ID,
         benchmark_extra=agent_cfg["benchmark_extra"],
+        model_arg_key=agent_cfg.get("model_arg_key", "model_name"),
     )
     try:
         result = run_eval_on_daytona(spec)
-        return {"task_id": task_id, "correct": int(bool(result.get("score", 0))), "error": None}
+        correct = result.get("_reporter", {}).get("correct")
+        return {"task_id": task_id, "correct": correct, "error": None}
     except Exception as exc:
         print(f"[error] {task_id}: {exc}")
-        return {"task_id": task_id, "correct": 0, "error": str(exc)}
+        return {"task_id": task_id, "correct": None, "error": str(exc)}
 
 
 def compare(actuals: list[dict], predictions: dict[str, float]) -> None:
-    if not predictions:
-        return
-    matched = [(r["task_id"], predictions[r["task_id"]], r["correct"])
-               for r in actuals if r["task_id"] in predictions]
-    if not matched:
-        print("[warn] no tasks matched between actuals and predictions")
-        return
-
-    n = len(matched)
-    brier = sum((p - c) ** 2 for _, p, c in matched) / n
-    actual_acc = sum(c for _, _, c in matched) / n
-    pred_acc   = sum(p for _, p, _ in matched) / n
-
-    # Point-biserial correlation
     import math
-    mean_p = pred_acc
-    var_p = sum((p - mean_p) ** 2 for _, p, _ in matched) / n
-    std_p = math.sqrt(var_p) if var_p > 0 else 1.0
-    cov = sum((p - mean_p) * (c - actual_acc) for _, p, c in matched) / n
-    std_c = math.sqrt(actual_acc * (1 - actual_acc)) if 0 < actual_acc < 1 else 1.0
-    r = cov / (std_p * std_c) if std_p * std_c > 0 else float("nan")
+    completed = [r for r in actuals if r["correct"] is not None]
+    errors = len(actuals) - len(completed)
+    n = len(completed)
+    actual_acc = sum(r["correct"] for r in completed) / n if n else float("nan")
+
+    # IRT cold-start predicted overall accuracy
+    irt_predicted_acc = _PREDICTED_ACCS.get((_agent_slug_key(), _model_slug), None)
 
     print()
-    print("=" * 50)
+    print("=" * 60)
     print("IRT Generalization Evaluation")
-    print("=" * 50)
-    print(f"Agent / Model  : {AGENT} × {MODEL}")
-    print(f"Benchmark      : {BENCHMARK} ({THRESHOLD} subset, {n} tasks)")
+    print("=" * 60)
+    print(f"Agent / Model   : {AGENT} × {MODEL}")
+    print(f"Benchmark       : {BENCHMARK} ({THRESHOLD} subset, {n}/{len(actuals)} tasks completed)")
     print(f"Actual accuracy : {actual_acc:.3f}")
-    print(f"Predicted acc   : {pred_acc:.3f}  (IRT cold-start)")
-    print(f"Brier score     : {brier:.4f}  (chance = 0.25)")
-    print(f"Point-biserial r: {r:.3f}    (predicted_prob vs correct)")
-    print("=" * 50)
+    if irt_predicted_acc is not None:
+        delta = actual_acc - irt_predicted_acc
+        print(f"IRT predicted   : {irt_predicted_acc:.3f}  (cold-start, from docs/index.html)")
+        print(f"Delta           : {delta:+.3f}")
+    if errors:
+        print(f"[warn] {errors} tasks errored")
+
+    # Per-task Brier score if predictions CSV available
+    if predictions:
+        matched = [(r["task_id"], predictions[r["task_id"]], r["correct"])
+                   for r in completed if r["task_id"] in predictions]
+        if matched:
+            mn = len(matched)
+            brier = sum((p - c) ** 2 for _, p, c in matched) / mn
+            pred_acc = sum(p for _, p, _ in matched) / mn
+            mean_p = pred_acc
+            var_p = sum((p - mean_p) ** 2 for _, p, _ in matched) / mn
+            std_p = math.sqrt(var_p) if var_p > 0 else 1.0
+            actual_m = sum(c for _, _, c in matched) / mn
+            cov = sum((p - mean_p) * (c - actual_m) for _, p, c in matched) / mn
+            std_c = math.sqrt(actual_m * (1 - actual_m)) if 0 < actual_m < 1 else 1.0
+            r = cov / (std_p * std_c) if std_p * std_c > 0 else float("nan")
+            print(f"Brier score     : {brier:.4f}  (chance = 0.25, {mn} tasks)")
+            print(f"Point-biserial r: {r:.3f}    (predicted_prob vs correct)")
+    print("=" * 60)
+
+
+def _agent_slug_key() -> str:
+    """Return the agent key as used in _PREDICTED_ACCS."""
+    return AGENT
 
 
 # ── Main ────────────────────────────────────────────────────────────────────
@@ -160,7 +194,7 @@ def main():
         for fut in as_completed(futures):
             result = fut.result()
             actuals.append(result)
-            status = "✓" if result["correct"] else "✗"
+            status = "✓" if result["correct"] else ("?" if result["correct"] is None else "✗")
             err = f"  [err: {result['error'][:60]}]" if result["error"] else ""
             print(f"  {status} {result['task_id']}{err}")
 

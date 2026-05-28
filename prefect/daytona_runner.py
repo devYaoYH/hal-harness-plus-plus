@@ -37,7 +37,7 @@ from tidb_storage import (
     save_task_results_local,
 )
 
-_ZIP_EXCLUDES = {
+_ZIP_EXCLUDES_BASE = {
     ".git",
     ".venv",
     "prefect",
@@ -48,7 +48,7 @@ _ZIP_EXCLUDES = {
     "irt_data/traces",
     "irt_data/test_traces",
     "irt_data/extracted",
-    # Agents not used in this run
+    # Agents not used in typical runs (added back per-spec when needed)
     "agents/auto-code-rover",
     "agents/Moatless",
     "agents/SWE-agent-v1.0",
@@ -62,6 +62,13 @@ _ZIP_EXCLUDES = {
     "hal/benchmarks/taubench/taubench_setup.sh",
     "hal/benchmarks/colbench",
 }
+
+
+def _zip_excludes_for(spec: "DaytonaEvalSpec") -> set:
+    excludes = set(_ZIP_EXCLUDES_BASE)
+    # Include the agent's own directory
+    excludes.discard(spec.agent_dir)
+    return excludes
 
 
 def _resolve_ip(hostname: str) -> str:
@@ -78,7 +85,7 @@ def _daytona_client() -> Daytona:
     )
 
 
-def _zip_repo() -> bytes:
+def _zip_repo(excludes: set) -> bytes:
     repo_root = Path(__file__).resolve().parent.parent
     reporter = Path(__file__).parent / "sandbox_reporter.py"
     buf = io.BytesIO()
@@ -87,7 +94,7 @@ def _zip_repo() -> bytes:
     ) as zf:
         for path in sorted(repo_root.rglob("*")):
             rel = path.relative_to(repo_root)
-            if any(str(rel).startswith(ex) for ex in _ZIP_EXCLUDES):
+            if any(str(rel).startswith(ex) for ex in excludes):
                 continue
             if path.is_file():
                 zf.write(path, rel)
@@ -148,7 +155,7 @@ def _build_sandbox_command(spec: DaytonaEvalSpec, run_id: str) -> str:
     return (
         f"echo '[eval] started' && "
         f"apt-get update -qq 2>&1 | tail -1 && apt-get install -y -q git docker.io 2>&1 | tail -1 && "
-        f"(dockerd --host=unix:///var/run/docker.sock &) && sleep 3 && "
+        f"(dockerd --host=unix:///var/run/docker.sock >/dev/null 2>&1 &) && sleep 3 && "
         f"echo '[eval] apt done' && "
         f"cd /home/daytona/hal-harness && "
         f"pip install --no-deps -e . && "
@@ -163,7 +170,9 @@ def _build_sandbox_command(spec: DaytonaEvalSpec, run_id: str) -> str:
         f"  --benchmark '{spec.benchmark}' "
         f"  --task_ids '{spec.task_id}' "
         f"  --run_id '{run_id}' "
-        f"  -A 'model_name={spec.model}' ; "
+        f"  -A '{spec.model_arg_key}={spec.model}' "
+        + (f"  -A 'disable_tools={spec.disable_tools}' " if spec.disable_tools else "")
+        + f"; "
         f"export HAL_EXIT_CODE=$? ; "
         f"python /home/daytona/hal-harness/prefect/sandbox_reporter.py"
     )
@@ -217,14 +226,14 @@ def run_eval_on_daytona(spec: DaytonaEvalSpec) -> dict:
             language="python",
             env_vars=_sandbox_env_vars(spec, task_key, run_id),
             auto_stop_interval=0,
-            resources=Resources(cpu=2, memory=8, disk=10),
+            resources=Resources(cpu=2, memory=4, disk=10),
         ),
         timeout=300,
     )
 
     try:
         print(f"Sandbox created | id={sandbox.id} — uploading code...")
-        zip_bytes = _zip_repo()
+        zip_bytes = _zip_repo(_zip_excludes_for(spec))
         sandbox.fs.upload_file(zip_bytes, "/home/daytona/hal-harness.zip")
         sandbox.process.exec(
             "python3 -m zipfile -e /home/daytona/hal-harness.zip /home/daytona/hal-harness",
@@ -252,6 +261,7 @@ def run_eval_on_daytona(spec: DaytonaEvalSpec) -> dict:
         local_path = save_task_results_local(spec.job_id, task_key, result)
         print(f"Results in TiDB + local cache | local={local_path}")
         result["_stdout"] = stdout[-5000:]
+        result["_reporter"] = reporter_data
         return result
 
     finally:

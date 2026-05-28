@@ -1,0 +1,16 @@
+normalized_harness,affordance_code_generation,affordance_code_execution,affordance_shell_access,affordance_file_read,affordance_file_edit,affordance_web_search,affordance_web_page_visit,affordance_browser_control,affordance_vision,affordance_native_domain_tools,affordance_benchmark_api_tools,affordance_human_dialogue,affordance_retrieval_context,affordance_external_judge_or_eval,affordance_self_debug_feedback,affordance_complete_program_prompt
+AssistantBench Browser Agent,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false
+Browser-Use,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false
+CORE-Agent,true,true,true,true,true,true,true,false,true,false,false,false,false,false,false,false
+Claude Code,true,true,true,true,true,false,false,false,false,false,false,false,false,true,false,false
+ColBench Example Agent,true,false,false,false,false,false,false,false,false,false,false,true,false,true,false,false
+HAL Generalist Agent,true,true,true,true,true,true,true,false,true,true,true,true,false,false,false,false
+HF Open Deep Research,true,true,false,true,false,true,true,false,true,false,false,false,false,false,false,false
+SAB Self-Debug,true,true,false,false,false,false,false,false,false,false,false,false,false,true,true,true
+SWE-Agent,true,true,true,true,true,false,false,false,false,false,false,false,false,true,false,false
+SciCode Tool Calling Agent,true,true,false,false,false,true,false,false,false,false,false,false,true,false,false,true
+SciCode Zero Shot Agent,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true
+SeeAct,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false
+TAU-bench FewShot,false,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false
+TAU-bench ToolCalling,false,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false
+USACO Episodic + Semantic,true,false,false,false,false,false,false,false,false,false,false,false,true,true,false,true

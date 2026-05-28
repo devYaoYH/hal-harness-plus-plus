@@ -1,0 +1,309 @@
+\section{Tool-Exposure Taxonomy}
+\label{app:tool-exposure-taxonomy}
+
+This appendix records how environment affordances are passed through to the
+underlying model for each normalized harness group in
+Appendix~\ref{app:dataset-inventory}. The unit here is the normalized harness,
+not the raw run label: reasoning-effort variants and model-name suffixes remain
+model-configuration metadata, not new tool-exposure mechanisms. The audit uses
+the local agent source when available and trace/config metadata where the
+source for a historical scaffold is not present in this repository.
+
+\subsection{Mechanism Index}
+
+\begingroup
+\footnotesize
+\begin{itemize}
+\item \textbf{Native tool schema} (2 harnesses): TAU-bench FewShot;
+TAU-bench ToolCalling.
+\item \textbf{Code-agent tool registry} (4 harnesses): CORE-Agent; HAL
+Generalist Agent; HF Open Deep Research; SciCode Tool Calling Agent.
+\item \textbf{Text action protocol} (2 harnesses): Claude Code; SWE-Agent.
+\item \textbf{Framework-mediated browser control} (3 harnesses):
+AssistantBench Browser Agent; Browser-Use; SeeAct.
+\item \textbf{Harness-side augmentation} (3 harnesses): ColBench Example
+Agent; SAB Self-Debug; USACO Episodic + Semantic.
+\item \textbf{No explicit tools} (1 harness): SciCode Zero Shot Agent.
+\end{itemize}
+\endgroup
+
+\subsection{Exposed-Tool Inventory}
+
+The joinable source for this inventory is
+\texttt{irt\_data/harness\_metadata.csv}, in the \texttt{exposed\_tools} and
+\texttt{exposed\_tools\_note} columns. The entries below use normalized harness
+labels and summarize the model-visible tools or, for harness-side augmentation,
+the harness actions that shape the trace without becoming callable model tools.
+The derived binary affordance flags, such as code execution, shell access, web
+search, browser control, native domain tools, retrieval context, external
+evaluation, and self-debug feedback, are stored in
+\texttt{irt\_data/harness\_affordances.csv}.
+
+\begingroup
+\footnotesize
+\begin{itemize}
+\item \textbf{AssistantBench Browser Agent}: browser navigation, click, type,
+scroll, page extraction, and done/answer actions mediated by
+\texttt{browser\_use.Agent}.
+\item \textbf{Browser-Use}: browser navigation, click, type, scroll, page
+extraction, and done/answer actions from the Browser-Use framework.
+\item \textbf{Claude Code}: shell command, file read/search/edit, test-command,
+and submit/finish actions through the external CLI text protocol.
+\item \textbf{ColBench Example Agent}: harness dialogue and final-answer
+submission; no callable environment tools are exposed to the model.
+\item \textbf{CORE-Agent}: \texttt{web\_search}, page visit,
+\texttt{python\_interpreter}, \texttt{execute\_bash},
+\texttt{inspect\_file\_as\_text}, \texttt{edit\_file},
+\texttt{file\_content\_search}, \texttt{query\_vision\_language\_model}, and
+\texttt{final\_answer}.
+\item \textbf{HAL Generalist Agent}: the CORE-style tools
+\texttt{web\_search}, page visit, \texttt{python\_interpreter},
+\texttt{execute\_bash}, \texttt{inspect\_file\_as\_text}, \texttt{edit\_file},
+\texttt{file\_content\_search}, and \texttt{query\_vision\_language\_model},
+plus benchmark-dependent adapters such as TAU-bench airline action wrappers,
+AppWorld API execution, and ColBench \texttt{ask\_user}/\texttt{finish\_task}.
+\item \textbf{HF Open Deep Research}: \texttt{visualizer},
+\texttt{inspect\_file\_as\_text}, a managed \texttt{search\_agent},
+\texttt{web\_search}, \texttt{visit\_page}, \texttt{page\_up},
+\texttt{page\_down}, \texttt{find\_on\_page\_ctrl\_f},
+\texttt{find\_next}, and \texttt{find\_archived\_url}.
+\item \textbf{SAB Self-Debug}: complete-program generation, harness code
+execution, and self-debug feedback. These are harness-side stages, not
+model-callable tools.
+\item \textbf{SciCode Tool Calling Agent}: \texttt{web\_search},
+\texttt{python\_interpreter}, \texttt{wikipedia\_search}, and
+\texttt{final\_answer}.
+\item \textbf{SciCode Zero Shot Agent}: no explicit tools.
+\item \textbf{SeeAct}: browser observation, click, type, select, scroll,
+navigate, and stop/answer actions from the SeeAct browser-action protocol.
+\item \textbf{SWE-Agent}: \texttt{bash},
+\texttt{str\_replace\_editor} view/create/replace/insert/undo operations,
+\texttt{filemap}, \texttt{submit}, and diff-state context.
+\item \textbf{TAU-bench FewShot}: airline-native tools
+\texttt{book\_reservation}, \texttt{calculate},
+\texttt{cancel\_reservation}, \texttt{get\_reservation\_details},
+\texttt{get\_user\_details}, \texttt{list\_all\_airports},
+\texttt{search\_direct\_flight}, \texttt{search\_onestop\_flight},
+\texttt{send\_certificate}, \texttt{think},
+\texttt{transfer\_to\_human\_agents},
+\texttt{update\_reservation\_baggages},
+\texttt{update\_reservation\_flights}, and
+\texttt{update\_reservation\_passengers}.
+\item \textbf{TAU-bench ToolCalling}: the same airline-native tools as
+TAU-bench FewShot, passed through the native \texttt{tools\_info} schema.
+\item \textbf{USACO Episodic + Semantic}: retrieval prompts, episodic and
+semantic examples, and judge execution as harness-side stages; no interactive
+callable environment tools are exposed to the model.
+\end{itemize}
+\endgroup
+
+\subsection{Canonical Tool-Passage Mechanisms}
+
+\begin{description}
+\item[Native tool schema.] The benchmark or harness passes OpenAI-style
+tool/function schemas to the model API or to a framework that preserves those
+schemas as the model-visible contract. The model returns structured tool calls,
+and the harness executes them. This category is reserved for cases where the
+environment's own schema, such as \texttt{isolated\_env.tools\_info}, is what
+the model is asked to call.
+\item[Code-agent tool registry.] Python callables are registered as tools in a
+code-agent runtime, most often a \texttt{smolagents.CodeAgent}. The model sees a
+tool catalogue through the agent runtime and emits executable code or tool-use
+steps that call those Python tools. Some registered tools are thin adapters over
+benchmark actions, but the model-visible schema is the wrapper function
+signature and docstring, not the benchmark's native tool schema. Thus HAL
+Generalist on TAU-bench is classified here: its wrappers eventually call
+\texttt{isolated\_env.step(Action(...))}, but the original
+\texttt{tools\_info} schema is not passed through directly to the model.
+\item[Text action protocol.] Tools are described in the prompt as text and the
+model is instructed to emit a parseable action, command, or JSON block. The
+harness parses that text and maps it to an environment action.
+\item[Framework-mediated browser control.] A browser-agent library supplies an
+action space such as click, type, scroll, navigation, and page observation. The
+benchmark environment is not passed as domain-specific tool schemas; instead,
+the model acts through the browser-control framework.
+\item[Harness-side augmentation.] Retrieval, self-debugging, code execution, or
+evaluation happens outside the model-visible action interface. The model may see
+retrieved context or error messages, but it is not given callable environment
+tools for that benchmark step.
+\item[No explicit tools.] The scaffold is a direct prompt-to-answer or
+prompt-to-code generator for the relevant benchmark. Any execution or grading is
+outside the model's callable interface.
+\end{description}
+
+Harness-side augmentation spans several strengths. At the light end, a harness
+may insert retrieved examples or generated context into a prompt before a normal
+model call. At the middle, it may run an external environment loop and feed the
+model textual observations without giving it callable tools. At the heavy end,
+it may execute generated programs, collect runtime errors, and ask the model to
+debug in subsequent turns. In all three cases the augmentation can materially
+change behavior, but it is not an environment tool interface exposed to the
+model.
+
+\subsection{Normalized Harness Labels}
+
+\begingroup
+\footnotesize
+\begin{itemize}
+\item \textbf{AssistantBench Browser Agent}: framework-mediated browser control.
+Uses the \texttt{browser\_use.Agent} stack with LangChain chat models and a
+browser object; browser affordances are mediated by the browser-use framework
+rather than benchmark-specific schemas.
+\item \textbf{Browser-Use}: framework-mediated browser control. Historical
+online\_mind2web Browser-Use runs are recorded as browser-use scaffolds. Local
+source for this exact scaffold is absent, so the label is assigned from trace
+configuration and the Browser-Use harness family.
+\item \textbf{Claude Code}: text action protocol / external CLI scaffold.
+Claude Code runs are software-engineering agents whose environment actions are
+exposed through the CLI/scaffold command interface, not through
+benchmark-native tool schemas.
+\item \textbf{ColBench Example Agent}: harness-side augmentation, medium
+strength. The ColBench scaffold calls the model for textual actions in a
+human-interaction environment. Environment stepping is mediated by the harness
+dialogue loop rather than by callable model tools.
+\item \textbf{CORE-Agent}: code-agent tool registry. CORE-Agent is implemented
+as a \texttt{smolagents.CodeAgent} with core Python tools such as web/search,
+page visit, Python execution, bash execution, file inspection/editing, and
+final answer.
+\item \textbf{HAL Generalist Agent}: code-agent tool registry with benchmark
+adapters. The general path uses \texttt{smolagents.CodeAgent} and
+\texttt{CORE\_TOOLS}. Some benchmarks add adapter tools: TAU-bench actions are
+hard-coded wrappers around \texttt{isolated\_env.step}, while AppWorld-style
+APIs can be converted from API docs into smolagents tools.
+\item \textbf{HF Open Deep Research}: code-agent tool registry. The Open Deep
+Research scaffold constructs a smolagents research agent with web, browser,
+visualizer, and file-inspection tools. Tools are exposed through the smolagents
+runtime.
+\item \textbf{SAB Self-Debug}: harness-side augmentation, heavy strength. The
+ScienceAgentBench self-debug scaffold asks the model to write complete Python
+programs, then the harness executes/debugs externally and may feed error
+messages back. The execution environment is not exposed as callable model
+tools.
+\item \textbf{SciCode Tool Calling Agent}: code-agent tool registry. Uses a
+smolagents \texttt{CodeAgent} with web search, Python interpreter, Wikipedia
+search, and final-answer tools. These are general scaffold tools rather than
+SciCode benchmark-native APIs.
+\item \textbf{SciCode Zero Shot Agent}: no explicit tools. Generates code from
+prompts with direct model calls. There is no callable tool interface exposed to
+the model in this scaffold.
+\item \textbf{SeeAct}: framework-mediated browser control. Historical
+online\_mind2web SeeAct runs are browser-interaction scaffolds. Local source is
+not present in this checkout; classification is based on trace/run metadata and
+the SeeAct harness family.
+\item \textbf{SWE-Agent}: text action protocol / external CLI scaffold.
+SWE-Agent exposes repository operations through its command/tool configuration
+and command parser. The model interacts with the environment via scaffold
+commands rather than benchmark-native tool schemas. The historical raw label
+\texttt{My Agent} is normalized into this group because its trace metadata
+points to \texttt{agents/SWE-agent-v1.0} filemap/simple-review configurations;
+the raw label is retained in \texttt{irt\_data/harness\_metadata.csv} for
+possible exclusion or data-cleaning sensitivity checks.
+\item \textbf{TAU-bench FewShot}: native tool schema. The TAU-bench few-shot
+harness passes \texttt{isolated\_env.tools\_info} and the environment wiki to
+\texttt{FewShotToolCallingAgent}; model actions are structured TauBench tool
+calls executed by the environment.
+\item \textbf{TAU-bench ToolCalling}: native tool schema. The TAU-bench
+tool-calling harness passes \texttt{isolated\_env.tools\_info} to
+\texttt{ToolCallingAgent}. Optional perturbations modify the schema and
+responses but preserve the native tool-call path.
+\item \textbf{USACO Episodic + Semantic}: harness-side augmentation, light to
+medium strength. The USACO scaffold performs solve and retrieval stages in the
+harness. Retrieved examples or context are inserted into prompts; the model is
+not given an interactive callable tool interface for the benchmark environment.
+\end{itemize}
+\endgroup
+
+\subsection{Tool and Affordance Metadata Construction}
+
+The harness metadata is intentionally split into three related layers:
+\texttt{tool\_exposure\_mechanism}, \texttt{exposed\_tools}, and binary
+\texttt{affordance\_*} flags. The first layer records how tools or
+environment actions are passed to the model. The second records the concrete
+tool names or harness-side stages associated with each normalized harness. The
+third collapses those tool lists into coarse feature flags that can be joined
+onto outcome and trace tables.
+
+\paragraph{Harness normalization.}
+Raw scaffold labels are first mapped to the normalized harness labels in
+Appendix~\ref{app:dataset-inventory}. This step removes provider/model suffixes
+and reasoning-setting suffixes from scaffold names, while preserving the raw
+label in \texttt{raw\_scaffold}. For example, historical \texttt{My Agent}
+runs are normalized to \textbf{SWE-Agent}, with the original label retained for
+possible sensitivity analysis. The normalized harness label is then used as the
+unit for mechanism labels, exposed-tool inventories, and affordance flags.
+
+\paragraph{Tool extraction.}
+For harnesses with local source, exposed tools are extracted from the agent or
+benchmark code. Smolagents-based harnesses are read from their
+\texttt{CodeAgent} or \texttt{ToolCallingAgent} construction sites and tool
+classes. This yields concrete lists such as \texttt{web\_search},
+\texttt{python\_interpreter}, \texttt{execute\_bash},
+\texttt{inspect\_file\_as\_text}, \texttt{edit\_file}, and
+\texttt{file\_content\_search}. TAU-bench tools are taken from the
+environment-native \texttt{isolated\_env.tools\_info} path and the observed
+airline action names. SWE-Agent tools are read from the filemap/simple-review
+configuration bundles, including shell, file-map, editor, submit, and
+diff-state actions. When the exact local source is absent, as for some
+historical browser scaffolds, the inventory is recorded at the framework-action
+level and the caveat is stored in \texttt{exposed\_tools\_note}.
+
+\paragraph{Harness-side stages.}
+For harness-side augmentation, \texttt{exposed\_tools} records stages that
+shape the trace rather than model-callable tools. Thus SAB Self-Debug records
+complete-program generation, harness code execution, and self-debug feedback;
+USACO records retrieval/example stages and judge execution; ColBench records
+harness dialogue and final-answer submission. These entries are useful for
+affordance analysis but should not be interpreted as native or registered model
+tools.
+
+\paragraph{Affordance flags.}
+The derived \texttt{affordance\_*} columns are stored once per normalized
+harness in \texttt{irt\_data/harness\_affordances.csv} and mirrored onto
+\texttt{irt\_data/harness\_metadata.csv}. The flags are:
+\begin{itemize}
+\item \texttt{affordance\_code\_generation}
+\item \texttt{affordance\_code\_execution}
+\item \texttt{affordance\_shell\_access}
+\item \texttt{affordance\_file\_read}
+\item \texttt{affordance\_file\_edit}
+\item \texttt{affordance\_web\_search}
+\item \texttt{affordance\_web\_page\_visit}
+\item \texttt{affordance\_browser\_control}
+\item \texttt{affordance\_vision}
+\item \texttt{affordance\_native\_domain\_tools}
+\item \texttt{affordance\_benchmark\_api\_tools}
+\item \texttt{affordance\_human\_dialogue}
+\item \texttt{affordance\_retrieval\_context}
+\item \texttt{affordance\_external\_judge\_or\_eval}
+\item \texttt{affordance\_self\_debug\_feedback}
+\item \texttt{affordance\_complete\_program\_prompt}
+\end{itemize}
+A flag is true when that capability is available through the harness or its
+evaluation loop, regardless of whether the capability is exposed as a native
+tool schema, a code-agent registered function, a text command, or a
+harness-side augmentation.
+
+\paragraph{Interpretation.}
+These affordance flags intentionally abstract away from the passage mechanism.
+For example, Claude Code and SAB Self-Debug both have code execution or
+debugging affordances, but Claude Code exposes execution through an interactive
+agent scaffold whereas SAB Self-Debug executes generated programs in the
+benchmark harness and may feed errors back into later prompts. Conversely,
+TAU-bench ToolCalling and HAL Generalist can both execute airline domain
+actions, but the former passes native schemas while the latter re-exports some
+actions through smolagents wrappers. Analyses should therefore use affordance
+flags together with \texttt{tool\_exposure\_mechanism}, not as replacements for
+the mechanism taxonomy.
+
+\subsection{Interpretation for Trace Features}
+
+This metadata separates \emph{available affordances} from \emph{model-visible
+tool passage}. For example, TAU-bench ToolCalling and HAL Generalist can both
+execute \texttt{update\_reservation\_flights}, but the former passes the
+TauBench schema directly through \texttt{tools\_info}, whereas the latter
+re-exports that action as a hand-written smolagents wrapper. Likewise, a
+browser scaffold and a code-agent scaffold may both access the web, but one
+does so through page-control actions and the other through search/page tools.
+Downstream trace features should therefore include both coarse affordance flags
+(for example browser control, code execution, web search, file editing) and this
+tool-passage mechanism label.

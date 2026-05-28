@@ -1,0 +1,52 @@
+display_harness,display_model,predicted_accuracy,tasks,actual_accuracy,observed_tasks,is_observed
+HAL Generalist Agent,DeepSeek-R1,0.08332031,50,0.06,50.0,True
+HAL Generalist Agent,DeepSeek-V3,0.093101844,50,0.1,50.0,True
+HAL Generalist Agent,claude-3-7-sonnet,0.2512734,50,0.32,50.0,True
+HAL Generalist Agent,claude-haiku-4-5,0.23710185,50,0.3087248322147651,50.0,True
+HAL Generalist Agent,claude-opus-4,0.29908264,50,0.32,50.0,True
+HAL Generalist Agent,claude-opus-4-1,0.29908264,50,0.54,50.0,True
+HAL Generalist Agent,claude-sonnet-4-5,0.2512734,50,0.37,50.0,True
+HAL Generalist Agent,gemini-2.0-flash,0.0814026,50,0.02,50.0,True
+HAL Generalist Agent,gpt-4.1,0.16966677,50,0.02,50.0,True
+HAL Generalist Agent,gpt-4o,0.16966677,50,,,False
+HAL Generalist Agent,gpt-4o-2024-11-20,0.16966677,50,0.02,50.0,True
+HAL Generalist Agent,gpt-5,0.16966677,50,0.14,50.0,True
+HAL Generalist Agent,o1,0.1570169,50,,,False
+HAL Generalist Agent,o3,0.1570169,50,0.0,50.0,True
+HAL Generalist Agent,o3-mini,0.1570169,50,,,False
+HAL Generalist Agent,o3-mini-2025-01-31,0.1570169,50,0.0,50.0,True
+HAL Generalist Agent,o4-mini,0.1570169,50,0.04,50.0,True
+SAB Self-Debug,DeepSeek-R1,0.058551002,50,,,False
+SAB Self-Debug,DeepSeek-V3,0.0624162,50,,,False
+SAB Self-Debug,claude-3-7-sonnet,0.124946855,50,,,False
+SAB Self-Debug,claude-haiku-4-5,0.119874105,50,,,False
+SAB Self-Debug,claude-opus-4,0.14275464,50,,,False
+SAB Self-Debug,claude-opus-4-1,0.14275464,50,,,False
+SAB Self-Debug,claude-sonnet-4-5,0.124946855,50,,,False
+SAB Self-Debug,gemini-2.0-flash,0.05673573,50,,,False
+SAB Self-Debug,gpt-4.1,0.11700273,50,,,False
+SAB Self-Debug,gpt-4o,0.11700273,50,,,False
+SAB Self-Debug,gpt-4o-2024-11-20,0.11700273,50,,,False
+SAB Self-Debug,gpt-5,0.11700273,50,,,False
+SAB Self-Debug,o1,0.1080878,50,,,False
+SAB Self-Debug,o3,0.1080878,50,,,False
+SAB Self-Debug,o3-mini,0.1080878,50,,,False
+SAB Self-Debug,o3-mini-2025-01-31,0.1080878,50,,,False
+SAB Self-Debug,o4-mini,0.1080878,50,,,False
+SWE-Agent,DeepSeek-R1,0.17317022,50,0.0,1.0,False
+SWE-Agent,DeepSeek-V3,0.19151536,50,0.41935483870967744,31.0,True
+SWE-Agent,claude-3-7-sonnet,0.49035478,50,0.52,50.0,True
+SWE-Agent,claude-haiku-4-5,0.43325967,50,,,False
+SWE-Agent,claude-opus-4,0.55800503,50,0.6,50.0,True
+SWE-Agent,claude-opus-4-1,0.55800503,50,0.6266666666666667,50.0,True
+SWE-Agent,claude-sonnet-4-5,0.49035478,50,0.7070707070707071,50.0,True
+SWE-Agent,gemini-2.0-flash,0.16677673,50,0.22448979591836735,49.0,True
+SWE-Agent,gpt-4.1,0.40046492,50,0.46938775510204084,49.0,True
+SWE-Agent,gpt-4o,0.40046492,50,0.2916666666666667,48.0,True
+SWE-Agent,gpt-4o-2024-11-20,0.40046492,50,,,False
+SWE-Agent,gpt-5,0.40046492,50,0.64,50.0,True
+SWE-Agent,o1,0.3722315,50,0.4,50.0,True
+SWE-Agent,o3,0.3722315,50,0.5925925925925926,48.0,True
+SWE-Agent,o3-mini,0.3722315,50,0.4084507042253521,50.0,True
+SWE-Agent,o3-mini-2025-01-31,0.3722315,50,,,False
+SWE-Agent,o4-mini,0.3722315,50,0.5510204081632653,50.0,True

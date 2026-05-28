@@ -1,0 +1,3 @@
+tool_exposure_mechanism,runs,successes,pass_rate,avg_llm_calls,avg_length_finishes,avg_output_code_blocks,avg_observation_mentions,avg_error_mentions,tool_registry_prompt_rate,self_debug_prompt_rate,exec_feedback_loop_rate,avg_final_chars
+code_agent_tool_registry,7,1,0.14285714285714285,26.571428571428573,0.5714285714285714,41.142857142857146,184.71428571428572,245.85714285714286,1.0,0.0,1.0,5035.857142857143
+harness_side_augmentation,18,17,0.9444444444444444,1.9444444444444444,0.0,3.888888888888889,0.0,8.833333333333334,0.0,1.0,0.0,8416.055555555555

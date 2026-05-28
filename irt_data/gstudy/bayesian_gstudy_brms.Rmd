@@ -1,0 +1,247 @@
+---
+title: "Bayesian G-Study for HAL Agent Benchmark Outcomes"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+params:
+  rows_csv: "hal_binary_rows.csv"
+  chains: 4
+  iter: 2000
+  warmup: 1000
+  adapt_delta: 0.95
+  max_treedepth: 12
+  seed: 20260527
+---
+
+```{r setup, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+required <- c("brms", "posterior", "dplyr", "readr", "tibble", "ggplot2")
+missing <- required[!vapply(required, requireNamespace, logical(1), quietly = TRUE)]
+if (length(missing) > 0) {
+  stop(
+    "Missing required packages: ",
+    paste(missing, collapse = ", "),
+    "\nInstall them with install.packages(...) before knitting this file."
+  )
+}
+
+library(brms)
+library(posterior)
+library(dplyr)
+library(readr)
+library(tibble)
+library(ggplot2)
+
+stan_backend <- if (requireNamespace("cmdstanr", quietly = TRUE)) "cmdstanr" else "rstan"
+```
+
+## Goal
+
+This notebook fits a Bayesian generalizability-style model to the HAL binary
+response rows. The question is where outcome variation lives before we fit the
+IRT model: benchmark, task, model, harness, model--harness compatibility, or
+task--harness interaction.
+
+Because the response matrix is sparse and unbalanced, this is not a classical
+balanced random-effects G-study. It is a Bernoulli-logit crossed random-effects
+model with partial pooling.
+
+## Data
+
+```{r data}
+rows <- read_csv(params$rows_csv, show_col_types = FALSE) |>
+  mutate(
+    correct = as.integer(correct),
+    benchmark = factor(benchmark),
+    task_nested = factor(task_nested),
+    model_name = factor(model_name),
+    harness_name = factor(scaffold_name),
+    model_harness = interaction(model_name, harness_name, drop = TRUE, sep = " | "),
+    benchmark_harness = interaction(benchmark, harness_name, drop = TRUE, sep = " | "),
+    task_harness = interaction(task_nested, harness_name, drop = TRUE, sep = " | ")
+  )
+
+tibble(
+  n_rows = nrow(rows),
+  mean_accuracy = mean(rows$correct),
+  benchmarks = n_distinct(rows$benchmark),
+  tasks = n_distinct(rows$task_nested),
+  models = n_distinct(rows$model_name),
+  harnesses = n_distinct(rows$harness_name),
+  model_harness_pairs = n_distinct(rows$model_harness),
+  task_harness_pairs = n_distinct(rows$task_harness)
+)
+```
+
+## Model
+
+The reportable model is:
+
+```r
+correct ~ 1 +
+  (1 | benchmark) +
+  (1 | task_nested) +
+  (1 | model_name) +
+  (1 | harness_name) +
+  (1 | model_harness) +
+  (1 | benchmark_harness) +
+  (1 | task_harness)
+```
+
+Each term is a random intercept. For example, `(1 | model_name)` estimates a
+partially pooled model-level ability offset, while `(1 | model_harness)`
+estimates whether a particular model--harness combination is unusually strong or
+weak after accounting for the model and harness main effects. The
+`task_harness` term asks whether a harness is unusually strong or weak on
+particular items after accounting for task difficulty and average harness
+strength.
+
+For Bernoulli-logit models, residual variance is not freely estimated as in a
+Gaussian model. On the latent logit scale, the conventional residual variance is
+fixed at `pi^2 / 3`. We therefore report posterior variance components and
+ICC-like shares:
+
+```text
+Var(facet) / (sum Var(facets) + pi^2 / 3)
+```
+
+```{r fit}
+priors <- c(
+  prior(normal(0, 2.5), class = "Intercept"),
+  prior(exponential(1), class = "sd")
+)
+
+fit <- brm(
+  correct ~ 1 +
+    (1 | benchmark) +
+    (1 | task_nested) +
+    (1 | model_name) +
+    (1 | harness_name) +
+    (1 | model_harness) +
+    (1 | benchmark_harness) +
+    (1 | task_harness),
+  data = rows,
+  family = bernoulli(link = "logit"),
+  prior = priors,
+  chains = params$chains,
+  iter = params$iter,
+  warmup = params$warmup,
+  seed = params$seed,
+  cores = min(params$chains, parallel::detectCores()),
+  control = list(adapt_delta = params$adapt_delta, max_treedepth = params$max_treedepth),
+  backend = stan_backend,
+  file = "brms_bayesian_gstudy_fit",
+  file_refit = "on_change"
+)
+
+fit
+```
+
+## Variance Components
+
+```{r variance-components}
+draws <- as_draws_df(fit)
+
+sd_cols <- grep("^sd_", names(draws), value = TRUE)
+
+variance_draws <- draws |>
+  select(all_of(sd_cols)) |>
+  mutate(across(everything(), ~ .x^2)) |>
+  rename_with(~ sub("^sd_", "var_", .x))
+
+residual_var <- pi^2 / 3
+total_var <- rowSums(variance_draws) + residual_var
+
+share_draws <- variance_draws |>
+  mutate(across(everything(), ~ .x / total_var)) |>
+  mutate(var_residual_logit = residual_var / total_var)
+
+variance_summary <- bind_rows(
+  summarise_draws(variance_draws, mean, median, ~ quantile(.x, 0.05), ~ quantile(.x, 0.95)) |>
+    as_tibble() |>
+    rename(component = variable, q05 = `5%`, q95 = `95%`) |>
+    mutate(scale = "variance"),
+  summarise_draws(share_draws, mean, median, ~ quantile(.x, 0.05), ~ quantile(.x, 0.95)) |>
+    as_tibble() |>
+    rename(component = variable, q05 = `5%`, q95 = `95%`) |>
+    mutate(scale = "variance_share")
+) |>
+  mutate(component = gsub("^var_", "", component))
+
+variance_summary
+
+write_csv(variance_summary, "brms_gstudy_variance_components.csv")
+```
+
+```{r variance-plot, fig.width=7, fig.height=4}
+variance_summary |>
+  filter(scale == "variance_share") |>
+  mutate(component = reorder(component, mean)) |>
+  ggplot(aes(x = component, y = mean)) +
+  geom_col(fill = "#3b6fb6") +
+  geom_errorbar(aes(ymin = q05, ymax = q95), width = 0.2) +
+  coord_flip() +
+  labs(
+    x = NULL,
+    y = "Posterior mean variance share",
+    title = "Bayesian G-study variance shares on the logit scale"
+  ) +
+  theme_minimal(base_size = 11)
+
+ggsave("brms_gstudy_variance_shares.png", width = 7, height = 4, dpi = 200)
+```
+
+## Optional Model Comparisons
+
+These lighter models are useful if the full `task_harness` model is slow or if
+we want to report the incremental contribution of interaction terms.
+
+```{r optional-comparisons, eval=FALSE}
+fit_main <- brm(
+  correct ~ 1 +
+    (1 | benchmark) +
+    (1 | task_nested) +
+    (1 | model_name) +
+    (1 | harness_name),
+  data = rows,
+  family = bernoulli(link = "logit"),
+  prior = priors,
+  chains = params$chains,
+  iter = params$iter,
+  warmup = params$warmup,
+  seed = params$seed,
+  cores = min(params$chains, parallel::detectCores()),
+  control = list(adapt_delta = params$adapt_delta, max_treedepth = params$max_treedepth),
+  backend = stan_backend,
+  file = "brms_bayesian_gstudy_main_fit",
+  file_refit = "on_change"
+)
+
+fit_model_harness <- update(
+  fit_main,
+  formula = correct ~ 1 +
+    (1 | benchmark) +
+    (1 | task_nested) +
+    (1 | model_name) +
+    (1 | harness_name) +
+    (1 | model_harness),
+  file = "brms_bayesian_gstudy_model_harness_fit",
+  file_refit = "on_change"
+)
+
+loo(fit_main, fit_model_harness, fit)
+```
+
+## Paper Language Template
+
+If the posterior variance shares show substantial mass on `task_nested`,
+`model_harness`, or `task_harness`, the paper can summarize the finding as:
+
+> A Bayesian G-study-style Bernoulli mixed model indicates that benchmark labels
+> are too coarse for agent measurement: substantial variance is attributable to
+> item identity and to interactions involving harnesses. This motivates the IRT
+> model's item-level difficulty and discrimination parameters, and motivates a
+> residual harness-feature analysis asking which tools help which models on
+> which item types.

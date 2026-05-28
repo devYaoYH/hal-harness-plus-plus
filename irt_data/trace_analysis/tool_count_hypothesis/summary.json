@@ -1,0 +1,19 @@
+{
+  "n_rows": 45069,
+  "n_configs": 219,
+  "n_harnesses": 15,
+  "naive_row_corr_tool_count_success": 0.0720120307803073,
+  "within_benchmark_row_corr_tool_count_success": -0.028826760616601332,
+  "config_corr_tool_count_pass_rate": 0.2413942951405237,
+  "within_benchmark_config_corr_tool_count_pass_rate": -0.2251005125672258,
+  "matched_pairs": 81,
+  "matched_mean_low_minus_high_pass_rate": 0.040527739856002803,
+  "matched_median_low_minus_high_pass_rate": 0.03076923076923077,
+  "matched_fraction_low_tool_better": 0.6172839506172839,
+  "two_way_fe_config_slope_pass_rate_per_log1p_tool": -0.026498997193360414,
+  "two_way_fe_bootstrap_ci": [
+    -0.051632870215744225,
+    -0.0019562897993998496
+  ],
+  "interpretation": "Negative slope/correlation supports fewer-tools-better; positive opposes it."
+}

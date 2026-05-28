@@ -1,0 +1,70 @@
+\section{SWE-bench Trace Audit: Registry vs. Repo Workflow}
+\label{app:swebench-trace-audit}
+
+HAL Generalist and SWE-Agent both expose code-generation, code-execution,
+shell, file-read, and file-edit affordances on SWE-bench. In HAL Generalist,
+these affordances pass through a smolagents-style code-agent registry with
+tools such as \texttt{python\_interpreter}, \texttt{execute\_bash},
+\texttt{inspect\_file\_as\_text}, \texttt{edit\_file},
+\texttt{file\_content\_search}, and \texttt{final\_answer}. SWE-Agent exposes
+a repo-repair workflow with a specialized action protocol, persistent editor
+semantics, file-map context, diff/review state, and an explicit submit action.
+The audit below therefore focuses on the model-facing workflow difference,
+rather than treating live execution or editing as the distinguishing factor.
+
+To make this distinction concrete, we audited matched GPT-5 traces on
+SWE-bench Verified Mini. The HAL Generalist run
+\texttt{\detokenize{swebench_verified_mini_hal_generalist_gpt520250807_1755463923}}
+and the SWE-Agent run
+\texttt{\detokenize{swebench_verified_mini_sweagentgpt520250807_1754592641}}
+cover the same 50 tasks. HAL Generalist fails while SWE-Agent succeeds on 26
+of these tasks. The joinable extraction artifacts are stored in
+\texttt{irt\_data/trace\_analysis/swebench\_hal\_vs\_sweagent/}: the full
+candidate set is \texttt{gpt5\_hal\_fail\_swe\_success\_tasks.csv}, and the
+paired trace examples below are \texttt{gpt5\_trace\_examples.csv}.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}}
+\toprule
+Task & Issue & HAL Generalist failed trace & SWE-Agent succeeded trace \\
+\midrule
+Django 12143 &
+Regex escaping in Django admin formset prefixes &
+8 LLM calls; uses registry tools including \texttt{file\_content\_search},
+\texttt{edit\_file}, and \texttt{execute\_bash}; final message says the
+referenced upstream code is absent and no patch is generated. &
+25 LLM calls; uses \texttt{bash}, \texttt{str\_replace\_editor}, and
+\texttt{submit}; final message reports locating the ModelAdmin edited-PK
+helper, applying \texttt{re.escape}, and verifying with a reproduction script. \\
+Django 12050 &
+Preserve list-vs-tuple type in query lookup resolution &
+19 LLM calls; uses search, edit, bash, and a Python interpreter; final message
+is still in patch-construction mode and the submitted result fails grading. &
+16 LLM calls; uses repository shell/editor actions and submit; trace records a
+plan to inspect ORM code, reproduce the coercion bug, patch it, and rerun the
+reproduction script. \\
+Sphinx 9698 &
+Remove parentheses from Sphinx Python-property index entries &
+19 LLM calls; uses repeated registry searches and edits; final message returns
+a patch description, but the benchmark marks it unresolved. &
+42 LLM calls; uses repeated shell/editor operations and submit; final message
+reports a minimal change in the Sphinx Python-domain implementation. \\
+\bottomrule
+\end{tabular}
+\caption{Matched GPT-5 examples where HAL Generalist fails and SWE-Agent
+succeeds on the same SWE-bench Verified Mini task. Both harnesses can execute
+and edit code; the visible difference is the model-facing workflow: a broad
+registry of general tools versus a repo-specific repair protocol.}
+\label{tab:swebench-trace-examples}
+\end{table}
+
+The examples suggest a concrete follow-up ablation: keep the same base model
+and sandbox budget, but vary only the repo-repair interface. For HAL
+Generalist, this could mean adding a SWE-Agent-like file-map/edit/review/submit
+layer while preserving its underlying execution tools. For SWE-Agent, this
+could mean disabling file-map or diff-state context while leaving shell and
+editor access intact. Such paired ablations would separate the value of live
+execution from the value of repo-specialized workflow structure.

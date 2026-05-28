@@ -25,6 +25,8 @@ class DaytonaEvalSpec:
     model: str
     job_id: str
     benchmark_extra: str = "swebench"  # pyproject.toml optional-dep group to install
+    disable_tools: str = ""  # comma-separated tool names to remove (forwarded as -A arg)
+    model_arg_key: str = "model_name"  # kwarg key the agent's run() expects for the model
 
 
 # ---------------------------------------------------------------------------
@@ -52,6 +54,7 @@ TASK_ENV_VARS: dict[str, str] = {
     for k in [
         "OPENAI_API_KEY",
         "ANTHROPIC_API_KEY",
+        "OPENROUTER_API_KEY",
         "HF_TOKEN",
         "WEAVE_API_KEY",
     ]

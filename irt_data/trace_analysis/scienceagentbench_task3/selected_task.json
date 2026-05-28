@@ -1,0 +1,11 @@
+{
+  "benchmark": "scienceagentbench",
+  "task_id": "3",
+  "n_runs": 25,
+  "n_success": 18,
+  "n_failure": 7,
+  "mechanisms": [
+    "code_agent_tool_registry",
+    "harness_side_augmentation"
+  ]
+}

@@ -1,0 +1,82 @@
+benchmark,normalized_model,low_tool_harness,low_tool_count,low_tool_pass_rate,high_tool_harness,high_tool_count,high_tool_pass_rate,low_minus_high_pass_rate
+swebench_verified_mini,o3,SWE-Agent,9,0.5925925925925926,HAL Generalist Agent,13,0.0,0.5925925925925926
+swebench_verified_mini,o4-mini,SWE-Agent,9,0.5510204081632653,HAL Generalist Agent,13,0.04,0.5110204081632652
+swebench_verified_mini,GPT-5,SWE-Agent,9,0.64,HAL Generalist Agent,13,0.14,0.5
+corebench_hard,Claude Opus 4.5,Claude Code,6,0.7777777777777778,HAL Generalist Agent,13,0.32222222222222224,0.45555555555555555
+swebench_verified_mini,GPT-4.1,SWE-Agent,9,0.46938775510204084,HAL Generalist Agent,13,0.02,0.4493877551020408
+swebench_verified_mini,o3-mini,SWE-Agent,9,0.4084507042253521,HAL Generalist Agent,13,0.0,0.4084507042253521
+swebench_verified_mini,Claude Sonnet 4.5,SWE-Agent,9,0.7070707070707071,HAL Generalist Agent,13,0.37,0.3370707070707071
+swebench_verified_mini,DeepSeek V3 / Chat,SWE-Agent,9,0.41935483870967744,HAL Generalist Agent,13,0.1,0.3193548387096774
+corebench_hard,Claude Sonnet 4.5,Claude Code,6,0.6222222222222222,HAL Generalist Agent,13,0.3111111111111111,0.3111111111111111
+swebench_verified_mini,Claude Opus 4,SWE-Agent,9,0.6,HAL Generalist Agent,13,0.32,0.27999999999999997
+swebench_verified_mini,GPT-4o,SWE-Agent,9,0.2916666666666667,HAL Generalist Agent,13,0.02,0.27166666666666667
+scienceagentbench,o3,SAB Self-Debug,3,0.3333333333333333,HAL Generalist Agent,13,0.09803921568627451,0.23529411764705882
+swebench_verified_mini,Gemini 2.0 Flash,SWE-Agent,9,0.22448979591836735,HAL Generalist Agent,13,0.02,0.20448979591836736
+swebench_verified_mini,Claude 3.7 Sonnet,SWE-Agent,9,0.52,HAL Generalist Agent,13,0.32,0.2
+corebench_hard,Gemini 2.5 Pro Preview,CORE-Agent,9,0.2222222222222222,HAL Generalist Agent,13,0.044444444444444446,0.17777777777777776
+scienceagentbench,GPT-4.1,SAB Self-Debug,3,0.24509803921568626,HAL Generalist Agent,13,0.06862745098039216,0.1764705882352941
+corebench_hard,Claude Sonnet 4,Claude Code,6,0.4666666666666667,CORE-Agent,9,0.3111111111111111,0.15555555555555556
+corebench_hard,GPT-5,CORE-Agent,9,0.26666666666666666,HAL Generalist Agent,13,0.1111111111111111,0.15555555555555556
+corebench_hard,GPT-4.1,CORE-Agent,9,0.3333333333333333,HAL Generalist Agent,13,0.17777777777777778,0.15555555555555553
+scienceagentbench,DeepSeek V3 / Chat,SAB Self-Debug,3,0.1568627450980392,HAL Generalist Agent,13,0.00980392156862745,0.14705882352941177
+scienceagentbench,Claude 3.7 Sonnet,SAB Self-Debug,3,0.26143790849673204,HAL Generalist Agent,13,0.14215686274509803,0.11928104575163401
+online_mind2web,Claude Sonnet 4.5,Browser-Use,6,0.47833333333333333,SeeAct,7,0.365,0.11333333333333334
+gaia,Claude Opus 4,HF Open Deep Research,10,0.5757575757575758,HAL Generalist Agent,13,0.47575757575757577,0.10000000000000003
+corebench_hard,DeepSeek V3 / Chat,CORE-Agent,9,0.18888888888888888,HAL Generalist Agent,13,0.08888888888888889,0.09999999999999999
+online_mind2web,Claude 3.7 Sonnet,Browser-Use,6,0.3883333333333333,SeeAct,7,0.29333333333333333,0.09499999999999997
+swebench_verified_mini,Claude Opus 4.1,SWE-Agent,9,0.6266666666666667,HAL Generalist Agent,13,0.54,0.08666666666666667
+corebench_hard,Claude 3.7 Sonnet,CORE-Agent,9,0.3111111111111111,HAL Generalist Agent,13,0.2253968253968254,0.08571428571428572
+corebench_hard,Claude Opus 4.1,Claude Code,6,0.4222222222222222,HAL Generalist Agent,13,0.34444444444444444,0.07777777777777778
+scienceagentbench,o4-mini,SAB Self-Debug,3,0.27450980392156865,HAL Generalist Agent,13,0.20588235294117646,0.06862745098039219
+assistantbench,o3,AssistantBench Browser Agent,6,0.06060606060606061,HAL Generalist Agent,13,0.0,0.06060606060606061
+online_mind2web,GPT-4.1,Browser-Use,6,0.36333333333333334,SeeAct,7,0.30333333333333334,0.06
+corebench_hard,o3,CORE-Agent,9,0.24444444444444444,HAL Generalist Agent,13,0.18888888888888888,0.05555555555555555
+corebench_hard,Gemini 2.0 Flash,CORE-Agent,9,0.1111111111111111,HAL Generalist Agent,13,0.05555555555555555,0.05555555555555555
+scicode,GPT-4.1,SciCode Zero Shot Agent,0,0.06153846153846154,HAL Generalist Agent,13,0.015384615384615385,0.046153846153846156
+corebench_hard,Gemini 3 Pro Preview,CORE-Agent,9,0.4,HAL Generalist Agent,13,0.35555555555555557,0.04444444444444445
+online_mind2web,Claude Haiku 4.5,Browser-Use,6,0.3883333333333333,SeeAct,7,0.345,0.043333333333333335
+gaia,o3,HF Open Deep Research,10,0.32727272727272727,HAL Generalist Agent,13,0.28484848484848485,0.04242424242424242
+scicode,o4-mini,SciCode Zero Shot Agent,0,0.07179487179487179,HAL Generalist Agent,13,0.03076923076923077,0.04102564102564102
+taubench_airline,Claude 3.7 Sonnet,HAL Generalist Agent,13,0.5102040816326531,TAU-bench FewShot,14,0.47,0.0402040816326531
+gaia,GPT-5,HF Open Deep Research,10,0.6280487804878049,HAL Generalist Agent,13,0.593939393939394,0.03410938654841089
+scicode,DeepSeek V3 / Chat,SciCode Zero Shot Agent,0,0.03076923076923077,HAL Generalist Agent,13,0.0,0.03076923076923077
+online_mind2web,Claude Sonnet 4,Browser-Use,6,0.39666666666666667,SeeAct,7,0.36666666666666664,0.030000000000000027
+online_mind2web,Gemini 2.0 Flash,Browser-Use,6,0.29,SeeAct,7,0.26666666666666666,0.023333333333333317
+corebench_hard,GPT-OSS 120B,CORE-Agent,9,0.1111111111111111,HAL Generalist Agent,13,0.08888888888888889,0.022222222222222213
+assistantbench,Claude 3.7 Sonnet,AssistantBench Browser Agent,6,0.04040404040404041,HAL Generalist Agent,13,0.020202020202020204,0.020202020202020204
+assistantbench,o4-mini,AssistantBench Browser Agent,6,0.06060606060606061,HAL Generalist Agent,13,0.04040404040404041,0.0202020202020202
+scicode,Gemini 2.0 Flash,SciCode Zero Shot Agent,0,0.015384615384615385,HAL Generalist Agent,13,0.0,0.015384615384615385
+online_mind2web,Gemini 2.5 Pro Preview,Browser-Use,6,0.41,SeeAct,7,0.39666666666666667,0.013333333333333308
+corebench_hard,DeepSeek R1,CORE-Agent,9,0.06666666666666667,HAL Generalist Agent,13,0.05925925925925926,0.007407407407407404
+gaia,GPT-4.1,HF Open Deep Research,10,0.503030303030303,HAL Generalist Agent,13,0.49696969696969695,0.0060606060606061
+usaco,GPT-4.1,USACO Episodic + Semantic,4,0.0,HAL Generalist Agent,13,0.0,0.0
+scicode,o3,SciCode Zero Shot Agent,0,0.046153846153846156,HAL Generalist Agent,13,0.046153846153846156,0.0
+scicode,DeepSeek R1,SciCode Zero Shot Agent,0,0.0,HAL Generalist Agent,13,0.0,0.0
+assistantbench,DeepSeek R1,AssistantBench Browser Agent,6,0.0,HAL Generalist Agent,13,0.0,0.0
+corebench_hard,o4-mini,CORE-Agent,9,0.2222222222222222,HAL Generalist Agent,13,0.22777777777777777,-0.005555555555555564
+gaia,DeepSeek V3 / Chat,HF Open Deep Research,10,0.28484848484848485,HAL Generalist Agent,13,0.29393939393939394,-0.009090909090909094
+scicode,Claude 3.7 Sonnet,SciCode Zero Shot Agent,0,0.015384615384615385,HAL Generalist Agent,13,0.03076923076923077,-0.015384615384615385
+assistantbench,GPT-4.1,AssistantBench Browser Agent,6,0.06060606060606061,HAL Generalist Agent,13,0.09090909090909091,-0.030303030303030304
+assistantbench,Gemini 2.0 Flash,AssistantBench Browser Agent,6,0.0,HAL Generalist Agent,13,0.030303030303030304,-0.030303030303030304
+gaia,o4-mini,HF Open Deep Research,10,0.5181818181818182,HAL Generalist Agent,13,0.5636363636363636,-0.045454545454545414
+gaia,DeepSeek R1,HF Open Deep Research,10,0.24848484848484848,HAL Generalist Agent,13,0.30303030303030304,-0.054545454545454564
+swebench_verified_mini,DeepSeek R1,SWE-Agent,9,0.0,HAL Generalist Agent,13,0.06,-0.06
+assistantbench,Claude Opus 4.1,AssistantBench Browser Agent,6,0.015151515151515152,HAL Generalist Agent,13,0.09090909090909091,-0.07575757575757576
+online_mind2web,GPT-5,Browser-Use,6,0.29888888888888887,SeeAct,7,0.3811111111111111,-0.08222222222222225
+online_mind2web,o3,Browser-Use,6,0.29,SeeAct,7,0.39,-0.10000000000000003
+assistantbench,DeepSeek V3 / Chat,AssistantBench Browser Agent,6,0.0,HAL Generalist Agent,13,0.12121212121212122,-0.12121212121212122
+online_mind2web,o4-mini,Browser-Use,6,0.19166666666666668,SeeAct,7,0.31833333333333336,-0.12666666666666668
+gaia,Gemini 2.0 Flash,HF Open Deep Research,10,0.19393939393939394,HAL Generalist Agent,13,0.32727272727272727,-0.13333333333333333
+taubench_airline,Claude Opus 4.1,HAL Generalist Agent,13,0.43,TAU-bench FewShot,14,0.58,-0.14999999999999997
+taubench_airline,DeepSeek V3 / Chat,HAL Generalist Agent,13,0.18,TAU-bench FewShot,14,0.34,-0.16000000000000003
+taubench_airline,Claude Opus 4,HAL Generalist Agent,13,0.44,TAU-bench FewShot,14,0.61,-0.16999999999999998
+taubench_airline,GPT-5,HAL Generalist Agent,13,0.34,TAU-bench FewShot,14,0.51,-0.16999999999999998
+taubench_airline,Gemini 2.0 Flash,HAL Generalist Agent,13,0.22,TAU-bench FewShot,14,0.44,-0.22
+gaia,o3-mini,HF Open Deep Research,10,0.18181818181818182,HAL Generalist Agent,13,0.403030303030303,-0.2212121212121212
+gaia,Claude 3.7 Sonnet,HF Open Deep Research,10,0.36363636363636365,HAL Generalist Agent,13,0.603030303030303,-0.23939393939393938
+taubench_airline,DeepSeek R1,HAL Generalist Agent,13,0.1,TAU-bench FewShot,14,0.36,-0.26
+taubench_airline,o3,HAL Generalist Agent,13,0.20833333333333334,TAU-bench FewShot,14,0.4842105263157895,-0.27587719298245617
+taubench_airline,o4-mini,HAL Generalist Agent,13,0.2,TAU-bench FewShot,14,0.5454545454545454,-0.3454545454545454
+gaia,Claude Opus 4.1,HF Open Deep Research,10,0.2696969696969697,HAL Generalist Agent,13,0.6636363636363637,-0.393939393939394
+taubench_airline,GPT-4.1,HAL Generalist Agent,13,0.16,TAU-bench FewShot,14,0.56,-0.4
+gaia,Claude Sonnet 4.5,HF Open Deep Research,10,0.3090909090909091,HAL Generalist Agent,13,0.7333333333333333,-0.4242424242424242

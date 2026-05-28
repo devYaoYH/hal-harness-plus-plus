@@ -1,0 +1,105 @@
+\documentclass{article}
+
+\usepackage[preprint]{neurips_2025}
+\makeatletter
+\renewcommand{\@notice}{}
+\makeatother
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{microtype}
+
+\title{Which Tasks Tell, Which Tools Help: IRT-Guided Agent Benchmarking}
+
+\author{%
+  Yiheng Yao\\
+  Stanford University\\
+  \texttt{yaoyh@stanford.edu}\\
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Agent benchmarks usually report aggregate pass rates, but those scores hide large variation in which tasks distinguish strong and weak agent harnesses, and which tool affordances make those differences possible. This project applies item response theory (IRT) to existing binary benchmark outcomes in order to model each agent harness as a latent ability vector and each benchmark task as an item with difficulty and discrimination parameters. The contribution is not the construction of novel agent harness benchmarks or execution infrastructure; rather, it is the statistical framing that treats benchmark scores and traces as response data. Using response matrices from multiple agent scaffolds, models, and benchmarks sourced from the Holistic Agent Leaderboard (HAL), we fit and evaluate multidimensional IRT models, compare them to simpler pass-rate baselines, rank tasks by estimated discrimination, and featurize traces to study which harness tools appear effective for which models, items, and benchmark families. The goal is to test whether a small, high-information subset of tasks can preserve ranking, calibration, and predictive accuracy while also revealing tool--model--item interactions that guide agent harness evaluation.
+\end{abstract}
+
+\section{Overview and Motivation}
+
+Modern agent evaluations are expensive because each new model--scaffold combination may require running hundreds or thousands of tasks. They are also statistically blunt: an aggregate benchmark score treats every task as equally informative, even though some tasks are solved by nearly every agent, some by almost none, and only a subset separates systems in ways that are useful for model selection or harness design. The research question for this project is: \emph{can IRT models fit to historical agent benchmark outcomes identify high-value tasks that preserve evaluation signal at lower cost, and can trace-derived features explain which tools help which models on which kinds of items?}
+
+This project leverages the collected model $\times$ harness $\times$ benchmark dataset introduced by the Holistic Agent Leaderboard (HAL) \citep{hal2026}. The version analyzed here spans 36 models, 13 agent harnesses, and 8 benchmarks, with binary correct/incorrect outcomes for each observed agent--task interaction. We fit a two-parameter $K$-factor IRT model for agent benchmark measurement, estimating latent agent abilities, item difficulty and discrimination parameters, and candidate high-information tasks. We then enrich this latent model with item features, model/scaffold features, and trace-derived tool-use features so that the analysis asks not only \emph{which tasks are informative}, but also \emph{which tools help which models on which kinds of tasks}.
+
+The project connects directly to the course's first two arcs. It uses the probabilistic measurement models from Lectures 2--4 and Chapters 2--3, especially Rasch/2PL IRT, factor models, sparse response matrices, predictive performance, and cold-start prediction. Its task-selection component draws on sample-efficient measurement and active learning from Lecture 5 and Chapter 4. Finally, the exploratory variance audit and uncertainty analysis connect to the reliability material in Lectures 7--8 and Chapter 5, including signal/noise decomposition, generalizability theory, random effects, and decision-study-style questions about how many items are needed for a dependable evaluation.
+
+Recent LLM evaluation work has used IRT to improve benchmark measurement \citep{lalor2016evaluation,zhou2025lost}, while recent agent work has begun evaluating tool-use trajectories rather than final answers alone \citep{he2025traject,fan2026agentprocessbench}. The practical motivation is that agent evaluation is becoming a bottleneck. A calibrated way to select smaller task subsets and interpret tool-use traces would let researchers test more harness variants, run faster ablations, and reserve full benchmark runs for the most promising systems.
+
+\section{Literature Review}
+
+Recent AI evaluation work treats benchmarks as measurement instruments whose scores must be tied to explicit constructs and claims \citep{wallach2025socialmeasurement,salaudeen2025measurement,sun2025beyondbenchmarks}. This project adopts that stance for agent harnesses: the target construct is not ``general intelligence,'' but the ability of model--harness systems to solve agentic benchmark items under particular tool affordances.
+
+The closest modeling precedent is Truong et al.'s amortized model-based evaluation, which uses IRT-style structure to make benchmark prediction more reliable and efficient when only partial item responses are observed \citep{truong2025amortized}. Related IRT benchmark work similarly estimates item difficulty, discrimination, and model ability for language-model evaluations \citep{zhou2025lost}. These papers motivate the core model in this project, but they primarily study language-model benchmark responses rather than model--harness--tool interactions in agentic evaluations.
+
+Efficient evaluation work studies whether full benchmarks can be replaced by smaller, cheaper measurements. TinyBenchmarks shows that curated small subsets can often recover full-benchmark performance estimates for popular LLM benchmarks \citep{maiapolo2024tinybenchmarks}. Zhang et al., however, caution that benchmark prediction from fewer data depends strongly on model similarity and can fail at the frontier, precisely where new models differ most from historical ones \citep{zhang2025missesmark}. This tension shapes the evaluation plan here: high-discrimination item subsets will be judged by held-out prediction, ranking stability, and calibration, rather than assumed to preserve every full-suite conclusion.
+
+Agentic benchmarks make this gap sharper because final correctness is only one view of tool-using behavior. TRAJECT-Bench argues that agent evaluation should inspect the trajectory itself, not just the final answer: it evaluates whether tools are selected, parameterized, and ordered correctly, and whether dependency constraints among calls are satisfied \citep{he2025traject}. This is important for the present project because the same final pass/fail outcome can be produced by very different tool-use policies. TRAJECT-Bench supplies a vocabulary of trajectory-level diagnostics, but it does not estimate latent item discrimination or ask which tool affordances are most informative for distinguishing model--harness combinations.
+
+AgentProcessBench pushes further toward process-level measurement by providing human-labeled step annotations for realistic tool-augmented trajectories \citep{fan2026agentprocessbench}. Its ternary step labels and error-propagation rule address a core problem in agent evaluation: intermediate actions may be useful, neutral exploratory moves, or genuine errors, and those distinctions can be obscured by outcome supervision alone. HAL addresses the complementary infrastructure side by standardizing agent evaluation across models, scaffolds, and benchmarks, and by releasing large-scale logs from agent rollouts \citep{hal2026}. This project builds on HAL as a data source, but differs from HAL by focusing on the statistical measurement layer rather than benchmark execution infrastructure.
+
+The opportunity is that these threads are usually separate. Validity-centered measurement work clarifies what claims an evaluation should support; IRT and benchmark-compression work identify informative items; HAL supplies model--scaffold--benchmark outcomes and traces; TRAJECT-Bench and AgentProcessBench show that process structure matters for tool-using agents. This project combines them by fitting an IRT-style model to HAL agent benchmark outcomes and then using item metadata and trace-derived tool features to ask which items are high-value, and which tool affordances appear useful for which model families, harnesses, and task types.
+
+\section{Proposed Methods and Analysis}
+
+\paragraph{Data.}
+The primary data source is constructed from HAL benchmark outcomes, spanning 36 models, 13 agent harnesses, and 8 benchmarks. We represent each model $\times$ harness pair as an agent configuration, producing a binary response matrix with 273 observed agent configurations, 1,796 tasks, and 37,110 observed agent--task outcomes. We treat each observed entry as a response $y_{ij} \in \{0,1\}$ for agent configuration $i$ on task $j$. We also plan to featurize execution traces into tool-use covariates, such as whether a harness used file search, code execution, web browsing, or vision tools on a given item.
+
+\paragraph{Exploratory generalizability analysis.}
+Before fitting the IRT model, we run a lightweight generalizability-theory-inspired variance audit on the binary response rows. Because the HAL matrix is sparse and unbalanced, this audit is implemented as a staged regularized logistic fixed-effect analysis rather than a classical balanced random-effects G-study. Its purpose is diagnostic: to estimate how much outcome structure remains after accounting for benchmark, task nested within benchmark, base model, harness, and coarse interactions. Preliminary runs show that benchmark identity alone explains relatively little structure, while task identity explains a much larger share. Adding model--harness interaction terms improves fit beyond task, model, and harness main effects, and task--harness terms provide additional residual signal. This motivates treating aggregate benchmark labels as too coarse for the main analysis and focusing instead on which harness affordances help which models on which items or item types. We use this exploratory analysis to justify the subsequent multidimensional IRT model and residual tool-feature analysis, not as a causal estimate of tool effects.
+
+\paragraph{Model.}
+The main model will be a multidimensional two-parameter IRT model:
+\[
+  P(y_{ij}=1) = \sigma(\theta_i^\top a_j + d_j),
+\]
+where $\theta_i \in \mathbb{R}^K$ is the latent ability of agent $i$, $a_j \in \mathbb{R}^K$ is the discrimination vector for task $j$, $d_j$ is task easiness, and $\sigma$ is the logistic function. We sweep small values of $K$ and compare feature-free latent models with models that use model and scaffold metadata as cold-start features. The feature model is useful for predicting new model--harness combinations before they have many observed task outcomes, but the core contribution remains the IRT framing and item-selection analysis. The same framework treats trace-derived tool use as an interaction feature: the same tool may be helpful for one model family on code-repair items, neutral on direct question-answering items, and harmful on tasks where it distracts the agent.
+
+\paragraph{Task selection.}
+After fitting the model, we rank tasks by discrimination magnitude $\|a_j\|$ within each benchmark. We construct fixed subsets that cover 50\%, 70\%, 80\%, and 90\% of total estimated discrimination mass. These subsets operationalize the question: how much of the benchmark's agent-separating signal can be preserved with fewer tasks? If time permits, we also simulate computerized adaptive testing by updating an agent's posterior ability estimate after each observed task and selecting the next item by expected Fisher information.
+
+\paragraph{Evaluation.}
+We evaluate predictive and ranking quality using held-out agent responses. Metrics include binary cross-entropy, AUC, accuracy, Brier score, calibration error, rank correlation between full-suite and subset-based agent rankings, and stability of selected high-discrimination tasks under resampling. For the tool-use analysis, we compare whether trace-derived interaction features improve held-out prediction and whether their estimated effects are stable across benchmarks, model families, and item types. For cost-aware evaluation, we report task-count reduction at each coverage threshold and the loss in predictive or ranking fidelity relative to the full benchmark. The main success criterion is not that a subset exactly reproduces every full benchmark score, but that it preserves enough ranking and calibration signal to be useful as a screening tool for agent harness variants.
+
+\section{Timeline and Responsibilities}
+
+This is scoped as a one-person modeling project. The responsibilities are limited to IRT-based analysis, item selection, agent trace feature extraction, and writing. We will not introduce additional benchmarks, adaptive testing unless time permits, or large-scale data collection.
+
+\begin{center}
+\begin{tabular}{lp{0.67\linewidth}}
+\toprule
+Dates & Milestone \\
+\midrule
+May 9--May 11 & Finalize and submit the pre-analysis plan by the May 11 deadline. \\
+May 12--May 17 & Prepare data; conduct G-study-style residual review; fit initial MIRT models without trajectory-level features; select the most discerning benchmark items. \\
+May 18--May 21 & Process agent traces and extract tool-call features. \\
+May 22--May 24 & Re-run MIRT with additional features; study tool-use and harness--item interactions. \\
+May 25--May 27 & Perform targeted high-signal harness/tool ablations; run simplified benchmark for predictive validation; write final manuscript. \\
+May 28--June 3 & Package analysis code, clean reproducibility notes, and submit code. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The main risks are data sparsity, benchmark heterogeneity, and over-interpreting latent dimensions. Trace-derived tool-use analysis adds another risk: tool calls are not randomly assigned, so any tool-effect estimates will be associational rather than causal. A practical risk is that agent traces may be heterogeneous across harnesses, making tool-call features difficult to extract consistently or compare across systems. For messy trace outputs, we will use an LLM-assisted data-cleaning workflow to extract tool-use-related steps, and when source code is available, augment the analysis by inspecting agent harness code to identify the tool affordances exposed to each harness.
+
+\section{Expected Contributions}
+
+The expected contribution is two-fold. First, the project aims to identify a compact subset of benchmark tasks that preserves agent rankings with high confidence, giving researchers a cheaper diagnostic panel for screening model--harness configurations before running full benchmark suites. Second, it aims to estimate harness--item interaction effects, especially whether trace-derived tool-use features explain why particular harnesses help on some task types but not others. Together, these contributions support smarter and cheaper agent benchmarking: deciding which tasks to run, which harness tools to ablate or prioritize, and which item types expose meaningful differences among agent harnesses under evaluation cost constraints.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

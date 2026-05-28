@@ -1,0 +1,237 @@
+---
+title: "Bayesian G-Study Base Model Without Task-Harness"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+params:
+  rows_csv: "hal_binary_rows.csv"
+  chains: 4
+  iter: 2000
+  warmup: 1000
+  adapt_delta: 0.95
+  max_treedepth: 12
+  seed: 20260527
+---
+
+```{r setup, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+required <- c("brms", "posterior", "dplyr", "readr", "tibble", "ggplot2")
+missing <- required[!vapply(required, requireNamespace, logical(1), quietly = TRUE)]
+if (length(missing) > 0) {
+  stop(
+    "Missing required packages: ",
+    paste(missing, collapse = ", "),
+    "\nInstall them with install.packages(...) before knitting this file."
+  )
+}
+
+library(brms)
+library(posterior)
+library(dplyr)
+library(readr)
+library(tibble)
+library(ggplot2)
+
+stan_backend <- if (requireNamespace("cmdstanr", quietly = TRUE)) "cmdstanr" else "rstan"
+```
+
+## Goal
+
+This notebook fits the Bayesian G-study model \emph{without} the
+`task_harness` random effect:
+
+```r
+correct ~ 1 +
+  (1 | benchmark) +
+  (1 | task_nested) +
+  (1 | model_name) +
+  (1 | harness_name) +
+  (1 | model_harness) +
+  (1 | benchmark_harness)
+```
+
+This answers: how much outcome structure is already accounted for by benchmark,
+item difficulty, model, harness, model--harness compatibility, and
+benchmark-specific harness effects? We then inspect residuals grouped by
+`task_harness` as evidence for the remaining item-specific harness component.
+
+## Data
+
+```{r data}
+rows <- read_csv(params$rows_csv, show_col_types = FALSE) |>
+  mutate(
+    correct = as.integer(correct),
+    benchmark = factor(benchmark),
+    task_nested = factor(task_nested),
+    model_name = factor(model_name),
+    harness_name = factor(scaffold_name),
+    model_harness = interaction(model_name, harness_name, drop = TRUE, sep = " | "),
+    benchmark_harness = interaction(benchmark, harness_name, drop = TRUE, sep = " | "),
+    task_harness = interaction(task_nested, harness_name, drop = TRUE, sep = " | ")
+  )
+
+tibble(
+  n_rows = nrow(rows),
+  mean_accuracy = mean(rows$correct),
+  benchmarks = n_distinct(rows$benchmark),
+  tasks = n_distinct(rows$task_nested),
+  models = n_distinct(rows$model_name),
+  harnesses = n_distinct(rows$harness_name),
+  model_harness_pairs = n_distinct(rows$model_harness),
+  benchmark_harness_pairs = n_distinct(rows$benchmark_harness),
+  task_harness_pairs = n_distinct(rows$task_harness)
+)
+```
+
+## Base Bayesian G-Study Model
+
+```{r fit-base}
+priors <- c(
+  prior(normal(0, 2.5), class = "Intercept"),
+  prior(exponential(1), class = "sd")
+)
+
+fit_base <- brm(
+  correct ~ 1 +
+    (1 | benchmark) +
+    (1 | task_nested) +
+    (1 | model_name) +
+    (1 | harness_name) +
+    (1 | model_harness) +
+    (1 | benchmark_harness),
+  data = rows,
+  family = bernoulli(link = "logit"),
+  prior = priors,
+  chains = params$chains,
+  iter = params$iter,
+  warmup = params$warmup,
+  seed = params$seed,
+  cores = min(params$chains, parallel::detectCores()),
+  control = list(adapt_delta = params$adapt_delta, max_treedepth = params$max_treedepth),
+  backend = stan_backend,
+  file = "brms_bayesian_gstudy_base_fit",
+  file_refit = "on_change"
+)
+
+fit_base
+```
+
+## Variance Components Already Accounted For
+
+For Bernoulli-logit models, residual variance is fixed on the latent scale at
+`pi^2 / 3`. We report variance components and ICC-like variance shares.
+
+```{r variance-components}
+draws <- as_draws_df(fit_base)
+sd_cols <- grep("^sd_", names(draws), value = TRUE)
+
+variance_draws <- draws |>
+  select(all_of(sd_cols)) |>
+  mutate(across(everything(), ~ .x^2)) |>
+  rename_with(~ sub("^sd_", "var_", .x))
+
+residual_var <- pi^2 / 3
+total_var <- rowSums(variance_draws) + residual_var
+
+share_draws <- variance_draws |>
+  mutate(across(everything(), ~ .x / total_var)) |>
+  mutate(var_residual_logit = residual_var / total_var)
+
+variance_summary <- bind_rows(
+  summarise_draws(variance_draws, mean, median, ~ quantile(.x, 0.05), ~ quantile(.x, 0.95)) |>
+    as_tibble() |>
+    rename(component = variable, q05 = `5%`, q95 = `95%`) |>
+    mutate(scale = "variance"),
+  summarise_draws(share_draws, mean, median, ~ quantile(.x, 0.05), ~ quantile(.x, 0.95)) |>
+    as_tibble() |>
+    rename(component = variable, q05 = `5%`, q95 = `95%`) |>
+    mutate(scale = "variance_share")
+) |>
+  mutate(component = gsub("^var_", "", component))
+
+variance_summary
+
+write_csv(variance_summary, "brms_gstudy_base_variance_components.csv")
+```
+
+```{r variance-plot, fig.width=7, fig.height=4}
+variance_summary |>
+  filter(scale == "variance_share") |>
+  mutate(component = reorder(component, mean)) |>
+  ggplot(aes(x = component, y = mean)) +
+  geom_col(fill = "#3b6fb6") +
+  geom_errorbar(aes(ymin = q05, ymax = q95), width = 0.2) +
+  coord_flip() +
+  labs(
+    x = NULL,
+    y = "Posterior mean variance share",
+    title = "Base Bayesian G-study variance shares"
+  ) +
+  theme_minimal(base_size = 11)
+
+ggsave("brms_gstudy_base_variance_shares.png", width = 7, height = 4, dpi = 200)
+```
+
+## Residual Task-Harness Structure
+
+This section estimates how much task-harness structure remains after the base
+model has accounted for benchmark, task, model, harness, model-harness, and
+benchmark-harness terms. It is not a substitute for the full random-effect
+`task_harness` model, but it is a fast diagnostic for whether that term is
+worth fitting.
+
+```{r residual-task-harness}
+pred <- fitted(fit_base, summary = TRUE)[, "Estimate"]
+
+residual_rows <- rows |>
+  mutate(
+    predicted = pred,
+    response_residual = correct - predicted
+  )
+
+task_harness_residuals <- residual_rows |>
+  group_by(task_harness, task_nested, harness_name) |>
+  summarise(
+    n = n(),
+    accuracy = mean(correct),
+    mean_predicted = mean(predicted),
+    mean_residual = mean(response_residual),
+    abs_mean_residual = abs(mean_residual),
+    .groups = "drop"
+  ) |>
+  arrange(desc(abs_mean_residual), desc(n))
+
+residual_summary <- tibble(
+  n_task_harness_cells = nrow(task_harness_residuals),
+  unweighted_var_cell_residual_mean = var(task_harness_residuals$mean_residual),
+  weighted_var_cell_residual_mean = weighted.mean(
+    (task_harness_residuals$mean_residual - weighted.mean(task_harness_residuals$mean_residual, task_harness_residuals$n))^2,
+    task_harness_residuals$n
+  ),
+  mean_abs_cell_residual = mean(abs(task_harness_residuals$mean_residual)),
+  weighted_mean_abs_cell_residual = weighted.mean(abs(task_harness_residuals$mean_residual), task_harness_residuals$n)
+)
+
+residual_summary
+task_harness_residuals |> filter(n >= 5) |> slice_head(n = 20)
+
+write_csv(residual_summary, "brms_gstudy_base_task_harness_residual_summary.csv")
+write_csv(task_harness_residuals, "brms_gstudy_base_task_harness_residuals.csv")
+```
+
+## Interpretation
+
+The base variance-component table shows what the model has already accounted
+for before introducing item-specific harness effects. The grouped residual
+diagnostic then asks whether the remaining errors cluster by `task_harness`.
+If the residual summary is large, or if many task-harness cells show systematic
+over- or under-performance, that motivates the full model with:
+
+```r
+(1 | task_harness)
+```
+
+as the next robustness check.
+

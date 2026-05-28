@@ -1,0 +1,9 @@
+{
+  "n_rows": 45069,
+  "n_models": 20,
+  "n_scaffolds": 15,
+  "n_model_harness": 165,
+  "n_benchmarks": 10,
+  "n_tasks": 2153,
+  "mean_accuracy": 0.29157514034036697
+}

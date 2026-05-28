@@ -1,0 +1,7 @@
+tool_exposure_mechanism,failure_mode,runs
+code_agent_tool_registry,functionally_incorrect,3
+code_agent_tool_registry,runtime_exception,2
+code_agent_tool_registry,output_not_saved,1
+code_agent_tool_registry,success,1
+harness_side_augmentation,success,17
+harness_side_augmentation,functionally_incorrect,1

@@ -1,0 +1,37 @@
+{
+  "benchmark": "taubench_airline",
+  "task_count": 50,
+  "semantic_units": 3,
+  "rows": 250,
+  "mean_predicted_accuracy": 0.43215036392211914,
+  "observed_accuracy": 0.416,
+  "figure": "irt_data/paper/final_report/figures/split_v1_k1_features_cold_start_heatmap_taubench_airline.png",
+  "prediction_csv": "irt_data/irt/experiments/split_v1_k1_features_cold_start_predictions_taubench_airline.csv",
+  "summary_csv": "irt_data/irt/experiments/split_v1_k1_features_cold_start_summary_taubench_airline.csv",
+  "unit_summary": [
+    {
+      "semantic_unit": "Gemini 2.0 Flash\nHAL Generalist Agent",
+      "model_name": "Gemini 2.0 Flash",
+      "scaffold_name": "HAL Generalist Agent",
+      "predicted_accuracy": 0.4271734654903412,
+      "observed_accuracy": 0.22,
+      "rows": 50
+    },
+    {
+      "semantic_unit": "Claude 3.7 Sonnet\nTAU-bench FewShot",
+      "model_name": "Claude 3.7 Sonnet",
+      "scaffold_name": "TAU-bench FewShot",
+      "predicted_accuracy": 0.4356120824813843,
+      "observed_accuracy": 0.47,
+      "rows": 100
+    },
+    {
+      "semantic_unit": "o4-mini\nTAU-bench ToolCalling",
+      "model_name": "o4-mini",
+      "scaffold_name": "TAU-bench ToolCalling",
+      "predicted_accuracy": 0.43117713928222656,
+      "observed_accuracy": 0.46,
+      "rows": 100
+    }
+  ]
+}

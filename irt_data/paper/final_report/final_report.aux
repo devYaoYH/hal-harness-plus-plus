@@ -1,0 +1,92 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{hal2026}
+\citation{wallach2025socialmeasurement,salaudeen2025measurement,sun2025beyondbenchmarks}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\citation{rasch1960probabilistic,baker2001basics}
+\citation{bradley1952rank,luce1959individual}
+\citation{lalor2016evaluation,zhou2025lost}
+\citation{truong2025amortized}
+\citation{maiapolo2024tinybenchmarks}
+\citation{zhang2025missesmark}
+\citation{he2025traject}
+\citation{fan2026agentprocessbench}
+\citation{hal2026}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Dataset coverage after regenerating the master binary outcome CSV and joining normalized metadata. The full matrix contains 45{,}069 observed outcomes across 10 benchmarks.}}{2}{table.1}\protected@file@percent }
+\newlabel{tab:dataset-coverage}{{1}{2}{Dataset coverage after regenerating the master binary outcome CSV and joining normalized metadata. The full matrix contains 45{,}069 observed outcomes across 10 benchmarks}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Background and Related Work}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Methods}{2}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Data.}{2}{section*.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Staged L2-regularized logistic audit. Pseudo-$R^2$ is McFadden-style deviance reduction relative to an intercept-only model. ``Task'' denotes task identity nested within benchmark.}}{3}{table.2}\protected@file@percent }
+\newlabel{tab:gstudy}{{2}{3}{Staged L2-regularized logistic audit. Pseudo-$R^2$ is McFadden-style deviance reduction relative to an intercept-only model. ``Task'' denotes task identity nested within benchmark}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Pseudo G-Study: Measurement Design Audit}{3}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Multidimensional IRT Model}{3}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Harness Feature and Residual Model}{3}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Task Selection and Adaptive Evaluation}{4}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Evaluation Protocol}{4}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Results and Discussion}{4}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Exploratory Measurement Audit}{4}{subsection.4.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Holdout performance on the split-v1 semantic holdout. The leakage unit is benchmark $\times $ normalized model $\times $ normalized harness. Lower BCE, Brier, and calibration error are better; higher AUC and accuracy are better.}}{5}{table.3}\protected@file@percent }
+\newlabel{tab:mirt-sweep}{{3}{5}{Holdout performance on the split-v1 semantic holdout. The leakage unit is benchmark $\times $ normalized model $\times $ normalized harness. Lower BCE, Brier, and calibration error are better; higher AUC and accuracy are better}{table.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}MIRT Model Comparison}{5}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Benchmark Downscaling}{5}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Which Tool Interfaces Help?}{5}{subsection.4.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Tradeoff between holdout AUC and mean task-count reduction at the 80\% discrimination-coverage threshold. Feature-informed $K=1$ and $K=2$ models form the useful frontier: $K=2$ maximizes AUC, while $K=1$ gives much larger task reduction with a small AUC decrease.}}{6}{figure.1}\protected@file@percent }
+\newlabel{fig:auc-reduction-tradeoff}{{1}{6}{Tradeoff between holdout AUC and mean task-count reduction at the 80\% discrimination-coverage threshold. Feature-informed $K=1$ and $K=2$ models form the useful frontier: $K=2$ maximizes AUC, while $K=1$ gives much larger task reduction with a small AUC decrease}{figure.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Fraction of tasks retained to preserve fixed fractions of total estimated discrimination mass under the compression-oriented $K=1$ feature-informed MIRT model. Bar labels give the retained task count.}}{6}{figure.2}\protected@file@percent }
+\newlabel{fig:cost-reduction}{{2}{6}{Fraction of tasks retained to preserve fixed fractions of total estimated discrimination mass under the compression-oriented $K=1$ feature-informed MIRT model. Bar labels give the retained task count}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Matched same-model, same-benchmark pass-rate contrasts. ``Task-specific'' means the benchmark-specialized interface, which may be a repo-repair workflow, native domain-tool schema, or execution/debug scaffold. ``HAL registry'' is HAL Generalist's code-agent tool registry. These observational contrasts motivate targeted ablations; they do not by themselves identify causal effects of individual tools.}}{7}{table.4}\protected@file@percent }
+\newlabel{tab:harness-contrasts}{{4}{7}{Matched same-model, same-benchmark pass-rate contrasts. ``Task-specific'' means the benchmark-specialized interface, which may be a repo-repair workflow, native domain-tool schema, or execution/debug scaffold. ``HAL registry'' is HAL Generalist's code-agent tool registry. These observational contrasts motivate targeted ablations; they do not by themselves identify causal effects of individual tools}{table.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Model--harness heatmap.}{7}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Targeted ablation hypotheses.}{7}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Limitations.}{7}{section*.4}\protected@file@percent }
+\bibstyle{plainnat}
+\bibdata{references}
+\bibcite{baker2001basics}{{1}{2001}{{Baker}}{{}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Demo heatmap for SWE-bench Verified Mini accuracy by normalized model and harness. Green cells are observed pass rates; blue italic cells are IRT cold-start predictions for unobserved model--harness combinations.}}{8}{figure.3}\protected@file@percent }
+\newlabel{fig:cold-start-heatmap}{{3}{8}{Demo heatmap for SWE-bench Verified Mini accuracy by normalized model and harness. Green cells are observed pass rates; blue italic cells are IRT cold-start predictions for unobserved model--harness combinations}{figure.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{8}{section.5}\protected@file@percent }
+\bibcite{bradley1952rank}{{2}{1952}{{Bradley and Terry}}{{}}}
+\bibcite{fan2026agentprocessbench}{{3}{2026}{{Fan et~al.}}{{Fan, Ye, Huo, et~al.}}}
+\bibcite{he2025traject}{{4}{2025}{{He et~al.}}{{He, Dai, He, et~al.}}}
+\bibcite{hal2026}{{5}{2026}{{Kapoor et~al.}}{{Kapoor, Stroebl, Kirgis, Nadgir, Siegel, Wei, Xue, Chen, Chen, Utpala, Ndzomga, Oruganty, Luskin, Liu, Yu, Arora, Hahm, Trivedi, Sun, Lee, Jin, Mai, Zhou, Zhu, Bommasani, Kang, Song, Henderson, Su, Liang, and Narayanan}}}
+\bibcite{lalor2016evaluation}{{6}{2016}{{Lalor et~al.}}{{Lalor, Wu, and Yu}}}
+\bibcite{luce1959individual}{{7}{1959}{{Luce}}{{}}}
+\bibcite{maiapolo2024tinybenchmarks}{{8}{2024}{{Maia~Polo et~al.}}{{Maia~Polo, Weber, Choshen, Sun, Xu, and Yurochkin}}}
+\bibcite{rasch1960probabilistic}{{9}{1960}{{Rasch}}{{}}}
+\bibcite{salaudeen2025measurement}{{10}{2025}{{Salaudeen et~al.}}{{Salaudeen, Reuel, Ahmed, Bedi, Robertson, Sundar, Domingue, Wang, and Koyejo}}}
+\bibcite{sun2025beyondbenchmarks}{{11}{2025}{{Sun et~al.}}{{Sun, Gibbons, Hern{\'a}ndez-Orallo, Wang, Jiang, Stillwell, Luo, and Xie}}}
+\bibcite{truong2025amortized}{{12}{2025}{{Truong et~al.}}{{Truong, Tu, Liang, Li, and Koyejo}}}
+\bibcite{wallach2025socialmeasurement}{{13}{2025}{{Wallach et~al.}}{{Wallach, Desai, Cooper, Wang, Atalla, Barocas, Blodgett, Chouldechova, Corvi, Dow, Garcia-Gathright, Olteanu, Pangakis, Reed, Sheng, Vann, Vaughan, Vogel, Washington, and Jacobs}}}
+\bibcite{zhang2025missesmark}{{14}{2025}{{Zhang et~al.}}{{Zhang, Dorner, and Hardt}}}
+\bibcite{zhou2025lost}{{15}{2026}{{Zhou et~al.}}{{Zhou, Huang, Han, et~al.}}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Pseudo G-Study Methodology}{10}{appendix.A}\protected@file@percent }
+\newlabel{app:pseudo-gstudy}{{A}{10}{Pseudo G-Study Methodology}{appendix.A}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Dataset Inventory}{10}{appendix.B}\protected@file@percent }
+\newlabel{app:dataset-inventory}{{B}{10}{Dataset Inventory}{appendix.B}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}Benchmarks}{10}{subsection.B.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Semantic Model and Model-Configuration Groups}{10}{subsection.B.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Benchmarks represented in the regenerated response matrix.}}{11}{table.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Reasoning-Effort Normalization}{12}{subsection.B.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Examples of reasoning-effort normalization. Reasoning settings are treated as model-call configuration, not as different HAL Generalist harnesses.}}{12}{table.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.4}Semantic Harness and Scaffold Groups}{12}{subsection.B.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {C}Tool-Exposure Taxonomy}{13}{appendix.C}\protected@file@percent }
+\newlabel{app:tool-exposure-taxonomy}{{C}{13}{Tool-Exposure Taxonomy}{appendix.C}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Mechanism Index}{13}{subsection.C.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}Exposed-Tool Inventory}{13}{subsection.C.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Canonical Tool-Passage Mechanisms}{14}{subsection.C.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.4}Normalized Harness Labels}{15}{subsection.C.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Tool and Affordance Metadata Construction}{16}{subsection.C.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Harness normalization.}{16}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Tool extraction.}{16}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Harness-side stages.}{16}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Affordance flags.}{16}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Interpretation.}{17}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.6}Interpretation for Trace Features}{17}{subsection.C.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {D}SWE-bench Trace Audit: Registry vs. Repo Workflow}{17}{appendix.D}\protected@file@percent }
+\newlabel{app:swebench-trace-audit}{{D}{17}{SWE-bench Trace Audit: Registry vs. Repo Workflow}{appendix.D}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Matched GPT-5 examples where HAL Generalist fails and SWE-Agent succeeds on the same SWE-bench Verified Mini task. Both harnesses can execute and edit code; the visible difference is the model-facing workflow: a broad registry of general tools versus a repo-specific repair protocol.}}{18}{table.7}\protected@file@percent }
+\newlabel{tab:swebench-trace-examples}{{7}{18}{Matched GPT-5 examples where HAL Generalist fails and SWE-Agent succeeds on the same SWE-bench Verified Mini task. Both harnesses can execute and edit code; the visible difference is the model-facing workflow: a broad registry of general tools versus a repo-specific repair protocol}{table.7}{}}
+\gdef \@abspage@last{18}

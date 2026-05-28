@@ -1,0 +1,60 @@
+raw_model,normalized_model,provider,model_family,normalization_note
+anthropic/claude-3-7-sonnet-20250219,Claude 3.7 Sonnet,Anthropic,Claude Sonnet,provider prefix and date suffix removed
+anthropic/claude-3.7-sonnet,Claude 3.7 Sonnet,Anthropic,Claude Sonnet,provider prefix removed
+claude-3-7-sonnet-20250219,Claude 3.7 Sonnet,Anthropic,Claude Sonnet,date suffix removed
+openrouter/anthropic/claude-3.7-sonnet,Claude 3.7 Sonnet,Anthropic via OpenRouter,Claude Sonnet,routing provider prefix removed
+openrouter/anthropic/claude-3.7-sonnet:thinking,Claude 3.7 Sonnet,Anthropic via OpenRouter,Claude Sonnet,routing provider prefix removed; thinking mode retained as configuration note
+anthropic/claude-haiku-4-5,Claude Haiku 4.5,Anthropic,Claude Haiku,provider prefix removed
+claude-haiku-4-5,Claude Haiku 4.5,Anthropic,Claude Haiku,canonical alias
+claude-haiku-4-5-20251001,Claude Haiku 4.5,Anthropic,Claude Haiku,date suffix removed
+openrouter/anthropic/claude-haiku-4.5,Claude Haiku 4.5,Anthropic via OpenRouter,Claude Haiku,routing provider prefix removed
+claude-opus-4-20250514,Claude Opus 4,Anthropic,Claude Opus,date suffix removed
+openrouter/anthropic/claude-opus-4,Claude Opus 4,Anthropic via OpenRouter,Claude Opus,routing provider prefix removed
+anthropic/claude-opus-4.1,Claude Opus 4.1,Anthropic,Claude Opus,provider prefix removed
+claude-opus-4-1,Claude Opus 4.1,Anthropic,Claude Opus,punctuation-normalized alias
+claude-opus-4-1-20250805,Claude Opus 4.1,Anthropic,Claude Opus,punctuation-normalized alias and date suffix removed
+openrouter/anthropic/claude-opus-4.1,Claude Opus 4.1,Anthropic via OpenRouter,Claude Opus,routing provider prefix removed
+anthropic/claude-opus-4-5-20251101,Claude Opus 4.5,Anthropic,Claude Opus,provider prefix and date suffix removed
+claude-opus-4-5,Claude Opus 4.5,Anthropic,Claude Opus,canonical alias
+claude-opus-4-5-20251101,Claude Opus 4.5,Anthropic,Claude Opus,date suffix removed
+claude-sonnet-4-20250514,Claude Sonnet 4,Anthropic,Claude Sonnet,date suffix removed
+anthropic/claude-sonnet-4-5,Claude Sonnet 4.5,Anthropic,Claude Sonnet,provider prefix removed
+anthropic/claude-sonnet-4-5-20250929,Claude Sonnet 4.5,Anthropic,Claude Sonnet,provider prefix and date suffix removed
+claude-sonnet-4-5,Claude Sonnet 4.5,Anthropic,Claude Sonnet,canonical alias
+claude-sonnet-4-5-20250929,Claude Sonnet 4.5,Anthropic,Claude Sonnet,date suffix removed
+openrouter/anthropic/claude-sonnet-4.5,Claude Sonnet 4.5,Anthropic via OpenRouter,Claude Sonnet,routing provider prefix removed
+deepseek-ai/DeepSeek-R1,DeepSeek R1,DeepSeek,DeepSeek R1,provider namespace retained as raw alias
+deepseek/deepseek-r1,DeepSeek R1,DeepSeek,DeepSeek R1,provider prefix removed
+openrouter/deepseek/deepseek-r1,DeepSeek R1,DeepSeek via OpenRouter,DeepSeek R1,routing provider prefix removed
+openrouter/deepseek/deepseek-r1-0528,DeepSeek R1,DeepSeek via OpenRouter,DeepSeek R1,routing provider prefix and date suffix removed
+together_ai/deepseek-ai/DeepSeek-R1,DeepSeek R1,DeepSeek via Together AI,DeepSeek R1,routing provider prefix removed
+deepseek-ai/DeepSeek-V3,DeepSeek V3 / Chat,DeepSeek,DeepSeek V3,provider namespace retained as raw alias
+deepseek/deepseek-chat,DeepSeek V3 / Chat,DeepSeek,DeepSeek V3,chat alias normalized to V3 family
+openrouter/deepseek/deepseek-chat-v3-0324,DeepSeek V3 / Chat,DeepSeek via OpenRouter,DeepSeek V3,routing provider prefix and date suffix removed
+openrouter/deepseek/deepseek-chat-v3.1,DeepSeek V3 / Chat,DeepSeek via OpenRouter,DeepSeek V3,routing provider prefix removed
+together_ai/deepseek-ai/DeepSeek-V3,DeepSeek V3 / Chat,DeepSeek via Together AI,DeepSeek V3,routing provider prefix removed
+gemini-2.0-flash,Gemini 2.0 Flash,Google,Gemini Flash,canonical alias
+gemini/gemini-2.0-flash,Gemini 2.0 Flash,Google,Gemini Flash,provider prefix removed
+google/gemini-2.0-flash-001,Gemini 2.0 Flash,Google,Gemini Flash,provider prefix and revision suffix removed
+gemini-2.5-pro-preview-03-25,Gemini 2.5 Pro Preview,Google,Gemini Pro,preview date suffix retained in raw alias
+gemini/gemini-2.5-pro-preview-03-25,Gemini 2.5 Pro Preview,Google,Gemini Pro,provider prefix removed
+google/gemini-3-pro-preview,Gemini 3 Pro Preview,Google,Gemini Pro,provider prefix removed
+gpt-4.1,GPT-4.1,OpenAI,GPT,canonical alias
+gpt-4.1-2025-04-14,GPT-4.1,OpenAI,GPT,date suffix removed
+openai/gpt-4.1-2025-04-14,GPT-4.1,OpenAI,GPT,provider prefix and date suffix removed
+gpt-4o,GPT-4o,OpenAI,GPT,canonical alias
+gpt-4o-2024-11-20,GPT-4o,OpenAI,GPT,date suffix removed
+gpt-5,GPT-5,OpenAI,GPT,canonical alias
+gpt-5-2025-08-07,GPT-5,OpenAI,GPT,date suffix removed
+openai/gpt-5,GPT-5,OpenAI,GPT,provider prefix removed
+openai/gpt-5-2025-08-07,GPT-5,OpenAI,GPT,provider prefix and date suffix removed
+openrouter/openai/gpt-oss-120b,GPT-OSS 120B,OpenAI via OpenRouter,GPT-OSS,routing provider prefix removed
+o1,o1,OpenAI,o-series,canonical alias
+o3-2025-04-03,o3,OpenAI,o-series,date suffix removed
+o3-2025-04-16,o3,OpenAI,o-series,date suffix removed
+openai/o3-2025-04-16,o3,OpenAI,o-series,provider prefix and date suffix removed
+o3-mini,o3-mini,OpenAI,o-series,canonical alias
+o3-mini-2025-01-31,o3-mini,OpenAI,o-series,date suffix removed
+openai/o3-mini-2025-01-31,o3-mini,OpenAI,o-series,provider prefix and date suffix removed
+o4-mini-2025-04-16,o4-mini,OpenAI,o-series,date suffix removed
+openai/o4-mini-2025-04-16,o4-mini,OpenAI,o-series,provider prefix and date suffix removed

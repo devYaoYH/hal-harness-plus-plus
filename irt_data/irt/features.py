@@ -9,9 +9,13 @@ for continuous features).
 
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
+
+IRT_DATA_DIR = Path(__file__).resolve().parents[1]
 
 
 # ── Model taxonomy ──────────────────────────────────────────────────────────
@@ -442,6 +446,14 @@ BENCHMARK_REGISTRY: dict[str, dict] = {
         "domain": "software_engineering", "task_type": "code_generation",
         "requires_code": True, "requires_web": False, "requires_reasoning": True,
     },
+    "taubench_airline": {
+        "domain": "customer_service", "task_type": "domain_tool_use",
+        "requires_code": False, "requires_web": False, "requires_reasoning": True,
+    },
+    "usaco": {
+        "domain": "software_engineering", "task_type": "competitive_programming",
+        "requires_code": True, "requires_web": False, "requires_reasoning": True,
+    },
 }
 
 
@@ -500,6 +512,13 @@ def extract_benchmark_features(benchmark: str) -> dict:
     }
 
 
+def _load_csv_if_exists(filename: str) -> pd.DataFrame | None:
+    path = IRT_DATA_DIR / filename
+    if not path.exists():
+        return None
+    return pd.read_csv(path)
+
+
 @dataclass
 class FeatureSchema:
     """Describes the full feature set. Used by the model to build input layers."""
@@ -527,9 +546,113 @@ def build_feature_tables(response_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Da
         .first()
         .reset_index()
     )
-    model_feats = pd.DataFrame([extract_model_features(m) for m in agent_meta["model"]])
-    scaffold_feats = pd.DataFrame([extract_scaffold_features(s) for s in agent_meta["scaffold"]])
-    agent_features = pd.concat([agent_meta[["agent_id"]], model_feats, scaffold_feats], axis=1)
+
+    model_metadata = _load_csv_if_exists("model_metadata.csv")
+    harness_metadata = _load_csv_if_exists("harness_metadata.csv")
+    harness_affordances = _load_csv_if_exists("harness_affordances.csv")
+
+    if model_metadata is not None and {"raw_model", "normalized_model"}.issubset(model_metadata.columns):
+        model_feats = (
+            agent_meta[["model"]]
+            .merge(model_metadata, left_on="model", right_on="raw_model", how="left")
+            .rename(columns={
+                "normalized_model": "model_name",
+                "provider": "model_provider",
+                "model_family": "model_family",
+            })
+        )
+        # Keep the old numeric feature names for model compatibility. They are
+        # optional and remain NaN when the normalized metadata does not provide
+        # release/size estimates.
+        for col in [
+            "model_release_ym", "model_size_tier", "model_reasoning",
+            "model_param_count_full_b", "model_param_count_active_b", "model_moe",
+        ]:
+            if col not in model_feats:
+                model_feats[col] = np.nan
+        model_feats = model_feats[[
+            "model_name", "model_provider", "model_family", "model_release_ym",
+            "model_size_tier", "model_reasoning", "model_param_count_full_b",
+            "model_param_count_active_b", "model_moe",
+        ]]
+        # Fall back row-wise for any labels absent from the metadata file.
+        missing = model_feats["model_name"].isna()
+        if missing.any():
+            fallback = pd.DataFrame([extract_model_features(m) for m in agent_meta.loc[missing, "model"]])
+            model_feats.loc[missing, fallback.columns] = fallback.values
+    else:
+        model_feats = pd.DataFrame([extract_model_features(m) for m in agent_meta["model"]])
+
+    if harness_metadata is not None and {"raw_scaffold", "normalized_harness"}.issubset(harness_metadata.columns):
+        harness_feats = (
+            agent_meta[["scaffold"]]
+            .merge(harness_metadata, left_on="scaffold", right_on="raw_scaffold", how="left")
+            .rename(columns={
+                "normalized_harness": "scaffold_name",
+                "tool_exposure_mechanism": "scaffold_tool_exposure_mechanism",
+                "tool_exposure_strength": "scaffold_tool_exposure_strength",
+            })
+        )
+        if harness_affordances is not None and "normalized_harness" in harness_affordances.columns:
+            # Prefer canonical normalized-harness affordances over per-raw-label
+            # copies in harness_metadata.
+            harness_feats = harness_feats.drop(
+                columns=[c for c in harness_feats.columns if c.startswith("affordance_")],
+                errors="ignore",
+            )
+            harness_feats = harness_feats.merge(
+                harness_affordances,
+                left_on="scaffold_name",
+                right_on="normalized_harness",
+                how="left",
+            )
+            harness_feats = harness_feats.drop(columns=["normalized_harness"], errors="ignore")
+        harness_feats["scaffold_type"] = harness_feats.get(
+            "scaffold_tool_exposure_mechanism", np.nan
+        )
+        harness_feats["scaffold_context_strategy"] = np.nan
+        harness_feats["scaffold_max_steps"] = np.nan
+        for col in [
+            "scaffold_name", "scaffold_type", "scaffold_tool_exposure_mechanism",
+            "scaffold_tool_exposure_strength", "scaffold_context_strategy",
+            "scaffold_max_steps",
+        ]:
+            if col not in harness_feats:
+                harness_feats[col] = np.nan
+        # Fall back row-wise for any labels absent from the metadata file.
+        missing = harness_feats["scaffold_name"].isna()
+        if missing.any():
+            fallback = pd.DataFrame([extract_scaffold_features(s) for s in agent_meta.loc[missing, "scaffold"]])
+            for col in fallback.columns:
+                if col not in harness_feats:
+                    harness_feats[col] = np.nan
+                harness_feats.loc[missing, col] = fallback[col].values
+    else:
+        harness_feats = pd.DataFrame([extract_scaffold_features(s) for s in agent_meta["scaffold"]])
+
+    # Backfill legacy scaffold_* affordance columns from the new taxonomy where
+    # the mapping is direct enough to preserve old scripts.
+    legacy_from_new = {
+        "scaffold_python_exec": "affordance_code_execution",
+        "scaffold_file_edit": "affordance_file_edit",
+        "scaffold_file_search": "affordance_file_read",
+        "scaffold_web_search": "affordance_web_search",
+        "scaffold_page_browse": "affordance_web_page_visit",
+        "scaffold_full_browser": "affordance_browser_control",
+        "scaffold_browser_vision": "affordance_browser_control",
+        "scaffold_vision_query": "affordance_vision",
+        "scaffold_filesystem": "affordance_file_read",
+        "scaffold_http_requests": "affordance_benchmark_api_tools",
+        "scaffold_self_critique": "affordance_self_debug_feedback",
+    }
+    for legacy_col, source_col in legacy_from_new.items():
+        if legacy_col not in harness_feats and source_col in harness_feats:
+            harness_feats[legacy_col] = harness_feats[source_col]
+    for legacy_col in [f"scaffold_{f}" for f in SCAFFOLD_TOOL_FIELDS]:
+        if legacy_col not in harness_feats:
+            harness_feats[legacy_col] = np.nan
+
+    agent_features = pd.concat([agent_meta[["agent_id"]], model_feats, harness_feats], axis=1)
     agent_features = agent_features.set_index("agent_id")
 
     task_meta = (
@@ -542,6 +665,9 @@ def build_feature_tables(response_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Da
     task_features = task_features.set_index(["benchmark", "task_id"])
 
     scaffold_bool_fields = [f"scaffold_{f}" for f in SCAFFOLD_TOOL_FIELDS]
+    affordance_bool_fields = sorted(
+        c for c in agent_features.columns if c.startswith("affordance_")
+    )
 
     schema = FeatureSchema(
         # model_name and scaffold_name kept as metadata in the DataFrame but excluded
@@ -549,12 +675,13 @@ def build_feature_tables(response_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Da
         categorical_agent=[
             "model_provider", "model_family", "model_size_tier",
             "scaffold_type", "scaffold_context_strategy",
+            "scaffold_tool_exposure_mechanism",
         ],
         continuous_agent=[
             "model_release_ym", "model_param_count_full_b", "model_param_count_active_b",
-            "scaffold_max_steps",
+            "scaffold_max_steps", "scaffold_tool_exposure_strength",
         ],
-        boolean_agent=["model_reasoning", "model_moe"] + scaffold_bool_fields,
+        boolean_agent=["model_reasoning", "model_moe"] + scaffold_bool_fields + affordance_bool_fields,
         categorical_task=["bench_domain", "bench_task_type"],
         boolean_task=["bench_requires_code", "bench_requires_web", "bench_requires_reasoning"],
     )

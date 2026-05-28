@@ -1,0 +1,16 @@
+normalized_harness,tool_exposure_mechanism,tool_count,outcomes,pass_rate,benchmarks,models
+SciCode Zero Shot Agent,no_explicit_tools,0,650,0.04,1,7
+ColBench Example Agent,harness_side_augmentation,2,10000,0.3497,1,7
+SAB Self-Debug,harness_side_augmentation,3,1836,0.24891067538126363,1,12
+USACO Episodic + Semantic,harness_side_augmentation,4,4298,0.0,1,10
+SciCode Tool Calling Agent,code_agent_tool_registry,4,1105,0.03800904977375565,1,11
+AssistantBench Browser Agent,framework_mediated_browser_control,6,627,0.028708133971291867,1,10
+Browser-Use,framework_mediated_browser_control,6,5700,0.34280701754385967,1,12
+Claude Code,text_action_protocol,6,180,0.5722222222222222,1,4
+SeeAct,framework_mediated_browser_control,7,5100,0.34568627450980394,1,10
+CORE-Agent,code_agent_tool_registry,9,1305,0.28045977011494255,1,17
+SWE-Agent,text_action_protocol,9,1048,0.5200381679389313,1,14
+HF Open Deep Research,code_agent_tool_registry,10,2639,0.36642667677150437,1,12
+HAL Generalist Agent,code_agent_tool_registry,13,8993,0.2945624374513511,8,18
+TAU-bench ToolCalling,native_tool_schema,14,594,0.4511784511784512,1,9
+TAU-bench FewShot,native_tool_schema,14,994,0.48893360160965793,1,12

@@ -44,7 +44,7 @@ MODEL         = os.getenv("MODEL",         "anthropic/claude-3-7-sonnet-20250219
 BENCHMARK     = os.getenv("BENCHMARK",     "swebench_verified_mini")
 THRESHOLD     = os.getenv("THRESHOLD",     "80pct")
 JOB_ID        = os.getenv("JOB_ID",        f"ablation-{DISABLE_TOOLS.replace(',','-')}-{BENCHMARK}-001")
-MAX_WORKERS   = int(os.getenv("MAX_WORKERS", "10"))
+MAX_WORKERS   = int(os.getenv("MAX_WORKERS", "2"))
 
 REPO_ROOT    = Path(__file__).resolve().parent.parent
 SUBSETS      = REPO_ROOT / "irt_data" / "adaptive_task_subsets.json"
@@ -101,40 +101,24 @@ def run_one(task_id: str) -> dict:
         model=MODEL,
         job_id=JOB_ID,
         benchmark_extra=_AGENT["benchmark_extra"],
+        disable_tools=DISABLE_TOOLS,
     )
-    # disable_tools is forwarded as an -A kwarg via the hal.cli call inside
-    # run_eval_on_daytona → _build_sandbox_command. We patch spec dynamically
-    # by monkey-patching the command builder for this run.
-    _orig_build = None
     try:
-        import daytona_runner as dr
-        _orig_build = dr._build_sandbox_command
-
-        def _patched_build(s, run_id):
-            cmd = _orig_build(s, run_id)
-            # Insert disable_tools arg before the trailing semicolon
-            return cmd.replace(
-                f"  -A 'model_name={s.model}' ;",
-                f"  -A 'model_name={s.model}'"
-                f"  -A 'disable_tools={DISABLE_TOOLS}' ;",
-            )
-        dr._build_sandbox_command = _patched_build
-
         result = run_eval_on_daytona(spec)
-        return {"task_id": task_id, "correct": int(bool(result.get("score", 0))), "error": None}
+        reporter = result.get("_reporter", {})
+        correct = reporter.get("correct")
+        return {"task_id": task_id, "correct": correct, "error": None}
     except Exception as exc:
         print(f"[error] {task_id}: {exc}")
-        return {"task_id": task_id, "correct": 0, "error": str(exc)}
-    finally:
-        if _orig_build is not None:
-            import daytona_runner as dr
-            dr._build_sandbox_command = _orig_build
+        return {"task_id": task_id, "correct": None, "error": str(exc)}
 
 
 def compare(actuals: list[dict], baseline: dict, predicted_delta: float) -> None:
-    n = len(actuals)
-    actual_acc = sum(r["correct"] for r in actuals) / n if n else float("nan")
+    completed = [r for r in actuals if r["correct"] is not None]
+    n = len(completed)
+    actual_acc = sum(r["correct"] for r in completed) / n if n else float("nan")
     errors = sum(1 for r in actuals if r["error"])
+    n_total = len(actuals)
 
     print()
     print("=" * 60)
@@ -156,7 +140,7 @@ def compare(actuals: list[dict], baseline: dict, predicted_delta: float) -> None
         print(f"Ablated accuracy (tool OFF) : {actual_acc:.3f}  (n={n})")
         print("No baseline found in response matrix for this model.")
     if errors:
-        print(f"[warn] {errors}/{n} tasks errored")
+        print(f"[warn] {errors}/{n_total} tasks errored ({n} completed)")
     print("=" * 60)
 
 

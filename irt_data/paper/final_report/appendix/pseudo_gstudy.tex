@@ -1,0 +1,32 @@
+\section{Pseudo G-Study Methodology}
+\label{app:pseudo-gstudy}
+
+Classical generalizability theory decomposes measurement variation across facets such as persons, items, raters, and occasions. In HAL, the analogous facets are base model, harness, benchmark, and task. A balanced random-effects G-study is not appropriate because the observed response matrix is sparse and highly unbalanced: not every model--harness pair is evaluated on every task.
+
+We initially considered Bernoulli mixed-effects models of the form
+\[
+\begin{aligned}
+y \sim 1
+    &+ (1|\text{task}) + (1|\text{model}) + (1|\text{harness})\\
+    &+ (1|\text{model}:\text{harness})
+     + (1|\text{benchmark}:\text{harness})
+     + (1|\text{task}:\text{harness}).
+\end{aligned}
+\]
+This is the closest analogue to a G-study for binary outcomes, but the full Bayesian version was computationally unstable for the current matrix, especially with high-cardinality task--harness effects. We therefore use a staged L2-regularized logistic fixed-effect audit in the main analysis.
+
+For each staged model, we compute Bernoulli log loss,
+\[
+\ell = -\frac{1}{N}\sum_i \left[y_i\log p_i + (1-y_i)\log(1-p_i)\right],
+\]
+and deviance,
+\[
+D = 2N\ell.
+\]
+We report McFadden-style pseudo-$R^2$,
+\[
+R^2_{\mathrm{pseudo}} = 1 - \frac{D_{\mathrm{model}}}{D_{\mathrm{null}}},
+\]
+where the null model is intercept-only. This quantity should be interpreted as relative reduction in Bernoulli deviance, not as ordinary least-squares variance explained. Because all staged models are fit to the same binary rows and likelihood family, the comparisons indicate which facets materially reduce predictive uncertainty.
+
+We do not use a Gaussian linear mixed model as the main audit because the outcome is binary. A linear probability mixed model can produce probabilities outside $[0,1]$, has heteroskedastic residuals by construction, and estimates variance components on a scale that does not match the Bernoulli likelihood used by the IRT model. The staged logistic audit is therefore a more regular and reproducible diagnostic for this response matrix.

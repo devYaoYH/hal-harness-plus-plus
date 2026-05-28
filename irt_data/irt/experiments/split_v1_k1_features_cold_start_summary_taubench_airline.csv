@@ -1,0 +1,7 @@
+semantic_unit,model_name,scaffold_name,predicted_accuracy,observed_accuracy,rows
+"Gemini 2.0 Flash
+HAL Generalist Agent",Gemini 2.0 Flash,HAL Generalist Agent,0.42717347,0.22,50
+"Claude 3.7 Sonnet
+TAU-bench FewShot",Claude 3.7 Sonnet,TAU-bench FewShot,0.43561208,0.47,100
+"o4-mini
+TAU-bench ToolCalling",o4-mini,TAU-bench ToolCalling,0.43117714,0.46,100

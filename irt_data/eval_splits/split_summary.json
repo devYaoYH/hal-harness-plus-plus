@@ -1,0 +1,19 @@
+{
+  "split_name": "benchmark_normalized_model_harness_holdout_v1",
+  "source_response_matrix": "irt_data/response_matrix.csv",
+  "source_model_metadata": "irt_data/model_metadata.csv",
+  "source_harness_metadata": "irt_data/harness_metadata.csv",
+  "leakage_unit": "benchmark x normalized_model x normalized_harness",
+  "selection_rule": "Within each benchmark x normalized_harness cell, hold out the normalized model whose pass rate is closest to that cell's median pass rate. Ties prefer larger outcome coverage, then stable labels.",
+  "source_rows": 45069,
+  "train_rows": 39461,
+  "holdout_rows": 5608,
+  "holdout_row_fraction": 0.124431,
+  "source_selection_units": 219,
+  "train_selection_units": 197,
+  "holdout_selection_units": 22,
+  "source_agent_configs": 352,
+  "train_agent_configs": 316,
+  "holdout_agent_configs": 36,
+  "no_selection_unit_overlap_between_train_and_holdout": true
+}

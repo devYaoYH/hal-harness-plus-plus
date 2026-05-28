@@ -1,0 +1,42 @@
+{
+  "benchmark": "taubench_airline",
+  "task_id": "20",
+  "n_runs": 47,
+  "n_success": 23,
+  "n_failure": 24,
+  "instruction": "Your user id is james_taylor_7043. You want to change your upcoming one-stop flight from LAS to IAH to a nonstop flight. Your reservation ID is 1N99U6. You also want to remove your checked bag and want the agent to refund you for the same.",
+  "expected_actions": [
+    {
+      "name": "get_reservation_details",
+      "kwargs": {
+        "reservation_id": "1N99U6"
+      }
+    },
+    {
+      "name": "search_direct_flight",
+      "kwargs": {
+        "origin": "LAS",
+        "destination": "IAH",
+        "date": "2024-05-19"
+      }
+    },
+    {
+      "name": "update_reservation_flights",
+      "kwargs": {
+        "reservation_id": "1N99U6",
+        "cabin": "economy",
+        "flights": [
+          {
+            "flight_number": "HAT266",
+            "date": "2024-05-19"
+          },
+          {
+            "flight_number": "HAT112",
+            "date": "2024-05-27"
+          }
+        ],
+        "payment_id": "gift_card_5634230"
+      }
+    }
+  ]
+}

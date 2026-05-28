@@ -45,6 +45,7 @@ HF_REPO = "agent-evals/hal_traces"
 TRACES_DIR = Path(__file__).resolve().parent / "traces"
 EXTRACTED_DIR = Path(__file__).resolve().parent / "extracted"
 OUTPUT_DIR = Path(__file__).resolve().parent
+LARGE_TRACE_THRESHOLD_BYTES = 512 * 1024 * 1024
 
 
 def list_remote_files():
@@ -84,14 +85,21 @@ def decrypt_upload_json(zip_path: Path) -> dict | None:
                         enc = json.load(f)
                     salt_bytes = base64.b64decode(enc["salt"].encode("utf-8"))
                     cipher = JsonEncryption(ENCRYPTION_PASSWORD, salt=salt_bytes)
-                    encrypted_bytes = base64.b64decode(
-                        enc["encrypted_data"].encode("utf-8")
-                    )
+                    encrypted_data = enc["encrypted_data"]
+                    del enc
+                    encrypted_bytes = base64.b64decode(encrypted_data.encode("utf-8"))
+                    del encrypted_data
                     decrypted = cipher.cipher.decrypt(encrypted_bytes)
-                    return json.loads(decrypted.decode("utf-8"))
+                    del encrypted_bytes
+                    return json.loads(decrypted)
     except Exception as e:
         logger.warning(f"Failed to decrypt {zip_path.name}: {e}")
     return None
+
+
+def drop_unused_trace_payload(data: dict) -> None:
+    """Release bulky trace fields that are not used for task-level extraction."""
+    data.pop("raw_logging_results", None)
 
 
 # --------------------------------------------------------------------------- #
@@ -242,6 +250,7 @@ def _extract_single_trace(zip_path: Path) -> str | None:
     data = decrypt_upload_json(zip_path)
     if data is None:
         return None
+    drop_unused_trace_payload(data)
 
     benchmark = _detect_benchmark(data, zip_path.name)
     if benchmark is None:
@@ -267,6 +276,7 @@ def _extract_single_trace(zip_path: Path) -> str | None:
     total_cost = data.get("total_cost", data.get("results", {}).get("total_cost"))
     n_correct = sum(c for _, c in task_results)
     n_tasks = len(task_results)
+    del data
 
     rows = []
     for task_id, correct in task_results:
@@ -306,7 +316,10 @@ def extract_all(benchmark_filter: list[str] | None = None, workers: int = 4):
     logger.info(f"Found {len(zip_files)} trace files to process")
 
     already = sum(1 for zp in zip_files if (EXTRACTED_DIR / f"{zp.stem}.csv").exists())
-    to_process = len(zip_files) - already
+    pending = [
+        zp for zp in zip_files if not (EXTRACTED_DIR / f"{zp.stem}.csv").exists()
+    ]
+    to_process = len(pending)
     logger.info(f"Already extracted: {already}, remaining: {to_process}")
 
     if to_process == 0:
@@ -314,10 +327,23 @@ def extract_all(benchmark_filter: list[str] | None = None, workers: int = 4):
 
     done = 0
     failed = 0
-    with ProcessPoolExecutor(max_workers=workers) as pool:
-        futures = {pool.submit(_extract_single_trace, zp): zp for zp in zip_files}
-        for future in as_completed(futures):
-            result = future.result()
+    large_pending = [
+        zp for zp in pending if zp.stat().st_size >= LARGE_TRACE_THRESHOLD_BYTES
+    ]
+    parallel_pending = [
+        zp for zp in pending if zp.stat().st_size < LARGE_TRACE_THRESHOLD_BYTES
+    ]
+
+    if large_pending:
+        logger.info(
+            "Processing %d large traces serially to limit peak memory",
+            len(large_pending),
+        )
+
+    if parallel_pending and workers <= 1:
+        logger.info("Processing %d traces serially", len(parallel_pending))
+        for zp in parallel_pending:
+            result = _extract_single_trace(zp)
             if result:
                 done += 1
             else:
@@ -325,6 +351,30 @@ def extract_all(benchmark_filter: list[str] | None = None, workers: int = 4):
             total_done = done + failed
             if total_done % 50 == 0:
                 logger.info(f"Extracted {done}/{total_done} ({failed} failed)")
+
+    elif parallel_pending:
+        with ProcessPoolExecutor(max_workers=workers) as pool:
+            futures = {
+                pool.submit(_extract_single_trace, zp): zp
+                for zp in parallel_pending
+            }
+            for future in as_completed(futures):
+                result = future.result()
+                if result:
+                    done += 1
+                else:
+                    failed += 1
+                total_done = done + failed
+                if total_done % 50 == 0:
+                    logger.info(f"Extracted {done}/{total_done} ({failed} failed)")
+
+    for i, zp in enumerate(large_pending, start=1):
+        logger.info("Extracting large trace %d/%d: %s", i, len(large_pending), zp.name)
+        result = _extract_single_trace(zp)
+        if result:
+            done += 1
+        else:
+            failed += 1
 
     logger.info(f"Extraction complete: {done} succeeded, {failed} failed")
 

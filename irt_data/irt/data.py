@@ -189,12 +189,19 @@ def _encode_agent_features(
     _ZSCORE_COLS = {"model_release_ym"}
 
     cont_data = []
+    bool_cols = set(schema.boolean_agent)
     for col in cont_cols:
         vals = features[col].copy()
-        if vals.dtype == object or vals.dtype == bool:
-            vals = vals.map({True: 1.0, False: 0.0, np.nan: 0.0}).astype(float)
+        if col in bool_cols:
+            vals = vals.map({
+                True: 1.0, False: 0.0,
+                "True": 1.0, "False": 0.0,
+                "true": 1.0, "false": 0.0,
+                1: 1.0, 0: 0.0,
+                np.nan: 0.0,
+            }).fillna(0.0).astype(float)
         else:
-            vals = vals.fillna(0.0).astype(float)
+            vals = pd.to_numeric(vals, errors="coerce").fillna(0.0).astype(float)
         bare = col.split(".")[-1]  # strip any prefix — col names have no dots, so this is a no-op
         if col in _LOG1P_COLS:
             vals = np.log1p(vals)
@@ -224,12 +231,19 @@ def _encode_task_features(
     cat_tensor = torch.from_numpy(np.column_stack(cat_data).astype(np.int64)) if cat_data else torch.zeros(len(features), 0, dtype=torch.long)
 
     cont_data = []
+    bool_cols = set(schema.boolean_task)
     for col in cont_cols:
         vals = features[col].copy()
-        if vals.dtype == object or vals.dtype == bool:
-            vals = vals.map({True: 1.0, False: 0.0, np.nan: 0.0}).astype(float)
+        if col in bool_cols:
+            vals = vals.map({
+                True: 1.0, False: 0.0,
+                "True": 1.0, "False": 0.0,
+                "true": 1.0, "false": 0.0,
+                1: 1.0, 0: 0.0,
+                np.nan: 0.0,
+            }).fillna(0.0).astype(float)
         else:
-            vals = vals.fillna(0.0).astype(float)
+            vals = pd.to_numeric(vals, errors="coerce").fillna(0.0).astype(float)
         cont_data.append(vals.values)
     cont_tensor = torch.from_numpy(np.column_stack(cont_data).astype(np.float32)) if cont_data else torch.zeros(len(features), 0)
 

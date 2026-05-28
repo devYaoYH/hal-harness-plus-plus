@@ -1,0 +1,89 @@
+\begin{thebibliography}{15}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Baker(2001)]{baker2001basics}
+Frank~B. Baker.
+\newblock \emph{The Basics of Item Response Theory}.
+\newblock ERIC Clearinghouse on Assessment and Evaluation, 2001.
+
+\bibitem[Bradley and Terry(1952)]{bradley1952rank}
+Ralph~Allan Bradley and Milton~E. Terry.
+\newblock Rank analysis of incomplete block designs: I. the method of paired comparisons.
+\newblock \emph{Biometrika}, 39\penalty0 (3/4):\penalty0 324--345, 1952.
+
+\bibitem[Fan et~al.(2026)Fan, Ye, Huo, et~al.]{fan2026agentprocessbench}
+Shengda Fan, Xuyan Ye, Yupeng Huo, et~al.
+\newblock {AgentProcessBench}: Diagnosing step-level process quality in tool-using agents.
+\newblock \emph{arXiv preprint arXiv:2603.14465}, 2026.
+
+\bibitem[He et~al.(2025)He, Dai, He, et~al.]{he2025traject}
+Pengfei He, Zhenwei Dai, Bing He, et~al.
+\newblock {TRAJECT-Bench}: A trajectory-aware benchmark for evaluating agentic tool use.
+\newblock \emph{arXiv preprint arXiv:2510.04550}, 2025.
+
+\bibitem[Kapoor et~al.(2026)Kapoor, Stroebl, Kirgis, Nadgir, Siegel, Wei, Xue, Chen, Chen, Utpala, Ndzomga, Oruganty, Luskin, Liu, Yu, Arora, Hahm, Trivedi, Sun, Lee, Jin, Mai, Zhou, Zhu, Bommasani, Kang, Song, Henderson, Su, Liang, and Narayanan]{hal2026}
+Sayash Kapoor, Benedikt Stroebl, Peter Kirgis, Nitya Nadgir, Zachary~S. Siegel, Boyi Wei, Tianci Xue, Ziru Chen, Felix Chen, Saiteja Utpala, Franck Ndzomga, Dheeraj Oruganty, Sophie Luskin, Kangheng Liu, Botao Yu, Amit Arora, Dongyoon Hahm, Harsh Trivedi, Huan Sun, Juyong Lee, Tengjun Jin, Yifan Mai, Yifei Zhou, Yuxuan Zhu, Rishi Bommasani, Daniel Kang, Dawn Song, Peter Henderson, Yu~Su, Percy Liang, and Arvind Narayanan.
+\newblock Holistic agent leaderboard: The missing infrastructure for {AI} agent evaluation.
+\newblock In \emph{The Fourteenth International Conference on Learning Representations}, 2026.
+\newblock URL \url{https://arxiv.org/pdf/2510.11977}.
+
+\bibitem[Lalor et~al.(2016)Lalor, Wu, and Yu]{lalor2016evaluation}
+John~P. Lalor, Hao Wu, and Hong Yu.
+\newblock Building an evaluation scale using item response theory.
+\newblock In \emph{Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing}, pages 648--657, 2016.
+\newblock \doi{10.18653/v1/D16-1062}.
+
+\bibitem[Luce(1959)]{luce1959individual}
+R.~Duncan Luce.
+\newblock \emph{Individual Choice Behavior: A Theoretical Analysis}.
+\newblock Wiley, 1959.
+
+\bibitem[Maia~Polo et~al.(2024)Maia~Polo, Weber, Choshen, Sun, Xu, and Yurochkin]{maiapolo2024tinybenchmarks}
+Felipe Maia~Polo, Lucas Weber, Leshem Choshen, Yuekai Sun, Gongjun Xu, and Mikhail Yurochkin.
+\newblock tiny{B}enchmarks: evaluating {LLM}s with fewer examples.
+\newblock In \emph{Proceedings of the 41st International Conference on Machine Learning}, volume 235 of \emph{Proceedings of Machine Learning Research}, pages 34303--34326. PMLR, 2024.
+\newblock URL \url{https://proceedings.mlr.press/v235/maia-polo24a.html}.
+
+\bibitem[Rasch(1960)]{rasch1960probabilistic}
+Georg Rasch.
+\newblock \emph{Probabilistic Models for Some Intelligence and Attainment Tests}.
+\newblock Danish Institute for Educational Research, 1960.
+
+\bibitem[Salaudeen et~al.(2025)Salaudeen, Reuel, Ahmed, Bedi, Robertson, Sundar, Domingue, Wang, and Koyejo]{salaudeen2025measurement}
+Olawale Salaudeen, Anka Reuel, Ahmed Ahmed, Suhana Bedi, Zachary Robertson, Sudharsan Sundar, Ben Domingue, Angelina Wang, and Sanmi Koyejo.
+\newblock Measurement to meaning: A validity-centered framework for {AI} evaluation.
+\newblock \emph{arXiv preprint arXiv:2505.10573}, 2025.
+
+\bibitem[Sun et~al.(2025)Sun, Gibbons, Hern{\'a}ndez-Orallo, Wang, Jiang, Stillwell, Luo, and Xie]{sun2025beyondbenchmarks}
+Luning Sun, Christopher Gibbons, Jos{\'e} Hern{\'a}ndez-Orallo, Xiting Wang, Liming Jiang, David Stillwell, Fang Luo, and Xing Xie.
+\newblock Beyond benchmarks: Evaluating generalist medical artificial intelligence with psychometrics.
+\newblock \emph{Journal of Medical Internet Research}, 27:\penalty0 e70901, 2025.
+\newblock \doi{10.2196/70901}.
+
+\bibitem[Truong et~al.(2025)Truong, Tu, Liang, Li, and Koyejo]{truong2025amortized}
+Sang Truong, Yuheng Tu, Percy Liang, Bo~Li, and Sanmi Koyejo.
+\newblock Reliable and efficient amortized model-based evaluation.
+\newblock \emph{arXiv preprint arXiv:2503.13335}, 2025.
+
+\bibitem[Wallach et~al.(2025)Wallach, Desai, Cooper, Wang, Atalla, Barocas, Blodgett, Chouldechova, Corvi, Dow, Garcia-Gathright, Olteanu, Pangakis, Reed, Sheng, Vann, Vaughan, Vogel, Washington, and Jacobs]{wallach2025socialmeasurement}
+Hanna Wallach, Meera Desai, A.~Feder Cooper, Angelina Wang, Chad Atalla, Solon Barocas, Su~Lin Blodgett, Alexandra Chouldechova, Emily Corvi, P.~Alex Dow, Jean Garcia-Gathright, Alexandra Olteanu, Nicholas~J. Pangakis, Stefanie Reed, Emily Sheng, Dan Vann, Jennifer~Wortman Vaughan, Matthew Vogel, Hannah Washington, and Abigail~Z. Jacobs.
+\newblock Position: Evaluating generative {AI} systems is a social science measurement challenge.
+\newblock In \emph{Proceedings of the 42nd International Conference on Machine Learning}, volume 267 of \emph{Proceedings of Machine Learning Research}, pages 82232--82251. PMLR, 2025.
+\newblock URL \url{https://proceedings.mlr.press/v267/wallach25a.html}.
+
+\bibitem[Zhang et~al.(2025)Zhang, Dorner, and Hardt]{zhang2025missesmark}
+Guanhua Zhang, Florian~E. Dorner, and Moritz Hardt.
+\newblock How benchmark prediction from fewer data misses the mark.
+\newblock \emph{arXiv preprint arXiv:2506.07673}, 2025.
+
+\bibitem[Zhou et~al.(2026)Zhou, Huang, Han, et~al.]{zhou2025lost}
+Hongli Zhou, Hui Huang, Lvyuan Han, et~al.
+\newblock Lost in benchmarks? rethinking large language model benchmarking with item response theory.
+\newblock \emph{Proceedings of the AAAI Conference on Artificial Intelligence}, 40\penalty0 (41):\penalty0 35085--35093, 2026.
+\newblock \doi{10.1609/aaai.v40i41.40814}.
+
+\end{thebibliography}

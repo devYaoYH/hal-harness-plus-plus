@@ -1,0 +1,2 @@
+agent_id,scaffold,model,benchmark,task_id,correct,run_id,date,total_cost,n_tasks,n_correct,source_file
+My Agent__together_ai/deepseek-ai/DeepSeek-R1__swebench_verified_mini_my_agenttogether_aideepseekaideepseekr1_1745262492,My Agent,together_ai/deepseek-ai/DeepSeek-R1,swebench_verified_mini,django__django-11790,0,swebench_verified_mini_my_agenttogether_aideepseekaideepseekr1_1745262492,2025-04-21,4.164276,1,0,swebench_verified_mini_my_agenttogether_aideepseekaideepseekr1_1745262492_UPLOAD.zip
