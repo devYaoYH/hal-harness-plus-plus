@@ -1,85 +1,141 @@
-# HAL-IRT: Adaptive Agent Evaluation
+# HAL-IRT data and analysis
 
-Extensions to the [HAL leaderboard](https://github.com/benediktstroebl/hal-harness) adding IRT-based adaptive task selection, cold-start predictions for novel scaffold × model pairs, and cloud-native evaluation infrastructure.
+This directory contains the data pipeline and analysis artifacts for fitting IRT
+models on HAL leaderboard traces. The repository is a fork of the public
+[HAL harness](https://github.com/benediktstroebl/hal-harness); the additions here
+turn uploaded HAL traces into response matrices, train 2PL-style IRT models, and
+produce adaptive-evaluation and trace-analysis artifacts.
 
-## What we add
+The public-facing report is served from `docs/index.html` via GitHub Pages:
+[HAL-IRT report](https://devyaoyh.github.io/hal-harness-plus-plus/).
 
-### 1. Multidimensional IRT model (`irt/`)
+## Start from a fresh clone
 
-A K=2 MIRT model fitted on the public HAL response matrix (13 harnesses × 36 models × 1796 tasks across 8 benchmarks). Each task gets a discrimination vector **a**_j and easiness scalar d_j; each agent gets a latent ability vector **θ**_i ∈ ℝ².
-
-Agent features (model release date, parameter counts, MoE flag, 16 scaffold tool booleans, etc.) feed a projection network f_agent(·) that provides a cold-start **θ** prior for scaffold × model combinations never seen during training — no evaluation runs required.
-
-Key files:
-| File | Purpose |
-|------|---------|
-| `irt/features.py` | Feature extraction for models and scaffolds |
-| `irt/data.py` | Response matrix encoding and train/val split |
-| `irt/train.py` | MIRT training loop (binary cross-entropy + L2) |
-| `irt/predict_new_agent.py` | Cold-start prediction for novel agents |
-| `irt/FINDINGS.md` | K-factor sweep results and model selection rationale |
-| `irt/GENERALIZATION_TEST.md` | Cold-start validation and tool ablation experiments |
-
-### 2. Adaptive task subsets (`adaptive_task_subsets.json`)
-
-Tasks ranked by discrimination magnitude ‖**a**_j‖; the 80% coverage threshold reduces evaluation cost by 25–44% per benchmark with minimal loss in ability estimation accuracy.
-
-```python
-import json
-with open("irt_data/adaptive_task_subsets.json") as f:
-    subsets = json.load(f)
-task_ids = subsets["swebench_verified_mini"]["thresholds"]["80pct"]["task_ids"]
-# 28 tasks instead of 50 — 44% cost reduction
-```
-
-### 3. Daytona sandbox runner (`../prefect/`)
-
-Each evaluation task runs in an isolated [Daytona](https://www.daytona.io/) cloud sandbox. The harness zip (agents + dependencies) is uploaded once per job; tasks run in parallel up to a configurable worker limit.
-
-```python
-from prefect.config_daytona import DaytonaEvalSpec
-from prefect.daytona_runner import run_eval_on_daytona
-
-spec = DaytonaEvalSpec(
-    agent="hal_generalist_agent",
-    agent_function="main.run",
-    agent_dir="agents/hal_generalist_agent",
-    benchmark="swebench_verified_mini",
-    task_id="django__django-11099",
-    model="anthropic/claude-3-7-sonnet-20250219",
-    job_id="my-run-001",
-)
-result = run_eval_on_daytona(spec)  # returns {"score": 0/1, ...}
-```
-
-Sandboxes are ephemeral and auto-deleted after each task. The `_ZIP_EXCLUDES` list in `daytona_runner.py` controls which agent directories are bundled.
-
-### 4. TiDB trace logging
-
-Agent traces (tool calls, model outputs, scores) are written to a TiDB Serverless instance for downstream analysis. Connection config is read from `.env` (`TIDB_HOST`, `TIDB_USER`, `TIDB_PASSWORD`, `TIDB_DB`). The response matrix used to fit the IRT model (`response_matrix.csv`) is extracted from these logs via `prepare_irt_data.py`.
-
-### 5. Experiment runners
-
-| Script | Experiment |
-|--------|-----------|
-| `prefect/run_irt_validation.py` | Generalization test: SWE-Agent × DeepSeek-R1 on 28 swebench tasks, predicted 38.4% |
-| `prefect/run_tool_ablation.py` | Tool ablation: HAL Generalist −{web_search, page_browse, text_inspect, vision_query} on swebench, predicted +18pp |
-
-Override any parameter via environment variable (`MODEL`, `BENCHMARK`, `DISABLE_TOOLS`, `JOB_ID`, `MAX_WORKERS`).
-
-## Demo
-
-Results are presented at `../docs/index.html` (served via GitHub Pages). The demo includes the K-factor sweep, adaptive subset cost reductions, a swebench model × harness heatmap with IRT-predicted fill-in, and cold-start predictions for novel scaffold × model pairs.
-
-## Setup
+Clone this repository with submodules, then install the normal harness
+dependencies from the repository root.
 
 ```bash
+git clone --recursive git@github.com:devYaoYH/hal-harness-plus-plus.git
+cd hal-harness-plus-plus
 pip install -r requirements.txt
-cp .env.example .env  # fill in DAYTONA_API_KEY, TIDB_*, ANTHROPIC_API_KEY
-
-# Refit IRT model after new data
-python3 -m irt_data.irt.run --k 2
-
-# Regenerate adaptive subsets
-python3 -m irt_data.irt.discriminate --k 2 --thresholds 0.7 0.8 0.9
 ```
+
+Most commands below are run from the repository root so Python can import both
+`hal` and `irt_data`.
+
+## A. Download trace data
+
+HAL leaderboard traces are published as encrypted zip files in the Hugging Face
+dataset `agent-evals/hal_traces`. The preparation script downloads those zips,
+decrypts them with the public HAL trace password used by the harness, extracts
+task-level pass/fail outcomes, and writes IRT-ready CSVs.
+
+```bash
+python irt_data/prepare_irt_data.py
+```
+
+Useful variants:
+
+```bash
+# Reuse zips already present in irt_data/traces/.
+python irt_data/prepare_irt_data.py --skip-download
+
+# Recombine existing per-trace CSV extracts without re-downloading or re-parsing.
+python irt_data/prepare_irt_data.py --combine-only
+
+# Limit work to specific benchmarks.
+python irt_data/prepare_irt_data.py --benchmarks swebench_verified_mini taubench_airline
+
+# Increase parallel extraction workers.
+python irt_data/prepare_irt_data.py --workers 8
+```
+
+Primary outputs:
+
+| File | Purpose |
+| --- | --- |
+| `response_matrix.csv` | One row per agent-task outcome; main input to IRT training. |
+| `agents.csv` | Agent/run metadata derived from the traces. |
+| `tasks.csv` | Task-level benchmark metadata and pass-rate summaries. |
+| `extracted/*.csv` | Incremental per-upload extraction cache. |
+| `traces/*.zip` | Downloaded encrypted HAL trace uploads; ignored by git when absent. |
+
+## B. Train the IRT 2PL model
+
+The main training entrypoint fits multidimensional 2PL-style models. A
+one-dimensional run is the closest scalar 2PL configuration; `--k 2` trains the
+default two-factor model used for most HAL-IRT analysis.
+
+```bash
+# Scalar 2PL-style model with feature-informed agent/task priors.
+python -m irt_data.irt.run --k 1
+
+# Two-dimensional 2PL/MIRT model.
+python -m irt_data.irt.run --k 2
+
+# Compare K in {1, 2, 4, 8}, with and without features.
+python -m irt_data.irt.run --sweep
+```
+
+Training reads `irt_data/response_matrix.csv` by default. To train on another
+matrix:
+
+```bash
+python -m irt_data.irt.run --k 2 --response-csv irt_data/eval_splits/response_matrix_train.csv
+```
+
+Training outputs include `training_curves_k*_feat.png`,
+`training_curves_k*_nofeat.png`, and `sweep_results.json`.
+
+## C. Use the fitted models
+
+Generate discrimination-ranked task lists and adaptive subsets:
+
+```bash
+python -m irt_data.irt.discriminate --k 2 --thresholds 0.5 0.7 0.8 0.9
+```
+
+This writes:
+
+| File | Purpose |
+| --- | --- |
+| `task_discrimination.csv` | All tasks ranked by fitted discrimination magnitude. |
+| `adaptive_task_subsets.json` | Per-benchmark task shortlists at each coverage threshold. |
+
+Use cold-start predictions for a new scaffold x model combination:
+
+```bash
+python -m irt_data.irt.predict_new_agent \
+  --scaffold "SWE-Agent" \
+  --model "deepseek-r1" \
+  --benchmarks swebench_verified_mini \
+  --threshold 80pct \
+  --out irt_data/irt/validation/pred_sweagent_deepseekr1.csv
+```
+
+The prediction script refits the model from `response_matrix.csv`, estimates the
+new agent's latent ability from feature projections, and scores the selected
+adaptive task subset.
+
+## Analysis artifacts
+
+Use these files and folders when inspecting results or regenerating figures.
+
+| Path | Contents |
+| --- | --- |
+| `irt/report/FINDINGS.md` | Model-selection notes, K sweep summary, and adaptive subset rationale. |
+| `irt/report/GENERALIZATION_TEST.md` | Cold-start validation notes and tool-ablation discussion. |
+| `irt/report/scaffold_tools_report.md` | Scaffold/tool feature summary. |
+| `irt/plots/` | Heatmaps, discrimination plots, cost-reduction plots, and training curves. |
+| `irt/experiments/` | Split-v1 sweeps, cost-reduction tables, feature attribution, and cold-start heatmaps. |
+| `irt/validation/` | Prediction and actual-result CSVs for validation runs. |
+| `eval_splits/` | Canonical train/holdout split files and split summary. |
+| `gstudy/` | Generalizability-study data, residual summaries, and report. |
+| `trace_analysis/` | Trace-level analyses of task trajectories, failure modes, and tool-use patterns. |
+| `demo/index.html` | Local static demo entrypoint. |
+| `../docs/index.html` | GitHub Pages report source. |
+
+For the rendered public summary, use the
+[GitHub Pages report](https://devyaoyh.github.io/hal-harness-plus-plus/). For
+the original benchmark harness usage, agents, and leaderboard submission flow,
+see the top-level `README.md` inherited from the HAL harness fork.
